@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <constant name="struts.devMode" value="false"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.action.extension" value="action,"/>
+    <constant name="struts.objectFactory" value="spring"/>
+    <constant name="struts.custom.i18n.resources" value="ApplicationResources,errors"/>
+    <constant name="struts.multipart.maxSize" value="2097152"/>
+    <constant name="struts.ui.theme" value="css_xhtml"/>
+    <constant name="struts.codebehind.pathPrefix" value="/WEB-INF/pages/"/>
+    <constant name="struts.enable.SlashesInActionNames" value="true"/>
+    <constant name="struts.convention.action.disableScanning" value="true"/>
+    <constant name="struts.mapper.alwaysSelectFullNamespace" value="false"/>
+    <!-- Allow <s:submit> to call method names directly -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+        
+ 	<package name="cmsz-default" extends="struts-default">
+	    <interceptors>
+				<interceptor name="authorization"     	   	class="com.cmsz.cloudplatform.web.core.AuthorizationInterceptor"/>
+				<interceptor name="error" 					class="com.cmsz.cloudplatform.web.interceptor.ExceptionInterceptor"></interceptor>
+				<interceptor-stack name="cmszStack">
+					<interceptor-ref name="defaultStack" />
+					<interceptor-ref name="error" />
+					<interceptor-ref name="authorization" />
+				</interceptor-stack>
+	
+		</interceptors>       
+		
+		<default-interceptor-ref name="cmszStack" />
+	</package>
+
+    <package name="control" extends="cmsz-default" namespace="/">
+    	<action name="api" class="com.cmsz.cloudplatform.web.action.ControlAction">
+    		<result name="generic" type="chain">generic</result>
+    		
+    		<result name="login" type="chain">login</result>
+			<result name="logout" type="chain">logout</result>
+			<result name="getTemplateAccount" type="chain">getTemplateAccount</result>    		    		
+		<result name="createTemplateAccount" type="chain">createTemplateAccount</result>
+			<result name="deleteTemplateAccount" type="chain">deleteTemplateAccount</result>
+			<result name="listLog" type="chain">listLog</result>
+			<result name="listProperty" type="chain">listProperty</result>
+			<result name="addProperty" type="chain">addProperty</result>
+			<result name="deleteProperty" type="chain">deleteProperty</result>
+			<result name="listresourcepool" type="chain">listresourcepool</result>
+			<result name="listsubresource" type="chain">listsubresource</result>
+			<result name="listavailableresource" type="chain">listavailableresource</result>
+			<result name="configzone" type="chain">configzone</result>
+			<result name="computeresource" type="chain">computeresource</result>
+			<result name="removerelation" type="chain">removerelation</result>
+			<result name="listResourcePoolRelatedObjectType" type="chain">listResourcePoolRelatedObjectType</result>
+			<result name="listResourcePoolPermission" type="chain">listResourcePoolPermission</result>
+			<result name="saveResourcePoolPermission" type="chain">saveResourcePoolPermission</result>
+			<result name="saveOrder" type="chain">saveOrder</result>
+			<result name="listWorkOrder" type="chain">listWorkOrder</result>
+			<result name="listConfig" type="chain">listConfig</result>
+			<result name="listDimResourceTree" type="chain">listDimResourceTree</result>
+			<result name="getAttribute" type="chain">getAttribute</result>
+			<result name="getExtval" type="chain">getExtval</result>
+			<result name="doapprove" type="chain">doapprove</result>
+			<result name="getWorkOrderReport" type="chain">getWorkOrderReport</result>
+			<result name="workOrderReportExcel" type="chain">workOrderReportExcel</result>
+			<result name="checkStatus" type="chain">checkStatus</result>
+			<result name="listProjectResourcePoolPermission" type="chain">listProjectResourcePoolPermission</result>
+			<result name="getRelResourcePoolByZoneId" type="chain">getRelResourcePoolByZoneId</result>
+			<result name="listTopData" type="chain">listTopData</result>
+			<result name="firstPage" type="chain">firstPage</result>
+			<result name="rootClusterResource" type="chain">rootClusterResource</result>
+			<result name="listPoolNodes" type="chain">listPoolNodes</result>
+			<result name="firstResource" type="chain">firstResource</result>
+			<result name="getResource" type="chain">getResource</result>
+			<result name="secondResource" type="chain">secondResource</result>
+			<result name="listhost" type="chain">listhost</result>
+			<result name="listEquipmentEnroll" type="chain">listEquipmentEnroll</result>
+			<result name="createEquipmentEnroll" type="chain">createEquipmentEnroll</result>
+			<result name="updateEquipmentEnroll" type="chain">updateEquipmentEnroll</result>
+			<result name="removeEquipmentEnroll" type="chain">removeEquipmentEnroll</result>
+			<result name="listmessage" type="chain">listmessage</result>
+			<result name="listvm" type="chain">listvm</result>
+			<result name="getvminfo" type="chain">getvminfo</result>
+			<result name="updatehostrespool" type="chain">updatehostrespool</result>
+			<result name="listrack" type="chain">listrack</result>
+			<result name="saveoarack" type="chain">saveoarack</result>
+			<result name="archivehost" type="chain">archivehost</result>
+			<result name="deletemessage" type="chain">deletemessage</result>
+			<result name="archiverack" type="chain">archiverack</result>
+			<result name="listdevinfo" type="chain">listdevinfo</result>
+			<result name="removehost" type="chain">removehost</result>
+			<result name="removerack" type="chain">removerack</result>
+    	</action>
+    	
+    	<action name="generic" 	class="com.cmsz.cloudplatform.web.action.GenericAction"/>
+    	<action name="login" 	class="com.cmsz.cloudplatform.web.action.LoginAction"/>
+    	<action name="logout" 	class="com.cmsz.cloudplatform.web.action.LogoutAction"/>
+    	<action name="getTemplateAccount" class="com.cmsz.cloudplatform.web.action.TemplateAccountAction" method="getTemplateAccount"/>
+    	<action name="createTemplateAccount" class="com.cmsz.cloudplatform.web.action.TemplateAccountAction" method="create"/>
+    	<action name="deleteTemplateAccount" class="com.cmsz.cloudplatform.web.action.TemplateAccountAction" method="remove"/>
+  		<action name="listLog" class = "com.cmsz.cloudplatform.web.action.LogAction" method = "list"/>
+  		<action name="listProperty" class = "com.cmsz.cloudplatform.web.action.PropertyAction" method = "list"/>
+  		<action name="addProperty" class = "com.cmsz.cloudplatform.web.action.PropertyAction" method = "add"/>
+  		<action name="deleteProperty" class = "com.cmsz.cloudplatform.web.action.PropertyAction" method = "deleteProperty"/>
+  		<action name="listresourcepool" class = "com.cmsz.cloudplatform.web.action.ResourcePoolAction" method = "list"/>
+  		<action name="listsubresource" class = "com.cmsz.cloudplatform.web.action.ResourcePoolAction" method = "listSubResource"/>
+  		<action name="listavailableresource" class = "com.cmsz.cloudplatform.web.action.ResourcePoolAction" method = "listAvailableResource"/>
+  		<action name="configzone" class = "com.cmsz.cloudplatform.web.action.ResourcePoolAction" method = "configZone"/>
+  		<action name="computeresource" class = "com.cmsz.cloudplatform.web.action.ResourcePoolAction" method = "computeResource"/>
+  		<action name="removerelation" class = "com.cmsz.cloudplatform.web.action.ResourcePoolAction" method = "removeRelation"/>
+  		<action name="listResourcePoolRelatedObjectType" class = "com.cmsz.cloudplatform.web.action.ResourcePoolPermissionAction" method = "listResourcePoolRelatedObjectType"/>
+  		<action name="listResourcePoolPermission" class = "com.cmsz.cloudplatform.web.action.ResourcePoolPermissionAction" method = "listResourcePoolPermission"/>
+  		<action name="saveResourcePoolPermission" class = "com.cmsz.cloudplatform.web.action.ResourcePoolPermissionAction" method = "saveResourcePoolPermission"/>
+  		<action name="saveOrder" class = "com.cmsz.cloudplatform.web.action.WorkOrderAction" method = "save"/>
+  		<action name="listWorkOrder" class = "com.cmsz.cloudplatform.web.action.WorkOrderAction" method = "list"/>
+  		<action name="listConfig" class = "com.cmsz.cloudplatform.web.action.DbConfigAction" method = "listConfig"/>
+  		<action name="listDimResourceTree" class = "com.cmsz.cloudplatform.web.action.ResourceStatisticAction" method = "listDimResourceTree"/>
+  		<action name="getAttribute" class = "com.cmsz.cloudplatform.web.action.WorkOrderAction" method = "getAttribute"/>
+  		<action name="getExtval" class = "com.cmsz.cloudplatform.web.action.WorkOrderAction" method = "getExtval"/>
+  		<action name="doapprove" class = "com.cmsz.cloudplatform.web.action.WorkOrderApprovalAction" method = "approveWorkOrder"/>
+  		<action name="getWorkOrderReport" class = "com.cmsz.cloudplatform.web.action.WorkOrderReportAction" method = "getWorkOrderReport"/>
+  		<action name="workOrderReportExcel" class = "com.cmsz.cloudplatform.web.action.WorkOrderReportAction" method = "workOrderReportExcel"/>
+  		<action name="checkStatus" class = "com.cmsz.cloudplatform.web.action.WorkOrderAction" method = "checkStatus"/>
+  		<action name="listProjectResourcePoolPermission" class = "com.cmsz.cloudplatform.web.action.ResourcePoolPermissionAction" method = "listProjectResourcePoolPermission"/>
+  		<action name="getRelResourcePoolByZoneId" class = "com.cmsz.cloudplatform.web.action.ResourcePoolAction" method = "getRelResourcePoolByZoneId"/>
+  		<action name="listTopData" class = "com.cmsz.cloudplatform.web.action.TopDataAction" method = "listTopData"/>
+		<action name="getResource" class = "com.cmsz.cloudplatform.web.action.ResourceStructureAction" method = "getResource"/>
+		<action name="listhost" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "listHost"/>
+		<action name="listEquipmentEnroll" class = "com.cmsz.cloudplatform.web.action.EquipmentEnrollAction" method = "list"/>
+		<action name="createEquipmentEnroll" class = "com.cmsz.cloudplatform.web.action.EquipmentEnrollAction" method = "create"/>
+		<action name="updateEquipmentEnroll" class = "com.cmsz.cloudplatform.web.action.EquipmentEnrollAction" method = "update"/>
+		<action name="removeEquipmentEnroll" class = "com.cmsz.cloudplatform.web.action.EquipmentEnrollAction" method = "remove"/>
+		<action name="listmessage" class = "com.cmsz.cloudplatform.web.action.EquipmentEventAction" method = "list"/>
+		<action name="listvm" class = "com.cmsz.cloudplatform.web.action.HPVirtualManageAction" method = "list"/>
+		<action name="getvminfo" class = "com.cmsz.cloudplatform.web.action.HPVirtualManageAction" method = "getByVMName"/>
+		
+		<action name="updatehostrespool" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "updateHost"/>
+		<action name="listrack" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "listRack"/>
+		
+		<action name="saveoarack" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "saveRack"/>
+		
+		<action name="archivehost" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "archiveHost"/>				
+		
+		<action name="deletemessage" class = "com.cmsz.cloudplatform.web.action.EquipmentEventAction" method = "remove"/>
+		
+		<action name="archiverack" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "archiveRack"/>
+		
+		<action name="listdevinfo" class = "com.cmsz.cloudplatform.web.action.HPVirtualManageAction" method = "listDevinfo"/>
+		
+		<action name="removehost" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "removeHost"/>
+		
+		<action name="removerack" class = "com.cmsz.cloudplatform.web.action.PhysicalResourceAction" method = "deleteRack"/>
+		
+		
+		
+  		<!-- resource pool -->
+  			<action name="firstPage" class="com.cmsz.cloudplatform.web.action.ResourcePoolAction" method="firstPage">
+				<result name="success">/jsp/iaaspool/firstResource.jsp</result>
+		</action>
+			<action name="firstResource" class="com.cmsz.cloudplatform.web.action.ResourcePoolAction" method="firstResource">
+			<result name="success">/jsp/iaaspool/secondResource.jsp</result>
+		</action>
+		<action name="secondResource" class="com.cmsz.cloudplatform.web.action.ResourcePoolAction" method="secondResource">
+			<result name="success">/jsp/iaaspool/thirdResource.jsp</result>
+		</action>
+		
+		<!-- level 0 -->
+		<action name="rootClusterResource" class="com.cmsz.cloudplatform.web.action.ResourcePoolAction" method="rootClusterResource"></action>
+		 
+		<action name="listPoolNodes" class="com.cmsz.cloudplatform.web.action.ResourcePoolAction" method="listPoolNodes"></action>
+		
+    </package>
+    
+
+</struts>

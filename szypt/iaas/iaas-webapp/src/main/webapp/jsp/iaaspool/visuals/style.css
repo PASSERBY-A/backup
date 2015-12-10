@@ -1,0 +1,129 @@
+@charset "utf-8";
+/* CSS Document */
+
+* { padding:0; margin:0; border:none; list-style:none; font-family:"Microsoft YaHei";}
+body { font-size:9pt; background:url(bodyGrain.gif) repeat 0 0;}
+h1 { font-size:1.45em;}
+h2 { font-size:1.2em;}
+h3 { font-size:1em;}
+a:link { text-decoration:underline;}
+a:hover {}
+hr { border-bottom:1px solid #d3d3d3; height:1px; line-height:1px;}
+input { vertical-align:middle;}
+textarea { padding:0.5em;}
+
+#page-body { min-width:1000px; overflow:hidden; background:url(bodyBG2.png) no-repeat 50% 0;}
+#header { background:url(repeatsH.png) repeat-x 0 -70px; height:70px;}
+#bodyer { margin-top:20px;}
+#footer { margin-top:15px; height:50px; text-align:center;}
+#logoBar { width:360px; height:60px; position:absolute; left:0; top:5px;}
+#topBar { width:170px; height:30px; position:absolute; right:0; top:20px; text-align:center; line-height:28px; background:url(topBarBG.png) no-repeat 50% 50%;}
+#pathBar { height:50px; line-height:48px; border-bottom:1px solid #b0c8e1; margin-bottom: 20px;}
+#pageContents { margin:0 auto; width:970px; padding-bottom:15px;}
+
+#pathBar .returnBtn { position:absolute; left:0; top:0; display:block; width:49px; height:50px; overflow:hidden; border-right:1px solid #b0c8e1;}
+#pathBar .returnBtn .icon { width:50px; height:50px; background:url(returnIcon.png) no-repeat 0 0;}
+#pathBar .returnBtn:hover { width:100px; font-size:1.25em; text-decoration:none; background:url(repeatsH.png) repeat-x 0 -90px;}
+#pathBar .returnBtn:hover .icon { background-position:100% 0;}
+#pathBar .pathText { margin-left:50px; height:50px; padding-left:1em; border-left:1px solid #fff;}
+#pathBar .pathText label { font-weight: normal; font-size: 0.8em;}
+#pathBar .pageTabs { position:absolute; width:60%; height:50px; top:0; right:0;}
+#pathBar .pageTabs li { float:left; width:80px; text-align:center;}
+#pathBar .pageTabs a { text-decoration:none;}
+#pathBar .pageTabs .selected { background:url(pageTab.png) no-repeat 50% 50%;}
+
+.floatl { float:left;}
+.floatr { float:right;}
+.wrapper { width:1000px; margin:0 auto;}
+.relaContainer { position:relative;}
+
+.blockBoard { background-color: #f8f8f8;}
+.blockBoard h2 { background-color: #efefef; height: 36px; line-height: 36px; padding: 0 20px;}
+.blockBoard .counts { height: 60px; line-height: 60px; padding-left: 36px; overflow: hidden;}
+
+#sideBoard { width: 240px; height: 823px; margin-left: 730px; overflow: hidden;}
+#sideBoard .counts { padding: 0; width: 240px; text-align: center;}
+#sideBoard .textField { padding-right: 20px;}
+#sideBoard .nodeViewContainer { width: 220px; height: 180px;}
+#sideBoard .nodeViewContainer table.nodeCell { background: no-repeat 50% 50%;}
+
+#vmwareBoard { width: 720px; height: 835px; overflow: hidden;}
+#vmwareBoard .nodeViewContainer { width: 720px; height: 300px;}
+#kvmBoard { height: 300px;}
+#kvmBoard .nodeViewContainer table.nodeCell { background-image: url("nodeIcon02_s.png");}
+#miniBoard { height: 290px; margin-top: 10px;}
+#miniBoard .nodeViewContainer table.nodeCell { background-image: url("nodeIcon03_s.png");}
+
+#nodeDetails { height: 300px; overflow: hidden;}
+#nodeDetails .nodeViewContainer { width: 300px; height: 300px;}
+#nodeDetails .status { margin-left: 300px; padding-left: 0;}
+#nodeDetails .alertTitle { font-size:2.2em; font-weight:normal; color: #c8741e; padding-top: 20px; padding-bottom: 10px;}
+
+#subLevel { height: 250px; overflow: hidden;}
+#subLevel h3 { font-weight: normal; font-size: 1.2em; line-height: 30px; padding-left: 20px;}
+#subLevel .nodeViewContainer { height: 220px;}
+#subLevel .status { margin-left: 220px; padding-left: 0; text-align: left; background: url("separation_v.png") repeat-y 100% 0;}
+#subLevel .status th { height: auto;}
+#subLevel .status td { height: 50px;}
+
+#endNodes .bigNode li { background: url(node01.png) no-repeat 50% -250px;}
+#endNodes .bigNode table.nodeCell td { color: #faf2e1;}
+#endNodes .barNode li { background: url(node03_s.png) no-repeat 100px 10px;}
+#endNodes .barNode table.nodeCell { font-size:1.4em; width:100px; height:60px; margin-left: 135px; margin-top: 80px;}
+#endNodes .barNode .status { margin-left: 270px;}
+#endNodes .barNode .status th { height: 120px;}
+#endNodes .barNode table.nodeCell { text-shadow:5px 2px 6px #000; text-shadow: #000 1px 1px 3px; filter: Shadow(Color=#000000, Direction=135, Strength=1);}
+
+.separation { height:0; font-size: 0; border-top: 1px solid #efefef; border-bottom: 1px solid #fff;}
+
+.textField { padding-right: 50px;}
+.textField label { font-size: 1.2em; font-weight: bold; color: #666;}
+
+.status { padding-left: 50px;}
+.status table { width: 100%;}
+.status th { text-align: left; height: 60px;}
+.status th .textField label { font-size: 1.8em; color: #333;}
+.status td { height: 30px;}
+.status .process { height:14px; width:162px; background: url("process.png") no-repeat 0 0; overflow: hidden;}
+.status .process .process { background-position: 0 -14px; float: left; width: 50%;}
+.status .process .end { background-position: 100% -14px; width: 49.9%;}
+.status .bad .process { background-position: 0 -28px;}
+.status .bad .end { background-position: 100% -28px;}
+.status .counts { height: 30px; line-height: 30px; padding: 0;}
+.status .counts .textField { padding-right: 10px;}
+.status .counts .textField label { font-size: 1em;}
+
+.layoutTable {}
+.layoutTable h3 { line-height:2.2em; margin-left:100px;}
+.layoutTable td { vertical-align:top; padding-top:30px;}
+
+
+/* Colors */
+body			{ color:#666; background-color:#69c;}
+h1				{ color:#036;}
+h2				{}
+h3				{ color:#666;}
+a				{ color:#4079b3;}
+a:hover			{ color:#8ab8e5;}
+#page-body		{}
+#header			{}
+#bodyer			{ background-color:#fff;}
+#footer			{ color:#d8e4f0;}
+#logoBar		{}
+#topBar			{ color:#6692c7;}
+#topBar label	{ color:#fff;}
+#pathBar 		{ background-color:#d7e3f0;}
+#pathBar .returnBtn { color:#fff;}
+#pathBar .pageTabs a { color:#036;}
+#pathBar .pageTabs .selected a { color:#fff;}
+.layoutTable	{ color:#666;}
+tr.r1 { background:#efefef;}
+tr.r2 { background:#fff;}
+
+/* Radius for IE9+ */
+.radiusAll { border-radius:12px;}
+.radiusTopL { border-top-left-radius:12px;}
+.radiusTopR { border-top-right-radius:12px;}
+.radiusBotL { border-bottom-left-radius:12px;}
+.radiusBotR {border-bottom-right-radius:12px;}
+

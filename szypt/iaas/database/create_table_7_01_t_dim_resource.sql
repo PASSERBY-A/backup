@@ -1,0 +1,24 @@
+ALTER TABLE T_DIM_RESOURCE
+ DROP PRIMARY KEY CASCADE;
+DROP TABLE T_DIM_RESOURCE CASCADE CONSTRAINTS;
+CREATE TABLE T_DIM_RESOURCE(
+       PK_T_DIM_RESOURCE_ID           NUMBER             NOT NULL,
+       RESOURCE_ID                    VARCHAR2(200)      NOT NULL,
+       NAME                           VARCHAR2(200)      NOT NULL,
+       TYPE                           VARCHAR2(50)       NOT NULL,
+       PRE_RESOURCE_ID                VARCHAR2(200)      NULL,
+	   HYPERVISOR					  VARCHAR2(200)	     NULL,
+       DESCRIPT                       VARCHAR2(200)      NOT NULL,
+       CREATED_BY                     VARCHAR2(200)      NOT NULL,
+       CREATED_ON                     TIMESTAMP          DEFAULT SYSTIMESTAMP NOT NULL,
+       MODIFIED_BY                    VARCHAR2(50)       NULL,
+       MODIFIED_ON                    TIMESTAMP          NULL
+);
+
+ALTER TABLE T_DIM_RESOURCE
+ADD CONSTRAINT T_DIM_RESOURCE_PK PRIMARY KEY
+(
+PK_T_DIM_RESOURCE_ID
+)
+ ENABLE
+;

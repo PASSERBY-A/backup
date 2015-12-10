@@ -1,0 +1,54 @@
+{"title":"IAAS资源池", "page":"root.html", "items":[
+	{"title":"测试资源池", "page":"A.html", "val":10, "items":[
+		{"title":"开发框架室", "page":"A1.html","items":[
+			{"title":"测试环境一", "page":"A1a.html"},
+			{"title":"测试环境二", "page":"A1b.html"}
+		]},
+		{"title":"项目资源池", "page":"A2.html", "items":[
+			{"title":"综合项目结算<label>一期</label>", "page":"A2a.html"},
+			{"title":"综合项目结算<label>二期</label>", "page":"A2b.html"}
+		]},
+		{"title":"运维一室", "page":"A3.html"},
+		{"title":"测试室", "page":"A4.html"}
+	]},
+	{"title":"生产资源池1", "page":"B.html", "val":23, "items":[
+		{"title":"PAAS<label>资源池</label>", "page":"B1.html","items":[
+			{"title":"网间结算<label>校验池</label>", "page":"B1a.html"},
+			{"title":"数据质量稽核<label>Hadoop对比池</label>", "page":"B1b.html"}
+		]},
+		{"title":"漫游结算", "page":"B2.html"},
+		{"title":"国际漫游", "page":"B3.html"},
+		{"title":"网间结算", "page":"B4.html"}
+	]},
+	{"title":"生产资源池2", "page":"B.html", "val":23, "items":[
+		{"title":"PAAS<label>资源池</label>", "page":"B1.html","items":[
+			{"title":"网间结算<label>校验池</label>", "page":"B1a.html"},
+			{"title":"数据质量稽核<label>Hadoop对比池</label>", "page":"B1b.html"}
+		]},
+		{"title":"漫游结算", "page":"B2.html"},
+		{"title":"国际漫游", "page":"B3.html"},
+		{"title":"网间结算", "page":"B4.html"}
+	]},
+	{"title":"生产资源池3", "page":"B.html", "val":23, "items":[
+		{"title":"PAAS<label>资源池</label>", "page":"B1.html","items":[
+			{"title":"网间结算<label>校验池</label>", "page":"B1a.html"},
+			{"title":"数据质量稽核<label>Hadoop对比池</label>", "page":"B1b.html"}
+		]},
+		{"title":"漫游结算", "page":"B2.html"},
+		{"title":"国际漫游", "page":"B3.html"},
+		{"title":"网间结算", "page":"B4.html"}
+	]},
+	{"title":"生产资源池4", "page":"B.html", "val":23, "items":[
+		{"title":"PAAS<label>资源池</label>", "page":"B1.html","items":[
+			{"title":"网间结算<label>校验池</label>", "page":"B1a.html"},
+			{"title":"数据质量稽核<label>Hadoop对比池</label>", "page":"B1b.html"}
+		]},
+		{"title":"漫游结算", "page":"B2.html"},
+		{"title":"国际漫游", "page":"B3.html"},
+		{"title":"网间结算", "page":"B4.html"}
+	]},
+	{"title":"信息资源池", "page":"C.html", "val":45, "items":[
+		{"title":"信息资源池一", "page":"C1.html"},
+		{"title":"信息资源池二", "page":"C2.html"}
+	]}
+]}

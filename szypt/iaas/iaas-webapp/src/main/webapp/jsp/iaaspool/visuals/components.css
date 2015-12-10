@@ -1,0 +1,50 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Nodes */
+.nodeViewContainer { margin:0 auto; text-align:center; position: relative;}
+.nodeViewContainer li { width:120px; height:120px; background:url(node02_s.png) no-repeat 50% 50%;}
+.nodeViewContainer .alert table.nodeCell { background: url("alert.png") no-repeat 80px -5px;}
+
+table.nodeCell { color:#fff; font-size:1.8em; width:100%; height: 110px; overflow: hidden;}
+table.nodeCell td  { padding: 0 15px; color: #deedd2; line-height: 1.2em;}
+table.nodeCell a { color: #deedd2; text-decoration: none;}
+table.nodeCell a:hover { color: #fff;}
+
+.nodeViewTips { display:none; width: 650px; height: 300px; position: absolute; border:1px solid #bdbdbd; top: 80px; left: 35px; background: url("tipsBG.png") repeat-x 50% 50%; overflow: hidden;}
+.nodeViewTips h3 { margin-left: 1em; font-size:1.8em; font-weight:normal; height: 60px; line-height: 60px;}
+.nodeViewTips th { font-weight: normal; height: 40px;}
+.nodeViewTips .nodeViewContainer { width: 150px !important; height: 150px !important;}
+.nodeViewTips .status { padding: 0;}
+.nodeViewTips .textField { padding-right: 30px;}
+.nodeViewTips .close { display:block; width:50px; height:50px; margin-top:5px; background: url("close_t.png") no-repeat 0 0;}
+.nodeViewTips .close:hover { background-position: 0 -50px;}
+.alertTips h3 { background: url("alert.png") no-repeat 0 50%; color: #c8741e; padding-left: 50px;}
+
+.nodeViewControls { height:50px; position:absolute;}
+.nodeViewControls a { display:block; width:50px; height:50px; background: no-repeat 0 0;}
+.nodeViewControls a:hover { background-position:0 -50px;}
+.nodeViewControls .prev { background-image: url("rollArrows_l.png");}
+.nodeViewControls .next { background-image: url("rollArrows_r.png");}
+.nodeViewControls .dis { background-position:0 -100px !important; cursor: default;}
+
+.ctrlFace2 a { background-position: -50px 0;}
+.ctrlFace2 a:hover { background-position: -50px -50px;}
+.ctrlFace2 .dis { background-position: -50px -100px !important;}
+
+.bigNode {}
+.bigNode li { width: 260px; height: 260px; background: url(node02.png) no-repeat 50% 50%;}
+.bigNode table.nodeCell { height: 200px;}
+.bigNode table.nodeCell td  { font-size: 1.4em; font-weight: bold; padding: 0 50px;}
+.bigNode .subTitle { color: #fff; font-size: 0.6em; margin-bottom: 10px;}
+
+.barNode {}
+.barNode li { width:485px; height:200px; background: url("node01_s.png") no-repeat 80px 10px;}
+.barNode table.nodeCell { font-size: 1.6em; font-weight: bold; width:120px; margin-left: 80px; margin-top: 10px;}
+.barNode table.nodeCell a { color: #fff;}
+
+
+
+
+
+

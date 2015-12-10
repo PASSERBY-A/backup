@@ -1,0 +1,60 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Nodes */
+#nodeViewContainer { width:900px; height:500px; margin:0 auto; text-align:center;}
+#nodeViewContainer .msgText { text-align:left; color:#000; margin-top:1em;}
+#nodeViewContainer .msgText h3 { font-size:1.6em; line-height:2em;}
+#nodeViewContainer table.cell { color:#fff; font-size:2.2em; width:250px; height:220px;}
+#nodeViewContainer table.cell label { display:block; font-size:0.8em; opacity:0.85;}
+#nodeViewContainer table.cell .percent { display:block; font-size:1.4em; color:#cddbc5;}
+#nodeViewContainer table.cell .percent .val { font-size:2em;}
+#nodeViewContainer .nodeLevel { width:900px; height:500px; position:absolute; top:0; left:0;}
+#nodeViewContainer .nodeLevel dl { position:absolute; display:block; width:250px; height:250px; top:30px; left:325px;}
+#nodeViewContainer .nodeLevel dt { display:block; background:url(node02.png) no-repeat 50% 50%; height:250px;}
+#nodeViewContainer .nodeLevel dd { position:absolute; width:250px; height:250px; display:none; top:0; left:0; background:url(node02.png) no-repeat 50% 50%;}
+#nodeViewContainer .nodeLevel dd.btn { cursor:pointer;}
+#nodeViewContainer .rootNodes dt,
+#nodeViewContainer .rootNodes dd,
+#nodeViewContainer .rollLevel dt { background:url(node01.png);}
+#nodeViewContainer .rootNodes dd td { background:url(nodeIcon01.png) no-repeat 50% 30%; padding-top:80px;}
+#nodeViewContainer .rollLevel dt td {}
+#nodeViewContainer .rootNodes table.cell,
+#nodeViewContainer .rollLevel dt table.cell { height:250px;}
+#nodeViewContainer .lastNodes dd,
+#nodeViewContainer .endNodes dt { background:url(node03.png);}
+#nodeViewControls { height:50px; width:1050px; position:absolute; left:-75px; top:30%;}
+#nodeViewControls a { width:50px; height:50px; background:url(nodeArrows.png) no-repeat;}
+#nodeViewControls .prev { background-position:0 0;}
+#nodeViewControls .next { background-position:-50px 0;}
+
+/* Nodes Loadpage */
+#nodePageContainer { width:970px; overflow:hidden;}
+#nodePageContainer .msgText { color:#000; text-align:center; padding:5px 8px; border:1px solid #b36262; background-color:#ffe3e3;}
+#inforTabs { min-height:400px;}
+
+/* Column Chart */
+#columnChartContainer { width:610px; color:#666;}
+#columnChartContainer ul { width:480px; height:220px; margin:0 auto; overflow:hidden;}
+#columnChartContainer li { position:relative; float:left; height:120px; width:60px; margin-top:40px;}
+#columnChartContainer li label { position:absolute; width:60px; left:0; bottom:-35px; font-size:0.75em; text-align:center;}
+#columnChartContainer .chart { position:absolute; left:18px; bottom:0; width:24px; height:0; background:url(chartBG.png) repeat-y 0 0;}
+#columnChartContainer .chart .value { position:absolute; width:40px; left:-8px; top:-40px; color:#000; text-align:center; font-size:0.9em;}
+#columnChartContainer .chart .cap { position:absolute; left:0; width:24px; background:url(chartCap.png) no-repeat 0 0;}
+#columnChartContainer .chart .top { background-position:0 0; height:15px; top:-15px;}
+#columnChartContainer .chart .root { background-position:0 100%; height:5px; bottom:-5px;}
+#columnChartContainer .empty .chart,
+#columnChartContainer .empty .top { background-position:100% 0;}
+#columnChartContainer .empty .root { background-position:100% 100%;}
+#columnChartControls { position:absolute; width:610px; height:130px; top:35px; left:0;}
+#columnChartControls a { height:130px; width:40px; background:url(rollArrows.png) no-repeat;}
+#columnChartControls .prev { background-position:0 50%;}
+#columnChartControls .next { background-position:100% 50%;}
+#columnChartPages { text-align:center; line-height:2em;}
+#columnChartPages label { font-weight:bold; font-size:1.4em;}
+
+/* Pie Chart */
+.pieChart svg>g:last-child { display:none;}
+
+
+

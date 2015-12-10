@@ -1,0 +1,43 @@
+ALTER TABLE T_HOST  DROP PRIMARY KEY CASCADE;
+
+DROP TABLE T_HOST CASCADE CONSTRAINTS;
+
+CREATE TABLE T_HOST 
+(
+   PK_HOST_ID           NUMBER(10)                     NOT NULL PRIMARY KEY,
+   MANUFACTURER         VARCHAR2(200)                  NULL,
+   PRODUCTNAME          VARCHAR2(200)                  NULL,
+   SERIALNUMBER         VARCHAR2(200)                  NOT NULL,
+   SERVERNAME           VARCHAR2(200)                  NULL,
+   CPUCOUNT             INT                            NULL,
+   CPUCORES             INT                            NULL,
+   CPUTYPE              VARCHAR2(200)                  NULL,
+   MEMORY               INT                            NULL,
+   STATUS               INT                            NULL,
+   TYPE                 INT                            NULL,
+   DESCRIPT             VARCHAR2(200)                  NULL,
+   NIC                  INT                            NULL,
+   BAY_INDEX            INT                            NULL,
+   CREATED_BY           VARCHAR(60)                    NOT NULL,
+   CREATED_ON           TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
+   MODIFIED_BY          VARCHAR(60)                    NULL,
+   MODIFIED_ON          TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
+   HOSTNAME             VARCHAR2(200)                  NULL,
+   RESORUCEPOOLID       VARCHAR2(200)                  NULL
+);
+
+COMMENT ON TABLE T_HOST IS 
+'主机信息';
+
+COMMENT ON COLUMN T_HOST.MANUFACTURER IS 
+'厂商';
+
+COMMENT ON COLUMN T_HOST.SERVERNAME IS 
+'服务器名称';
+
+COMMENT ON COLUMN T_HOST.CPUCOUNT IS 
+'CPU数量';
+
+COMMENT ON COLUMN T_HOST.CPUCORES IS 
+'CPU核数';
+

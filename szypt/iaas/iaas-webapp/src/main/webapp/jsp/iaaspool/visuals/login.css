@@ -1,0 +1,24 @@
+@charset "utf-8";
+/* CSS Document */
+
+* { padding:0; margin:0; border:none; list-style:none;}
+body { color:#666; font-size:9pt; font-family:"Microsoft YaHei"; background:url(bodyGrain.gif) repeat 0 0;}
+a:link { color:#4079b3; text-decoration:underline;}
+a:hover { color:#8ab8e5;}
+
+#page-body { min-width:1000px; overflow:hidden; background:url(bodyBG.jpg) no-repeat 50% 0;}
+#loginHeader { height:130px;}
+#header { background:url(repeatsH.png) repeat-x 0 0; height:100px; padding:20px 0;}
+#bodyer { margin:0 auto; margin-top:20px; width:620px; height:240px; text-align:center;}
+#bodyer td { height:60px;}
+#footer { color:#d8e4f0; margin-top:15px; height:50px; text-align:center;}
+#logoBar { width:500px; height:100px; margin:0 auto;}
+#topBar { color:#6692c7; width:170px; height:30px; position:absolute; right:0; top:20px; text-align:center; line-height:28px; background:url(topBarBG.png) no-repeat 50% 50%;}
+#topBar label { color:#fff;}
+
+.wrapper { width:1000px; margin:0 auto;}
+.relaContainer { position:relative;}
+.inputBlock { color:#666; border:1px solid #d3d3d3; background:url(boxShadows.png) no-repeat 0 0; height:30px; line-height:30px; width:220px; padding:0 0.5em;}
+.submitBtn { font-size:1.2em; border:1px solid #395491; font-weight:bold; color:#fff; width:100px; height:30px; background:url(components.png) no-repeat 50% 0;}
+.msgTxt { color:#eaff80;}
+

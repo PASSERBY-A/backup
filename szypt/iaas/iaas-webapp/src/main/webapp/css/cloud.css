@@ -1,0 +1,506 @@
+#navigation ul li.property span.icon {
+	background-position: -610px -340px;
+}
+
+#navigation ul li.logs span.icon {
+	background-position: -610px -303px;
+}
+
+#navigation ul li.resourcePoolPermission span.icon {
+	background-position: -610px -380px;
+}
+
+#navigation ul li.workOrders span.icon {
+	background: url(../images/icons_workOrders.gif) no-repeat 5px 10px;
+	background-size: 32px;
+}
+
+#navigation ul li.resourceStatistics span.icon {
+	background: url(../images/icons_resourceStatistics.gif) no-repeat 5px
+		10px;
+	background-size: 32px;
+}
+
+#navigation ul li.workOrderReport span.icon {
+	background: url(../images/icons_workOrderReport.gif) no-repeat 5px 10px;
+	background-size: 32px;
+}
+
+#navigation ul li.topData span.icon {
+	background: url(../images/icons_topData.gif) no-repeat 5px 10px;
+	background-size: 32px;
+}
+
+#navigation ul li.hpHostManagement span.icon {
+	background: url(../images/icons_workOrderReport.gif) no-repeat 5px 10px;
+	background-size: 47px;
+}
+
+
+#navigation ul li.equipmentEnroll span.icon {
+	background-position: -610px -295px;
+}
+
+#navigation ul li.service{
+	background: #fff;
+}
+#navigation ul li.service span.icon{
+	background-position:-208px -440px;
+	background-position:-120px -440px;
+}
+.ui-datepicker{
+	z-index: 9999 !important;
+}
+.system-dashboard.zone .status_box li{
+	margin-bottom: 20px !important;
+}
+.system-dashboard.zone{
+	height:709px !important;
+}
+.new-project .field label{
+	height:20px !important;
+}
+.new-project .field label{
+	width:140px !important;
+}
+.new-project .field input[type=text],.new-project .field select{
+	width:480px !important;
+}
+.new-project .field select,.new-project .field textarea{
+	margin: 15px 0 0 15px;
+	border-radius:5px;
+}
+.new-project .field textarea{
+	width:480px !important;
+}
+.new-project .projectReason label{
+	height: 80px  !important;
+}
+.new-project .resourePool{
+	height: 44px;
+}
+.project-dashboard .resources form .field textarea{
+	float: right;
+	margin-right: 105px;
+	width: 180px;
+	border-radius: 5px;
+}
+.detail-view .main-groups{
+	max-height: 507px;
+}
+.detail-view.edit-mode .main-groups {
+	max-height: 460px;
+}
+.applyReason td textarea{
+	margin-left: 10px;
+	min-width: 360px;
+	max-width:560px;
+}
+
+/**********************************************start 如下css样式为添加实例界面调整***********************************/
+/******第一步调整两个select框显示排版问题*******
+.multi-wizard .content .section .select-area select{
+	margin: 2px 0px 0px 14px;
+}
+.multi-wizard .content .section .select-area select.pool{
+	width:120px;
+	margin: 11px 4px 0px 14px;
+}
+***/
+.multi-wizard .content .section .select-area select{
+	margin-top:5px;
+}
+.multi-wizard .content .section .select-area{
+	height: 60px;
+}
+/***新增实例最后一步左侧面板 高度增加20个像素***********/
+.multi-wizard .select-container{
+	height: 372px;
+}
+/*********************************************end***********************************/
+
+/**********************************************start 如下css样式为更改服务方案调整***********************************/
+.ui-dialog div.form-container div.value textarea{
+	width:222px;
+}
+/**********************************************end***********************************/
+
+/******************************************start新增项目页面增加数字输入校验错误信息提示 样式修改***************************/
+.new-project .field label.error{
+	width:180px !important;
+	margin-left: 170px;
+	margin-top: 40px;
+	padding: 0px;
+}
+.new-project div.projectReason label.error{
+	margin-top: 5px;
+}
+
+/**********************************************end***********************************/
+/* add by huang xianjin */
+.data-table table.body input[type=button] {
+  display: inline-block;
+  height: 25px;
+  border: none;
+  color: #FFFFFF;
+  -moz-text-shadow: 0px -1px 1px #465259;
+  -webkit-text-shadow: 0px -1px 1px #465259;
+  -o-text-shadow: 0px -1px 1px #465259;
+  text-shadow: 0px -1px 1px #465259;
+  background: #0049FF url(../images/gradients.png) 0px -317px;
+  font-size: 13px;
+  font-weight: bold;
+  border: 1px solid #0069CF;
+  border-radius: 5px 5px 5px 5px;
+  cursor: pointer;
+}
+
+#validateForm label.error{
+	position: static;
+	margin-left: 10px;
+}
+
+/* add by huang xianjin used in resource statistics style begin */
+.detail-view #details-tab-detailTable div.list-view {
+	width: 610px;
+	margin: auto auto !important;
+}
+
+.detail-view #details-tab-detailTable div.list-view div.fixed-header {
+	left: 13px !important;
+	top: 10px !important;
+	width: 553px !important;
+}
+
+.detail-view #details-tab-detailTable div.list-view div.fixed-header table
+	{
+	top: 20px !important;
+}
+
+.detail-view #details-tab-detailTable div.list-view div.data-table table
+	{
+	width: 553px !important;
+}
+/* resource statistics style end */
+
+/* add by huang xianjin used in work order report style begin */
+.plot-view div.plot {
+	position: relative;
+	height: 274px;
+	width: 98%;
+	background: #FFFFFF;
+	border: 1px solid #E2DDDD;
+	margin-top: 41px;
+	margin-left: 8px;
+	/* 	overflow: auto; */
+	/* 	overflow-x: hidden; */
+}
+
+.plot-view div.plot-list {
+	position: relative;
+}
+
+.plot-view div.list-view {
+	width: 780px;
+	border: 1px solid #DAD4D4;
+	margin: 11px auto auto !important;
+	height: 356px !important;
+	background: #F7F7F7;
+}
+
+.plot-view div.list-view div.fixed-header {
+	width: 703px !important;
+	top: 1px !important;
+	left: 19px !important;
+	background: #FFFFFF;
+}
+
+.plot-view div.list-view div.fixed-header table {
+	top: 20px !important;
+}
+
+.plot-view div.list-view table tbody td.ym,.plot-view div.list-view table tbody td.s1,.plot-view div.list-view table tbody td.s5,.plot-view div.list-view table tbody td.s6,.plot-view div.list-view table tbody td.total,.plot-view div.list-view table th.ym,.plot-view div.list-view table th.s1,.plot-view div.list-view table th.s5,.plot-view div.list-view table th.s6,.plot-view div.list-view table th.total
+	{
+	min-width: 60px;
+/* 	max-width: 60px !important; */
+	width: 60px !important;
+}
+
+.plot-view select {
+	height: 21px;
+	font-size: 12px;
+	border: 1px solid #808080;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	border-radius: 4px;
+	border-radius: 4px 4px 4px 4px;
+}
+
+.plot-view input[type=button] {
+  display: inline-block;
+  height: 25px;
+  border: none;
+  color: #FFFFFF;
+  -moz-text-shadow: 0px -1px 1px #465259;
+  -webkit-text-shadow: 0px -1px 1px #465259;
+  -o-text-shadow: 0px -1px 1px #465259;
+  text-shadow: 0px -1px 1px #465259;
+  background: #0049FF url(../images/gradients.png) 0px -317px;
+  font-size: 13px;
+  font-weight: bold;
+  border: 1px solid #0069CF;
+  border-radius: 5px 5px 5px 5px;
+  cursor: pointer;
+  margin : 3px 5px 3px 5px;
+}
+
+.reportTable table tbody td,.reportTable table th {
+	min-width: 0px;
+}
+
+.reportTable table {
+	width: auto;
+	max-width: 777px;
+	margin: 5px;
+	text-indent: 0px;
+}
+
+.reportTable table tbody tr {
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+}
+
+.reportTable .legendLabel,.reportTable .legendColorBox {
+	padding: 2px;
+}
+
+.reportTable .sysData { color:#888;}
+.reportTable .sysData li { border:1px dotted #bdb9a1; background-color:#fff; padding:5px; margin-bottom:10px;}
+.reportTable .sysData .dataTitle { line-height:2.2em; border-bottom:1px solid #7d86b3; padding:0 5px;}
+.reportTable .sysData .dataStatus { font-weight:bold; color:#4ec914; margin-top:5px;}
+.reportTable .sysData .dataTip { padding:2px 3px; line-height:1em;}
+.reportTable .sysData .icon { color:#000; width:60px; text-align:right; font-weight:bold; background-position:3px 50%; background-repeat:no-repeat;}
+.reportTable .sysData .percent { height:22px; margin:4px 0; margin-left:10px; background:#4ec914 url(../images/icon/progress.jpg) no-repeat 100% 100%;}
+.reportTable .sysData .val { color:#4ec914; font-weight:bold; padding-left:5px;}
+.reportTable .sysData li:hover { color:#7d86b3; border-color:#283993;}
+
+.reportTable { margin-bottom:10px; padding-right: 10px;}
+.reportTable .sysData { margin:0 5px;}
+.reportTable .sysData li:hover .dataTip { color:#fff;}
+.reportTable .dataTitle { margin-top: 5px; font-size: 12px; text-align:right;}
+.reportTable .dataStatus { height:220px;}
+.reportTable .dataTip { font-size: 12px; color:#e2e2e2; text-align:center;}
+.reportTable .columnTip { float:left; background-color:#555; margin-top:5px; margin-left:35px; padding:5px;}
+.reportTable .poolData { height:210px; margin-right:0;}
+.reportTable .poolData li { float:left; margin-right:5px;}
+.reportTable .poolData .dataStatus { width:168px; height:160px;}
+.reportTable .orderData .dataTitle { text-align:right;}
+.reportTable .ipsData { height:280px; margin-right:0;}
+.reportTable .ipsData li { display:none; float:left; height:260px; margin-right:5px;}
+.reportTable .ipsData .dataStatus { width:353px;}
+
+/* work order report style end */
+
+div.list-view table tbody td.productionPool,div.list-view table tbody td.testingPool,div.list-view table tbody td.save,div.list-view table th.productionPool,div.list-view table th.testingPool,div.list-view table th.save
+	{
+	min-width: 60px;
+	max-width: 60px !important;
+	width: 60px !important;
+}
+
+
+/***** added by steven ,2014/03/21, for the page of resource pool  *****/
+#header .link{
+	float: right;
+	color: #fff;
+	margin-top: 15px;
+	margin-left: 20px;
+	cursor: pointer;
+	font-size: 14px;
+}
+#header .link:hover{
+	text-decoration:underline;
+}
+#header div.controls{
+	padding-right:16px;
+}
+
+/***** added by steven ,2014/03/24, auto change a new line to adapt the long words  *****/
+table tbody td, table th{
+	table-layout : fixed;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+/** 登录页面中的样式 added by Li Manxin*/
+.index_header { background:url(../images/repeatsH.png) repeat-x 0 0; height:100px; padding:20px 0;}
+.index_logoBar { width:500px; height:100px; margin:0 auto;}
+
+/** menu style added by huangxianjin*/
+#navigation ul li.pl_45 {
+	padding-left: 45px;
+}
+
+#navigation ul li:hover.pl_45,#navigation ul li.active.pl_45 {
+	width: 185px;
+}
+
+#navigation ul li.service span.icon,#navigation ul li.resourceMenu span.icon,
+#navigation ul li.systemMenu span.icon,#navigation ul li.logMenu span.icon,#navigation ul li.statisticMenu span.icon,
+#navigation ul li.instanceMenu span.icon
+	{
+	background-position: -120px -433px;
+}
+
+#navigation ul li.toggle span.icon {
+	background-position: -208px -433px;
+}
+
+#validateForm label.error{
+	display:inline-block;
+}
+.detail-group .main-groups table td.value > span{
+	 display: block;
+  	 height: auto;
+  	 overflow: hidden;
+  	 position: relative;
+  	 top:0px;
+  	 float: none;
+  	 width: 100%;
+}
+.details.group-multiple table {
+border: 1px solid #cfc9c9;
+}
+/**
+#details-tab-stats table.header div.detail-group{
+	float: left;
+	height: 40px;
+	margin: -15px 0 -8px -17px;
+	border: none;
+}
+#details-tab-stats table.header table{
+	border: none;
+	border-right: 1px solid #cfc9c9;
+}*/
+
+#placeholder .xAxis .tickLabel {
+	word-wrap: break-word;
+	padding-left: 15px;
+}
+table tbody td, table th{
+	min-width:86px;
+}
+.logs table tbody td, .logs table th{
+	padding: 9px 3px 4px 3px;
+}
+
+div.details div.detail-group tr.resourcePoolId select,
+div.details div.detail-group tr.approveResult select,
+div.details div.detail-group tr.diskOfferingId select,
+div.details div.detail-group tr.serviceofferingid select,
+div.details div.detail-group tr.templateid select,
+div.details div.detail-group tr.zoneid select,
+div.details div.detail-group tr.diskofferingid select,
+div.details div.detail-group tr.hypervisor select,
+div.details div.detail-group tr.networkids select,
+div.details div.detail-group tr.approveDesc textarea
+ {
+	margin-left: 10px;
+	min-width: 360px;
+	max-width: 560px;
+}
+.multi-wizard.instance-wizard .select-network .main-desc{
+	margin-bottom: 10px;
+}
+#details-tab-approve div.details{
+	margin-top:20px !important;
+}
+.system-dashboard.zone .status_box li.resourcepools .icon {
+  background-position: -36px -105px;
+}
+
+div.workOrders div.toolbar div.filters {
+	width: 190px;
+}
+div.workOrders div.toolbar div.filters select {
+	width: 130px;
+}
+#navigation ul li.hpux span.icon{
+	background-position: -73px -23px
+}
+#navigation ul li.hphost span.icon{
+	background: url(../images/infrastructure-icons.png) no-repeat 0px 0px;
+	background-position: -610px -102px;
+	width: 10px;
+	height: 10px;
+	padding: 15px 25px;
+	margin-left:-17px;
+}
+.detail-view #details-tab-detailTable div.listViewsHead {
+	position : relative;
+	padding-top : 7px;
+}
+.detail-view #details-tab-detailTable div.listViewsHead table tbody td {
+	padding: 5px 5px 4px 5px;
+}
+	
+.detail-view #details-tab-detailTable div#resourcePool div.list-view {
+	height: 300px !important;
+}
+.detail-view #details-tab-detailTable div#resourcePool div.list-view div.fixed-header {
+	height: 27px;
+}
+.detail-view #details-tab-detailTable div#resourcePool div.list-view div.fixed-header table {
+	top: 10px !important;
+}
+.detail-view #details-tab-detailTable div#resourcePool div.list-view table.body {
+	margin-top: 39px;
+}
+
+.detail-view #details-tab-detailTable div#resourcePoolX86 div.list-view {
+	height: 130px !important;
+}
+.detail-view #details-tab-detailTable div#resourcePoolX86 div.list-view div.fixed-header {
+	height: 27px;
+}
+.detail-view #details-tab-detailTable div#resourcePoolX86 div.list-view div.fixed-header table {
+	top: 10px !important;
+}
+.detail-view #details-tab-detailTable div#resourcePoolX86 div.list-view table.body {
+	margin-top: 39px;
+}
+
+.detail-view #details-tab-detailTable div#resourcePoolHPVM div.list-view {
+	height: 130px !important;
+}
+.detail-view #details-tab-detailTable div#resourcePoolHPVM div.list-view div.fixed-header {
+	height: 27px;
+}
+.detail-view #details-tab-detailTable div#resourcePoolHPVM div.list-view div.fixed-header table {
+	top: 10px !important;
+}
+.detail-view #details-tab-detailTable div#resourcePoolHPVM div.list-view table.body {
+	margin-top: 39px;
+}
+.dashboard.admin .dashboard-container.sub.alerts{
+	height: 150px;
+}
+.dashboard.admin .dashboard-container.sub.message{
+	width: 763px;
+	margin-bottom: 10px;
+}
+.dashboard.admin .dashboard-container.sub.message ul{
+	width:760px;
+}
+.dashboard.admin .dashboard-container.sub.message ul li,.dashboard.admin .dashboard-container.sub.message ul li span.title{
+	width:100%;
+}
+.dashboard.admin .dashboard-container.sub.message ul li label{
+	float: right
+}
+.dashboard.admin .dashboard-container.sub.message ul li div.content{
+	line-height: 1.5;
+	font-size: 12px;
+}

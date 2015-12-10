@@ -1,0 +1,30 @@
+<!-- NOTE: If you're working offline, you might have to change the DOCTYPE to the following:
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">-->
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <mapping class="com.hp.config.model.DbConfig"/>
+        <mapping class="com.cmsz.cloudplatform.model.TemplateAccount"/>
+        <mapping class="com.cmsz.cloudplatform.model.Log"/>
+         <mapping class="com.cmsz.cloudplatform.model.Property"/>
+         <mapping class="com.cmsz.cloudplatform.model.ResourcePool"/>
+         <mapping class="com.cmsz.cloudplatform.model.DimResource"/>
+         <mapping class="com.cmsz.cloudplatform.model.ResourcePoolPermission"/>
+         <mapping class="com.cmsz.cloudplatform.model.WorkOrder"/>
+          <mapping class="com.cmsz.cloudplatform.model.WorkItem"/>
+          <mapping class="com.cmsz.cloudplatform.model.ProvisionAttribute"/>
+          <mapping class="com.cmsz.cloudplatform.model.ApproveRule"/>
+          <mapping class="com.cmsz.cloudplatform.model.Resource"/>
+          
+          <mapping class="com.cmsz.cloudplatform.model.TEquipmentenroll"/>
+          <mapping class="com.cmsz.cloudplatform.model.TEquipmentevent"/>
+          <mapping class="com.cmsz.cloudplatform.model.THost"/>
+          <mapping class="com.cmsz.cloudplatform.model.THba"/>
+          <mapping class="com.cmsz.cloudplatform.model.TRack"/>
+          <mapping class="com.cmsz.cloudplatform.model.TBayinfo"/>
+          <mapping class="com.cmsz.cloudplatform.model.PaasDestoryObj"/>
+    </session-factory>
+</hibernate-configuration>

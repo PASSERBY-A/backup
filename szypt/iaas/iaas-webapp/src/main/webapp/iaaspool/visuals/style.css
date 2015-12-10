@@ -1,0 +1,86 @@
+@charset "utf-8";
+/* CSS Document */
+
+* { padding:0; margin:0; border:none; list-style:none;}
+body { font-size:9pt; font-family:"Microsoft YaHei"; background:url(bodyGrain.gif) repeat 0 0;}
+h1 { font-size:1.45em;}
+h2 { font-size:1.2em;}
+h3 { font-size:1em;}
+a:link { text-decoration:underline;}
+a:hover {}
+hr { border-bottom:1px solid #d3d3d3; height:1px; line-height:1px;}
+input { vertical-align:middle;}
+textarea { padding:0.5em;}
+
+#page-body { min-width:1000px; overflow:hidden; background:url(bodyBG.jpg) no-repeat 50% 0;}
+#header { background:url(repeatsH.png) repeat-x 0 0; height:70px;}
+#bodyer { margin-top:20px;}
+#footer { margin-top:15px; height:50px; text-align:center;}
+#logoBar { width:360px; height:60px; position:absolute; left:0; top:5px;}
+#topBar { width:170px; height:30px; position:absolute; right:0; top:15px; text-align:center; line-height:28px; background:url(topBarBG.gif) no-repeat 50% 50%;}
+#topBar a:link{text-decoration:none;}
+#pathBar { height:50px; line-height:48px; border-bottom:1px solid #b0c8e1;}
+#pageContents { margin:0 15px; padding-bottom:15px;}
+
+#pathBar .returnBtn { position:absolute; left:0; top:0; display:block; width:49px; height:50px; overflow:hidden; border-right:1px solid #b0c8e1;}
+#pathBar .returnBtn .icon { width:50px; height:50px; background:url(returnIcon.png) no-repeat 0 0;}
+#pathBar .returnBtn:hover { width:100px; font-size:1.25em; text-decoration:none; background:url(repeatsH.png) repeat-x 0 0;}
+#pathBar .returnBtn:hover .icon { background-position:100% 0;}
+#pathBar .pathText { margin-left:50px; height:50px; padding-left:1em; border-left:1px solid #fff;}
+#pathBar .pageTabs { position:absolute; width:60%; height:50px; top:0; right:0;}
+#pathBar .pageTabs li { float:left; width:80px; text-align:center;}
+#pathBar .pageTabs a { text-decoration:none;}
+#pathBar .pageTabs .selected { background:url(pageTab.png) no-repeat 50% 50%;}
+
+.floatl { float:left;}
+.floatr { float:right;}
+.wrapper { width:1000px; margin:0 auto;}
+.relaContainer { position:relative;}
+.inputBlock { border:1px solid #d3d3d3; background:#fff url(boxShadows.png) no-repeat 0 0;}
+
+.textInput { height:30px; background-color:#fff; line-height:30px; width:160px; padding:0 0.5em;}
+.normalBtn { height:30px; padding:0 1em; border:1px solid #d3d3d3; background:url(repeatsH.png) repeat-x 0 -140px;}
+.specialBtn { font-size:1.1em; border:1px solid #395491; color:#fff; padding:0 1em; height:30px; background:url(components.png) no-repeat 50% 0;}
+.submitBtn { font-size:1.4em; font-weight:bold; color:#fff; width:146px; height:46px; background:url(components.png) no-repeat 0 0;}
+.addBtn { text-indent:32px; background-position:0 -46px; margin-bottom:10px;}
+
+.layoutTable {}
+.layoutTable h3 { line-height:2.2em; margin-left:100px;}
+.layoutTable td { vertical-align:top; padding-top:30px;}
+
+#baseInfor { font-size:10pt;}
+#poolInfor { font-size:11pt;}
+#poolInfor .pieChart { width:320px; height:160px; margin:0 auto;}
+#poolInfor .countData { font-size:0.8em; line-height:1.8em; margin-left:100px;}
+#poolInfor .wrapper { width:610px;}
+
+
+/* Colors */
+body			{ color:#666; background-color:#69c;}
+h1				{ color:#036;}
+h2				{}
+h3				{ color:#666;}
+a				{ color:#4079b3;}
+a:hover			{ color:#8ab8e5;}
+#page-body		{}
+#header			{}
+#bodyer			{ background-color:#fff;}
+#footer			{ color:#d8e4f0;}
+#logoBar		{}
+#topBar			{ color:#6692c7;}
+#topBar label	{ color:#fff;}
+#pathBar 		{ background-color:#d7e3f0;}
+#pathBar .returnBtn { color:#fff;}
+#pathBar .pageTabs a { color:#036;}
+#pathBar .pageTabs .selected a { color:#fff;}
+.layoutTable	{ color:#666;}
+tr.r1 { background:#efefef;}
+tr.r2 { background:#fff;}
+
+/* Radius for IE9+ */
+.radiusAll { border-radius:6px;}
+.radiusTopL { border-top-left-radius:6px;}
+.radiusTopR { border-top-right-radius:6px;}
+.radiusBotL { border-bottom-left-radius:6px;}
+.radiusBotR {border-bottom-right-radius:6px;}
+

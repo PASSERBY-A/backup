@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <logger name="org.apache">
+        <level value="WARN"/>
+    </logger>
+	<logger name="com.hp.gdcc.tsportal">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="org.apache.velocity">
+        <level value="FATAL"/>
+    </logger>
+
+    <logger name="org.ibatis">
+        <level value="WARN"/>
+    </logger>
+  
+   <logger name="org.springframework">
+        <level value="WARN"/>
+    </logger>
+
+</log4j:configuration>
