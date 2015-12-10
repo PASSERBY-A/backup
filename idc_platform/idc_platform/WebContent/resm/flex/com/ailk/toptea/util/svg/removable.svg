@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:www="http://www.adobe.com"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   x="0.0000000"
+   y="0.0000000"
+   width="60.000000"
+   height="60.000000"
+   viewBox="0 0 256 256"
+   id="svg1"
+   xml:space="preserve"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   sodipodi:docname="removable.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:docbase="C:\Users\schroede.silverwhite\Documents\localcvs\spielwiese\flex\dnd\svg"><metadata
+   id="metadata35347"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   inkscape:window-height="575"
+   inkscape:window-width="765"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="0.0"
+   guidetolerance="10.0"
+   gridtolerance="10.0"
+   objecttolerance="10.0"
+   borderopacity="1.0"
+   bordercolor="#666666"
+   pagecolor="#ffffff"
+   id="base"
+   inkscape:zoom="6.2833333"
+   inkscape:cx="30"
+   inkscape:cy="30"
+   inkscape:window-x="567"
+   inkscape:window-y="397"
+   inkscape:current-layer="svg1" />
+  <defs
+   id="defs506">
+    <foreignObject
+   id="foreignObject126"
+   height="1"
+   width="1"
+   y="0"
+   x="0"
+   requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/">
+
+			</foreignObject>
+    
+  
+      
+    
+        
+        
+        
+      
+          
+          <linearGradient
+   x1="32.662601"
+   y1="227.99319"
+   x2="227.9735"
+   y2="32.682301"
+   id="XMLID_20_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#f0f0f0;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop144" />
+            <stop
+   style="stop-color:#b1b1c5;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop146" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#F0F0F0"
+   id="midPointStop148" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#F0F0F0"
+   id="midPointStop150" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#B1B1C5"
+   id="midPointStop152" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="127.9995"
+   y1="33"
+   x2="127.9995"
+   y2="223.0005"
+   id="XMLID_21_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#ffffff;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop159" />
+            <stop
+   style="stop-color:#000000;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop161" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#FFFFFF"
+   id="midPointStop163" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#FFFFFF"
+   id="midPointStop165" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#000000"
+   id="midPointStop167" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="127.9995"
+   y1="33.003399"
+   x2="127.9995"
+   y2="222.9967"
+   id="XMLID_22_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#b1b1c5;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop174" />
+            <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop176" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#B1B1C5"
+   id="midPointStop178" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#B1B1C5"
+   id="midPointStop180" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#7D7D99"
+   id="midPointStop182" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="62.9468"
+   y1="193.0547"
+   x2="193.0545"
+   y2="62.946899"
+   id="XMLID_23_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#003333;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop189" />
+            <stop
+   style="stop-color:#009f81;stop-opacity:1.0000000;"
+   offset="0.50000000"
+   id="stop191" />
+            <stop
+   style="stop-color:#003333;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop193" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#003333"
+   id="midPointStop195" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#003333"
+   id="midPointStop197" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#009F81"
+   id="midPointStop199" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#009F81"
+   id="midPointStop201" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#003333"
+   id="midPointStop203" />
+          </linearGradient>
+          
+          <radialGradient
+   cx="128"
+   cy="217"
+   r="195.99699"
+   fx="128"
+   fy="217"
+   id="XMLID_24_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#72c296;stop-opacity:1.0000000;"
+   offset="0.32020000"
+   id="stop210" />
+            <stop
+   style="stop-color:#009f81;stop-opacity:1.0000000;"
+   offset="0.58429998"
+   id="stop212" />
+            <stop
+   style="stop-color:#336666;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop214" />
+            <www:midPointStop
+   offset="0.3202"
+   style="stop-color:#72C296"
+   id="midPointStop216" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#72C296"
+   id="midPointStop218" />
+            <www:midPointStop
+   offset="0.5843"
+   style="stop-color:#009F81"
+   id="midPointStop220" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#009F81"
+   id="midPointStop222" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#336666"
+   id="midPointStop224" />
+          </radialGradient>
+          
+          
+          <linearGradient
+   x1="160.3418"
+   y1="160.32809"
+   x2="84.344101"
+   y2="84.330399"
+   id="XMLID_25_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#003333;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop233" />
+            <stop
+   style="stop-color:#336666;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop235" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#003333"
+   id="midPointStop237" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#003333"
+   id="midPointStop239" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#336666"
+   id="midPointStop241" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="160.3369"
+   y1="160.3242"
+   x2="84.3358"
+   y2="84.323097"
+   id="XMLID_26_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#e6e6e6;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop248" />
+            <stop
+   style="stop-color:#ffffff;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop250" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#E6E6E6"
+   id="midPointStop252" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#E6E6E6"
+   id="midPointStop254" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#FFFFFF"
+   id="midPointStop256" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="160.3369"
+   y1="160.3291"
+   x2="84.337502"
+   y2="84.329697"
+   id="XMLID_27_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#9a9ab1;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop263" />
+            <stop
+   style="stop-color:#ffffff;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop265" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#9A9AB1"
+   id="midPointStop267" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#9A9AB1"
+   id="midPointStop269" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#FFFFFF"
+   id="midPointStop271" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="95.676804"
+   y1="160.3311"
+   x2="171.6768"
+   y2="84.3311"
+   id="XMLID_28_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#cecedb;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop278" />
+            <stop
+   style="stop-color:#ffffff;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop280" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#CECEDB"
+   id="midPointStop282" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#CECEDB"
+   id="midPointStop284" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#FFFFFF"
+   id="midPointStop286" />
+          </linearGradient>
+          
+          
+          <linearGradient
+   x1="160.9639"
+   y1="96.036598"
+   x2="164.13139"
+   y2="92.869003"
+   id="XMLID_30_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop314" />
+            <stop
+   style="stop-color:#585868;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop316" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#7D7D99"
+   id="midPointStop318" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#7D7D99"
+   id="midPointStop320" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#585868"
+   id="midPointStop322" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="342.29691"
+   y1="96.036598"
+   x2="345.46439"
+   y2="92.869102"
+   id="XMLID_31_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop329" />
+            <stop
+   style="stop-color:#585868;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop331" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#7D7D99"
+   id="midPointStop333" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#7D7D99"
+   id="midPointStop335" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#585868"
+   id="midPointStop337" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="160.9639"
+   y1="-61.962898"
+   x2="164.13139"
+   y2="-65.130501"
+   id="XMLID_32_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop344" />
+            <stop
+   style="stop-color:#585868;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop346" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#7D7D99"
+   id="midPointStop348" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#7D7D99"
+   id="midPointStop350" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#585868"
+   id="midPointStop352" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="52.047901"
+   y1="122.1899"
+   x2="153.952"
+   y2="20.285801"
+   id="XMLID_33_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#f0f0f0;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop359" />
+            <stop
+   style="stop-color:#b1b1c5;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop361" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#F0F0F0"
+   id="midPointStop363" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#F0F0F0"
+   id="midPointStop365" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#B1B1C5"
+   id="midPointStop367" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="342.29791"
+   y1="-61.962399"
+   x2="345.46539"
+   y2="-65.129997"
+   id="XMLID_34_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop374" />
+            <stop
+   style="stop-color:#585868;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop376" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#7D7D99"
+   id="midPointStop378" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#7D7D99"
+   id="midPointStop380" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#585868"
+   id="midPointStop382" />
+          </linearGradient>
+          
+          
+          <linearGradient
+   x1="67.048302"
+   y1="242.7148"
+   x2="188.9527"
+   y2="120.8105"
+   id="XMLID_35_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#f0f0f0;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop391" />
+            <stop
+   style="stop-color:#b1b1c5;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop393" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#F0F0F0"
+   id="midPointStop395" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#F0F0F0"
+   id="midPointStop397" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#B1B1C5"
+   id="midPointStop399" />
+          </linearGradient>
+          
+          
+          <linearGradient
+   x1="127.9995"
+   y1="28"
+   x2="127.9995"
+   y2="228.0005"
+   id="XMLID_36_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#ffffff;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop408" />
+            <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop410" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#FFFFFF"
+   id="midPointStop412" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#FFFFFF"
+   id="midPointStop414" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#7D7D99"
+   id="midPointStop416" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="128.0005"
+   y1="123.7266"
+   x2="128.0005"
+   y2="-14.9802"
+   id="XMLID_37_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#dfdfdf;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop423" />
+            <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop425" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#DFDFDF"
+   id="midPointStop427" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#DFDFDF"
+   id="midPointStop429" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#7D7D99"
+   id="midPointStop431" />
+          </linearGradient>
+          
+          <linearGradient
+   x1="128.0005"
+   y1="123.7295"
+   x2="128.0005"
+   y2="-14.9721"
+   id="XMLID_38_"
+   gradientUnits="userSpaceOnUse">
+            <stop
+   style="stop-color:#9a9ab1;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop438" />
+            <stop
+   style="stop-color:#a5a5ba;stop-opacity:1.0000000;"
+   offset="0.037599999"
+   id="stop440" />
+            <stop
+   style="stop-color:#b7b7c8;stop-opacity:1.0000000;"
+   offset="0.12520000"
+   id="stop442" />
+            <stop
+   style="stop-color:#c4c4d3;stop-opacity:1.0000000;"
+   offset="0.22880000"
+   id="stop444" />
+            <stop
+   style="stop-color:#ccccd9;stop-opacity:1.0000000;"
+   offset="0.36260000"
+   id="stop446" />
+            <stop
+   style="stop-color:#cecedb;stop-opacity:1.0000000;"
+   offset="0.63480002"
+   id="stop448" />
+            <stop
+   style="stop-color:#b1b1c5;stop-opacity:1.0000000;"
+   offset="0.85949999"
+   id="stop450" />
+            <stop
+   style="stop-color:#ffffff;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop452" />
+            <www:midPointStop
+   offset="0"
+   style="stop-color:#9A9AB1"
+   id="midPointStop454" />
+            <www:midPointStop
+   offset="0.1696"
+   style="stop-color:#9A9AB1"
+   id="midPointStop456" />
+            <www:midPointStop
+   offset="0.6348"
+   style="stop-color:#CECEDB"
+   id="midPointStop458" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#CECEDB"
+   id="midPointStop460" />
+            <www:midPointStop
+   offset="0.8595"
+   style="stop-color:#B1B1C5"
+   id="midPointStop462" />
+            <www:midPointStop
+   offset="0.5"
+   style="stop-color:#B1B1C5"
+   id="midPointStop464" />
+            <www:midPointStop
+   offset="1"
+   style="stop-color:#FFFFFF"
+   id="midPointStop466" />
+          </linearGradient>
+          
+          
+          
+          
+        </defs>
+  
+  <rect
+   id="rect136"
+   style="fill:none"
+   y="0"
+   x="0"
+   height="256"
+   width="256" /><path
+   d="M 42,23 L 39.929,23 L 23,39.929 L 23,183 C 23,183 29.877,183 31.667,183 C 31.667,183.973 31.667,184.027 31.667,185 C 29.877,185 23,185 23,185 L 23,220 C 23,227.168 28.832,233 36,233 L 220,233 C 227.168,233 233,227.168 233,220 L 233,185 C 233,185 226.123,185 224.333,185 C 224.333,184.027 224.333,183.973 224.333,183 C 226.123,183 233,183 233,183 L 233,36 C 233,28.832 227.168,23 220,23 L 42,23 z "
+   style="fill:#585868"
+   id="path140" /><path
+   d="M 42.829,30 C 41.8,31.029 31.029,41.8 30,42.829 C 30,44.441 30,172.141 30,176 C 32.367,176 38.667,176 38.667,176 L 38.667,192 C 38.667,192 32.367,192 30,192 C 30,195.484 30,220 30,220 C 30,223.309 32.691,226 36,226 L 220,226 C 223.309,226 226,223.309 226,220 C 226,220 226,195.484 226,192 C 223.633,192 217.333,192 217.333,192 L 217.333,176 C 217.333,176 223.633,176 226,176 C 226,172.112 226,36 226,36 C 226,32.691 223.309,30 220,30 C 220,30 44.47,30 42.829,30 z "
+   style="fill:url(#XMLID_20_)"
+   id="path155" /><path
+   d="M 33,128 C 33,180.383 75.617,223 128,223 C 153.376,223 177.232,213.118 195.175,195.175 C 213.118,177.232 223,153.376 223,128 C 223,102.625 213.118,78.768 195.175,60.825 C 177.232,42.882 153.376,33 128,33 C 75.617,33 33,75.617 33,128 z "
+   style="fill:url(#XMLID_21_)"
+   id="path170" /><path
+   d="M 61.563,61.563 C 43.789,79.338 34,102.932 34,128 C 34,179.832 76.168,222 128,222 C 153.108,222 176.714,212.223 194.468,194.468 C 212.223,176.714 222,153.108 222,128 C 222,102.892 212.223,79.286 194.468,61.532 C 176.714,43.778 153.108,34 128,34 C 102.932,34 79.338,43.789 61.563,61.563 z "
+   style="fill:url(#XMLID_22_)"
+   id="path185" /><circle
+   cx="128"
+   cy="128"
+   r="92"
+   style="fill:url(#XMLID_23_)"
+   id="circle206"
+   sodipodi:cx="128"
+   sodipodi:cy="128"
+   sodipodi:rx="92"
+   sodipodi:ry="92" /><path
+   d="M 39,128 C 39,177.075 78.925,217 128,217 C 151.772,217 174.123,207.742 190.933,190.933 C 207.743,174.124 217,151.772 217,128 C 217,104.227 207.742,81.877 190.933,65.067 C 174.123,48.258 151.772,39 128,39 C 78.925,39 39,78.925 39,128 z "
+   style="fill:url(#XMLID_24_);opacity:1"
+   id="path227" /><path
+   d="M 78,128 C 78,155.57 100.43,178 128,178 C 141.549,178 153.774,172.936 163.355,163.355 C 172.936,153.774 178,141.549 178,128 C 178,114.451 172.936,102.225 163.355,92.645 C 153.776,83.064 141.55,78 128,78 C 100.43,78 78,100.43 78,128 z "
+   style="opacity:1;fill:#ffffff"
+   id="path229" /><path
+   d="M 86,128 C 86,151.159 104.841,170 128,170 C 139.381,170 149.65,165.746 157.698,157.698 C 165.746,149.65 170,139.381 170,128 C 170,116.619 165.746,106.349 157.698,98.301 C 149.651,90.253 139.382,86 128,86 C 104.841,86 86,104.841 86,128 z "
+   style="opacity:1;fill:url(#XMLID_25_)"
+   id="path244" /><path
+   d="M 89,128 C 89,149.505 106.495,167 128,167 C 138.568,167 148.104,163.05 155.577,155.577 C 163.05,148.104 167,138.568 167,128 C 167,117.432 163.05,107.896 155.577,100.422 C 148.104,92.95 138.568,89 128,89 C 106.495,89 89,106.495 89,128 z "
+   style="fill:url(#XMLID_26_)"
+   id="path259" /><path
+   d="M 104,128 C 104,141.233 114.766,152 128,152 C 134.597,152 140.306,149.635 144.971,144.971 C 149.635,140.307 152,134.597 152,128 C 152,121.403 149.635,115.693 144.97,111.029 C 140.307,106.365 134.597,104 128,104 C 114.766,104 104,114.767 104,128 z "
+   style="fill:url(#XMLID_27_)"
+   id="path274" /><path
+   d="M 106,128 C 106,140.131 115.869,150 128,150 C 134.046,150 139.28,147.832 143.557,143.557 C 147.832,139.282 150,134.047 150,128 C 150,121.953 147.832,116.719 143.556,112.443 C 139.281,108.167 134.048,106 128,106 C 115.869,106 106,115.869 106,128 z "
+   style="fill:url(#XMLID_28_)"
+   id="path289" /><g
+   id="g291">
+            <g
+   id="g293">
+              <linearGradient
+   x1="95.6763"
+   y1="160.3291"
+   x2="171.67551"
+   y2="84.329903"
+   id="XMLID_29_"
+   gradientUnits="userSpaceOnUse">
+                <stop
+   style="stop-color:#7d7d99;stop-opacity:1.0000000;"
+   offset="0.0000000"
+   id="stop297" />
+                <stop
+   style="stop-color:#585868;stop-opacity:1.0000000;"
+   offset="1.0000000"
+   id="stop299" />
+                <www:midPointStop
+   offset="0"
+   style="stop-color:#7D7D99"
+   id="midPointStop301" />
+                <www:midPointStop
+   offset="0.5"
+   style="stop-color:#7D7D99"
+   id="midPointStop303" />
+                <www:midPointStop
+   offset="1"
+   style="stop-color:#585868"
+   id="midPointStop305" />
+              </linearGradient>
+              <path
+   d="M 136.485,119.514 C 134.088,117.116 131.392,116 128,116 C 121.383,116 116,121.383 116,128 C 116,134.617 121.383,140 128,140 C 131.391,140 134.088,138.883 136.486,136.484 C 138.882,134.088 140,131.391 140,128 C 140,124.609 138.883,121.912 136.485,119.514 z M 135.072,135.07 C 133.046,137.096 130.865,138 128,138 C 122.486,138 118,133.514 118,128 C 118,122.486 122.486,118 128,118 C 130.865,118 133.046,118.903 135.071,120.928 C 137.096,122.954 138,125.135 138,128 C 138,130.865 137.097,133.045 135.072,135.07 z "
+   style="fill:url(#XMLID_29_)"
+   id="path308" />
+            </g>
+          </g><path
+   d="M 37.333,215.333 C 34.94,215.333 33,217.273 33,219.666 C 33,222.06 34.94,223.999 37.333,223.999 C 39.727,223.999 41.666,222.06 41.666,219.666 C 41.667,217.273 39.727,215.333 37.333,215.333 z M 37.333,222.999 C 36.443,222.999 35.605,222.652 34.976,222.023 C 34.347,221.393 34,220.556 34,219.666 C 34,218.776 34.347,217.938 34.976,217.31 C 35.606,216.68 36.443,216.333 37.333,216.333 C 39.171,216.333 40.666,217.828 40.666,219.666 C 40.666,221.504 39.171,222.999 37.333,222.999 z "
+   style="fill:url(#XMLID_30_)"
+   id="path325" /><path
+   d="M 218.666,215.333 C 216.273,215.333 214.334,217.273 214.334,219.666 C 214.334,222.06 216.273,223.999 218.666,223.999 C 221.061,223.999 223,222.06 223,219.666 C 223,217.273 221.061,215.333 218.666,215.333 z M 218.666,222.999 C 217.776,222.999 216.939,222.652 216.31,222.023 C 215.68,221.393 215.334,220.556 215.334,219.666 C 215.334,218.776 215.68,217.938 216.31,217.31 C 216.94,216.68 217.777,216.333 218.666,216.333 C 220.504,216.333 222,217.828 222,219.666 C 222,221.504 220.504,222.999 218.666,222.999 z "
+   style="fill:url(#XMLID_31_)"
+   id="path340" /><path
+   d="M 37.333,57.333 C 34.94,57.333 33,59.273 33,61.666 C 33,64.06 34.94,66 37.333,66 C 39.727,66 41.666,64.061 41.666,61.667 C 41.667,59.274 39.727,57.333 37.333,57.333 z M 37.333,65 C 36.443,65 35.605,64.653 34.976,64.024 C 34.347,63.394 34,62.557 34,61.667 C 34,60.777 34.347,59.939 34.976,59.311 C 35.606,58.681 36.443,58.334 37.333,58.334 C 39.171,58.334 40.666,59.829 40.666,61.667 C 40.666,63.505 39.171,65 37.333,65 z "
+   style="fill:url(#XMLID_32_)"
+   id="path355" /><path
+   d="M 54.333,120.333 L 151.666,120.333 C 157.188,120.333 161.666,115.856 161.666,110.333 L 161.666,28 L 44.333,28 L 44.333,110.333 C 44.333,115.856 48.81,120.333 54.333,120.333 z "
+   style="opacity:1;fill:#000000;fill-opacity:0.16348195"
+   id="path370" /><path
+   d="M 218.666,57.333 C 216.273,57.333 214.334,59.273 214.334,61.666 C 214.334,64.06 216.273,65.999 218.666,65.999 C 221.061,65.999 223,64.06 223,61.666 C 223,59.274 221.061,57.333 218.666,57.333 z M 218.666,65 C 217.776,65 216.939,64.653 216.31,64.024 C 215.68,63.394 215.334,62.557 215.334,61.667 C 215.334,60.777 215.68,59.939 216.31,59.311 C 216.94,58.681 217.777,58.334 218.666,58.334 C 220.504,58.334 222,59.829 222,61.667 C 222,63.505 220.504,65 218.666,65 z "
+   style="fill:url(#XMLID_34_)"
+   id="path385" /><path
+   d="M 105.667,121.667 L 150.333,121.667 C 158.053,121.667 164.333,115.387 164.333,107.667 L 164.333,28.333 C 164.333,28.221 164.316,28.112 164.313,28 L 91.686,28 C 91.684,28.112 91.667,28.221 91.667,28.333 L 91.667,107.666 C 91.667,115.386 97.947,121.667 105.667,121.667 z "
+   style="opacity:0.5;fill:#ffffff"
+   id="path387" /><path
+   d="M 203.666,228 L 203.666,139.666 C 203.666,134.144 199.189,129.666 193.666,129.666 L 62.333,129.666 C 56.81,129.666 52.333,134.144 52.333,139.666 L 52.333,228 L 203.666,228 z "
+   style="opacity:1;fill:#000000;fill-opacity:0.16348195"
+   id="path402" /><path
+   d="M 193.666,129.666 L 62.333,129.666 C 56.81,129.666 52.333,134.144 52.333,139.666 L 52.333,228 L 203.666,228 L 203.666,139.666 C 203.666,134.144 199.189,129.666 193.666,129.666 z M 201.666,226 C 197.823,226 58.176,226 54.333,226 C 54.333,222.179 54.333,139.666 54.333,139.666 C 54.333,135.255 57.922,131.666 62.333,131.666 L 193.666,131.666 C 198.077,131.666 201.666,135.255 201.666,139.666 C 201.666,139.666 201.666,222.179 201.666,226 z "
+   style="opacity:1;fill:#ffffff;fill-opacity:0.32271764"
+   id="path404" /><path
+   d="M 228,178 L 228,36 C 228,31.582 224.418,28 220,28 L 42,28 L 28,42 L 28,178 L 36.667,178 L 36.667,190 L 28,190 L 28,220 C 28,224.418 31.582,228 36,228 L 220,228 C 224.418,228 228,224.418 228,220 L 228,190 L 219.333,190 L 219.333,178 L 228,178 z M 226,192 C 226,195.484 226,220 226,220 C 226,223.309 223.309,226 220,226 L 36,226 C 32.691,226 30,223.309 30,220 C 30,220 30,195.484 30,192 C 32.367,192 38.667,192 38.667,192 L 38.667,176 C 38.667,176 32.367,176 30,176 C 30,172.141 30,44.441 30,42.829 C 31.029,41.8 41.8,31.029 42.829,30 C 44.47,30 220,30 220,30 C 223.309,30 226,32.691 226,36 C 226,36 226,172.112 226,176 C 223.633,176 217.333,176 217.333,176 L 217.333,192 C 217.333,192 223.633,192 226,192 z "
+   style="fill:url(#XMLID_36_)"
+   id="path419" /><path
+   d="M 93.667,28.333 L 93.667,107.666 C 93.667,114.293 99.039,119.666 105.667,119.666 L 150.333,119.666 C 156.96,119.666 162.333,114.293 162.333,107.666 L 162.333,28.333 C 162.333,26.415 161.871,24.608 161.071,23 L 94.929,23 C 94.128,24.608 93.667,26.415 93.667,28.333 z "
+   style="fill:url(#XMLID_37_)"
+   id="path434" /><path
+   d="M 97.01,26 C 96.802,26.761 96.667,27.537 96.667,28.333 L 96.667,107.666 C 96.667,112.628 100.705,116.666 105.667,116.666 L 150.333,116.666 C 155.296,116.666 159.333,112.628 159.333,107.666 L 159.333,28.333 C 159.333,27.537 159.198,26.761 158.99,26 C 155.212,26 100.787,26 97.01,26 z "
+   style="fill:url(#XMLID_38_)"
+   id="path469" /><g
+   id="g471">
+            <path
+   d="M 125.971,52.323 L 123.253,42.51 L 118.284,52.51 L 117.471,52.51 L 112.315,42.51 L 109.659,52.323 L 106.659,52.323 L 110.972,37.073 L 112.41,37.073 L 117.879,48.198 L 122.91,37.073 L 124.348,37.073 L 128.972,52.323 L 125.971,52.323 z "
+   id="path473" />
+            <path
+   d="M 130.345,44.573 C 130.345,42.371 131.175,40.529 132.837,39.047 C 134.498,37.565 136.74,36.823 139.564,36.823 C 142.741,36.823 145.175,37.506 146.869,38.87 C 148.561,40.235 149.408,42.136 149.408,44.573 C 149.408,47.074 148.558,49.033 146.861,50.449 C 145.163,51.865 142.73,52.573 139.564,52.573 C 136.678,52.573 134.42,51.825 132.791,50.329 C 131.159,48.833 130.345,46.915 130.345,44.573 z M 133.657,44.573 C 133.657,46.317 134.173,47.774 135.204,48.944 C 136.235,50.114 137.688,50.698 139.565,50.698 C 141.689,50.698 143.308,50.162 144.422,49.09 C 145.536,48.018 146.094,46.512 146.094,44.573 C 146.094,40.657 143.917,38.698 139.565,38.698 C 137.636,38.698 136.169,39.224 135.165,40.276 C 134.159,41.328 133.657,42.76 133.657,44.573 z "
+   id="path475" />
+          </g><g
+   id="g478">
+            <g
+   id="g480">
+              <path
+   d="M 108.265,77.991 L 108.265,66.523 L 104.952,68.428 L 104.952,66.522 C 105.789,66.132 106.68,65.595 107.625,64.91 C 108.57,64.225 109.302,63.576 109.82,62.959 L 110.483,62.959 L 110.483,77.99 L 108.265,77.99 L 108.265,77.991 z "
+   id="path482" />
+              <path
+   d="M 116.276,75.147 C 116.732,75.147 117.122,75.296 117.446,75.595 C 117.77,75.894 117.932,76.253 117.932,76.674 C 117.932,77.095 117.77,77.456 117.446,77.757 C 117.122,78.058 116.732,78.21 116.276,78.21 C 115.819,78.21 115.429,78.059 115.106,77.757 C 114.782,77.455 114.62,77.094 114.62,76.674 C 114.62,76.254 114.782,75.894 115.106,75.595 C 115.43,75.296 115.82,75.147 116.276,75.147 z "
+   id="path484" />
+              <path
+   d="M 119.656,76.928 L 120.719,75.365 C 121.441,76.094 122.354,76.459 123.46,76.459 C 125.508,76.459 126.532,75.534 126.532,73.682 C 126.532,72.838 126.234,72.153 125.639,71.625 C 125.044,71.097 124.255,70.833 123.27,70.833 L 123.094,70.833 L 123.094,69.177 L 123.194,69.177 C 125.065,69.177 126.001,68.413 126.001,66.885 C 126.001,65.288 125.119,64.49 123.355,64.49 C 122.396,64.49 121.632,64.792 121.063,65.396 L 120.063,63.99 C 120.752,63.157 121.904,62.74 123.52,62.74 C 124.943,62.74 126.103,63.09 126.999,63.789 C 127.895,64.488 128.344,65.384 128.344,66.475 C 128.344,67.308 128.095,68.044 127.597,68.685 C 127.099,69.326 126.514,69.756 125.844,69.974 C 126.77,70.254 127.506,70.73 128.054,71.403 C 128.602,72.076 128.875,72.89 128.875,73.846 C 128.875,75.239 128.398,76.314 127.445,77.072 C 126.492,77.83 125.155,78.209 123.434,78.209 C 122.71,78.209 122.001,78.083 121.307,77.832 C 120.612,77.581 120.062,77.28 119.656,76.928 z "
+   id="path486" />
+            </g>
+            <g
+   id="g489">
+              <path
+   d="M 141.581,76.795 L 141.581,74.443 L 139.643,74.443 L 139.643,73.474 L 142.752,73.474 L 142.752,77.228 C 142.295,77.551 141.791,77.795 141.24,77.96 C 140.689,78.125 140.101,78.208 139.476,78.208 C 138.109,78.208 137.039,77.809 136.268,77.01 C 135.497,76.211 135.111,75.098 135.111,73.672 C 135.111,72.242 135.496,71.128 136.267,70.328 C 137.038,69.529 138.107,69.13 139.472,69.13 C 140.042,69.13 140.583,69.2 141.097,69.34 C 141.611,69.48 142.083,69.686 142.517,69.958 L 142.517,71.224 C 142.079,70.851 141.616,70.57 141.124,70.382 C 140.632,70.194 140.115,70.099 139.573,70.099 C 138.504,70.099 137.701,70.398 137.165,70.996 C 136.628,71.595 136.36,72.487 136.36,73.672 C 136.36,74.854 136.629,75.743 137.166,76.342 C 137.702,76.941 138.506,77.239 139.576,77.239 C 139.993,77.239 140.366,77.203 140.694,77.131 C 141.022,77.059 141.319,76.948 141.581,76.795 z "
+   id="path491" />
+              <path
+   d="M 144.911,69.288 L 147.938,69.288 C 148.839,69.288 149.535,69.476 150.022,69.851 C 150.51,70.226 150.754,70.76 150.754,71.452 C 150.754,71.988 150.629,72.414 150.379,72.73 C 150.13,73.047 149.763,73.244 149.279,73.322 C 149.859,73.447 150.31,73.708 150.631,74.104 C 150.953,74.5 151.113,74.996 151.113,75.589 C 151.113,76.37 150.847,76.973 150.318,77.399 C 149.787,77.825 149.033,78.038 148.054,78.038 L 144.909,78.038 L 144.909,69.288 L 144.911,69.288 z M 146.099,70.256 L 146.099,72.897 L 147.851,72.897 C 148.429,72.897 148.86,72.789 149.143,72.571 C 149.426,72.353 149.568,72.023 149.568,71.576 C 149.568,71.134 149.426,70.804 149.143,70.584 C 148.86,70.364 148.429,70.255 147.851,70.255 L 146.099,70.255 L 146.099,70.256 z M 146.099,73.866 L 146.099,77.069 L 147.997,77.069 C 148.631,77.069 149.101,76.937 149.406,76.673 C 149.712,76.41 149.864,76.007 149.864,75.464 C 149.864,74.918 149.712,74.515 149.406,74.255 C 149.1,73.995 148.631,73.865 147.997,73.865 L 146.099,73.865 L 146.099,73.866 z "
+   id="path493" />
+            </g>
+          </g><rect
+   width="45.333"
+   height="6"
+   x="105.367"
+   y="54.667"
+   id="rect497" /><rect
+   id="_x3C_Slice_x3E_"
+   style="fill:none"
+   y="0"
+   x="0"
+   height="256"
+   width="256" />
+</svg>

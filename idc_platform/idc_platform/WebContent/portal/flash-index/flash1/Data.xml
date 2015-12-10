@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="GBK"?>
+<chart palette="2" caption='2010年10月五项指标考核全国成绩' yAxisName='得分' 
+baseFont='微软雅黑' baseFontSize='12' outCnvBaseFont='微软雅黑' outCnvBaseFontSize='12' lineColor='#56C819' 
+showValues="1" decimals="2" formatNumberScale="0" useRoundEdges="1" yAxisMaxValue="100" yAxisMinValue="95" 
+bgColor='FFFFFF,000080' bgAngle='270' bgAlpha='10,10' chartBottomMargin="30">
+    <set label='江苏' value='99.68' />
+    <set label='安徽' value='99.88' />
+    <set label='陕西' value='99.87' />
+    <set label='青海' value='99.75' />
+    <set label='内蒙古' value='99.23' />
+    <set label='云南' value='99.38' />
+    <set label='湖南' value='99.38' />
+</chart>

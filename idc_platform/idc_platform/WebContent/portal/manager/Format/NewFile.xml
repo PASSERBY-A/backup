@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node createTime="20101101092422" id="node8" dataId="2"
+	lastUpdate="20101101092422" parentId="1" createBy="34517754" assignTo="34520678"
+	assignType="0" assistant="" actureParentId="1" rollback="false" status="1"
+	nodeDesc="已解决" actTaskOid="200528" actuallyWorkflowOid="-1"
+	actuallyWorkflowVer="-1" dealedBy="34520678">
+	<fields>
+		<field id="inc_matter_analyse">咨询协查单</field>
+		<field id="inc_impact">1226</field>
+		<field id="inc_restore_time" />
+		<field id="inc_course" />
+		<field id="inc_role">1643</field>
+		<field id="execute_user">34520678</field>
+		<field id="inc_application_category">YWXT0251</field>
+		<field id="inc_category">1461</field>
+		<field id="inc_timeOutFlag" />
+		<field id="come_from_system_task_oid" />
+		<field id="inc_substitute" />
+		<field id="system_classification">1089</field>
+		<field id="inc_processor">34517754</field>
+		<field id="inc_telephone" />
+		<field id="inc_department">安徽/淮南/信息技术中心</field>
+		<field id="inc_selfDeal">0</field>
+		<field id="attachments" />
+		<field id="actual_start">2010-11-01 08:49:12</field>
+		<field id="actual_finish">2010-11-01 09:24:22</field>
+		<field id="title">EC编码同步不成功</field>
+		<field id="solution">已经同步，还请重新办理。--王寅州</field>
+		<field id="inc_status">1651</field>
+		<field id="inc_needcheck">true</field>
+		<field id="relative_ci" />
+		<field id="desc">集团编码5515400292需订购集团产品：国内400。开通业务时需现进行EC集团客户同步，已进行刷新成功，但在开通国内400业务，选择资费时，提示EC编码同步不存在。请贵处帮助解决
+			－－
+			请帮忙刷新数据</field>
+		<field id="inc_closure_code">1203</field>
+	</fields>
+</node>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="518" height="300" title="导出"
+			   creationComplete="init();"
+			   close="PopUpManager.removePopUp(this);"
+			   >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			private var fileRef:FileReference;
+			
+			public function doCenter() :void
+			{
+				PopUpManager.centerPopUp(this);
+			}
+			private function init() : void
+			{
+				fileRef = new FileReference();
+				fileRef.addEventListener(ProgressEvent.PROGRESS, processEvent); 
+				fileRef.addEventListener(Event.COMPLETE, completeHandler);
+				fileRef.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler); 
+				modelService.getModelTree();
+			}
+			private function completeHandler(event:Event):void {
+				exportBtn.enabled = true;
+				PetAlert.show("资源导出成功","操作结果",4,null,null,PetAlert.ICON_INFO);
+				
+			}
+			protected function exportBtn_clickHandler(event:MouseEvent):void
+			{
+				exportBtn.enabled = false;
+				fileRef.download(new URLRequest("/idc_platform/download?data=1&modelId="+modelTree.selectedItem.id), modelTree.selectedItem.id+"_data.xls");
+				//PopUpManager.removePopUp(this);
+			}
+			private function processEvent(event:ProgressEvent):void
+			{  
+				mydlBar.maximum=event.bytesTotal;
+				mydlBar.setProgress(event.bytesLoaded,event.bytesTotal);
+				mydlBar.label="已下载"+Math.round((event.bytesLoaded * 100 /event.bytesTotal))+"%";
+			}
+			private function ioErrorHandler(event:IOErrorEvent):void
+			{  
+				PetAlert.show(event.toString(),"IO错误", 4, null, null, PetAlert.ICON_ERROR);
+			}
+			private function modelQueryComplete(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				modelTree.dataProvider = TreeItem.createDataProvider(returnString);
+			}
+			protected function modelTree_changeHandler(event:IndexChangeEvent):void
+			{
+				//modelService.getModelAttributesByModelId(modelTree.selectedItem.id);
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<s:RadioButtonGroup id="radiogroup1"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="modelService" destination="modelService">
+			<mx:method  name="getModelTree" result="modelQueryComplete(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	<s:DropDownList id="modelTree"  itemRenderer="com.hp.idc.components.TreeItemRenderer" x="113" y="25" width="208"
+					labelField="label" change="modelTree_changeHandler(event)" />
+	<s:Label x="44" y="30" text="资源模型"/>
+	<s:Label x="44" y="65" text="导出格式"/>
+	<s:RadioButton x="110" y="61" label="Excel" groupName="radiogroup1" selected="true"/>
+	<!--s:RadioButton x="94" y="66" label="Word" groupName="radiogroup1"/>
+	<s:RadioButton x="94" y="82" label="Txt" groupName="radiogroup1"/-->
+	<mx:Image x="345" y="120" width="128" buttonMode="true" height="128" id="exportBtn" click="exportBtn_clickHandler(event)" source="@Embed(source='images/Downloads.png')"/>
+	<mx:ProgressBar id="mydlBar" x="32" y="186" label="已下载0%" />
+</s:TitleWindow>

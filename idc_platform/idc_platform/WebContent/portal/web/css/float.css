@@ -1,0 +1,49 @@
+#msg_win {
+	display: none;
+	font-size: 12px;
+	margin: 0;
+	position: absolute;
+	right: 0;
+	z-index: 99;
+}
+.float_div {
+	background: none repeat scroll 0 0 #FFFFFB;
+	border: 2px solid #3988C3;
+	width: 260px;
+}
+.float_title {
+	background: url("../../images/float_title.gif") no-repeat scroll 0 0 transparent;
+	height: 26px;
+	line-height: 26px;
+}
+.icos {
+	position: absolute;
+	right: 2px;
+	top: 2px;
+	z-index: 9;
+}
+.icos a {
+	color: #FFFFFF;
+	float: left;
+	font-family: webdings;
+	font-weight: bold;
+	height: 22px;
+	line-height: 22px;
+	margin: 1px;
+	padding: 1px;
+	text-align: center;
+	text-decoration: none;
+	width: 14px;
+}
+.icos a:link, .icos a:visited {
+	color: #1768BA;
+	text-decoration: none;
+}
+.float_list {
+	margin: 10px 10px;
+	padding: 0;
+}
+.float_list li {
+	line-height: 20px;
+	list-style: none outside none;
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<rmlist>com.ailk.toptea.components.rmList</rmlist>
+	<baseinfo>com.ailk.toptea.components.BaseNavigatorContent</baseinfo>
+	<associate>com.ailk.toptea.components.Associate_im_navigatorContent</associate>
+	<history>com.ailk.toptea.components.HistoryInfoNavigatorContent</history>
+	<topo>com.ailk.toptea.components.TopoNavigatorContent</topo>
+	<resourceObjectUpdate>com.ailk.toptea.resm.resource.ResourceObjectUpdate</resourceObjectUpdate>
+</config>

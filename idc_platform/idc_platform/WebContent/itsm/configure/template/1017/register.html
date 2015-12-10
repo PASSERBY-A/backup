@@ -1,0 +1,188 @@
+/* 解决TextArea100%时宽度过长换行问题 */
+Ext.override(Ext.form.Field, {
+    adjustWidth : function(tag, w){
+        tag = tag.toLowerCase();
+        if(typeof w == 'number' && !Ext.isSafari){
+            if(Ext.isIE && (tag == 'input' || tag == 'textarea')){
+                if(!Ext.isStrict){
+                    return this.inEditor ? w : w - 3;
+                }
+                if(tag == 'input' && Ext.isStrict){
+                    return w - (Ext.isIE6 ? 4 : 1);
+                }
+                if(tag == 'textarea' && Ext.isStrict){
+                    return w-4;
+                }
+            }else if(Ext.isOpera && Ext.isStrict){
+                if(tag == 'input'){
+                    return w + 2;
+                }
+                if(tag == 'textarea'){
+                    return w-2;
+                }
+            }
+        }
+        return w;
+    }
+});
+
+//客户信息的填充
+Ext.override(Ext.form.SelectDialogField, {
+  onTrigger2Click : function(){
+       	  var height=this.dialogHeight,width=this.dialogWidth;
+	  var ua = navigator.userAgent;
+	  if(ua.lastIndexOf("MSIE 6.0") != -1){
+		  if(ua.lastIndexOf("Windows NT 5.1") != -1){
+		    height += 49;
+		  }
+		  else if(ua.lastIndexOf("Windows NT 5.0") != -1){
+		    height += 49;
+		  }
+		}
+	  var xposition = (screen.width - width) / 2;
+	  var yposition = (screen.height - height) / 2;
+	  var vp = this.valueParam;
+	  this.params[vp] = this.getValue();
+	   if(this.hiddenName == 'fld_customerName'){
+		  	var urls = '/idc_platform/cusrelation/jsp/cusSelect.jsp';
+			var rv = window.showModalDialog(urls,'','dialogWidth='+width+'px;dialogHeight='+height+'px;dialogLeft='+xposition+'px;dialogTop='+yposition+'px;center=yes;status=no;help=no;resizable=no;scroll=no');
+			if (rv){
+				var obj = Ext.decode("{"+rv+"}");
+				this.setValue(obj.name);
+				fld_customer_type.setValue(obj.typeId);
+				fld_custormer_login.setValue(obj.longinName);
+				fld_contact_person.setValue(obj.majorContact);
+				fld_customer_phone.setValue(obj.phoneNo);
+				fld_customer_fax.setValue(obj.fax);
+				fld_boss_coustomerNo.setValue(obj.id);
+				fld_custormerName1.setValue(obj.abbrName);
+				fld_icp_linsence.setValue(obj.icpCert);
+				fld_customer_address.setValue(obj.address);
+				fld_postcode.setValue(obj.address);
+				fld_customer_email.setValue(obj.email);
+			} 
+		
+	  }else {
+			var urls = this.selectUrl+"?"+Ext.urlEncode(this.params);
+			var rv = window.showModalDialog(urls,'','dialogWidth='+width+'px;dialogHeight='+height+'px;dialogLeft='+xposition+'px;dialogTop='+yposition+'px;center=yes;status=no;help=no;resizable=no;scroll=no');
+			if (rv)
+				this.setValue(rv);
+	  }
+  }
+
+});
+
+/* 生成Ext对象 */
+#set($i = 0)
+#foreach ($fieldInfo in $fieldList)
+	##if (!$fieldInfo.getType().equals("com.hp.idc.itsm.configure.fields.FileFieldInfo"))
+		#if ($fieldInfo.getType().equals("com.hp.idc.itsm.configure.fields.PersonFieldInfo"))
+			#if(!$origin.equals("ITSM"))
+				$fieldInfo.setOrigin($origin)
+			#end
+		#end
+		#if ($fieldInfo.getId().equals($FLD_EXECUTE_USER))
+			#if($fromNode && ($fromNode.getType() == $TYPE_BRANCH_BEGIN) && $actionInfo.isMutiAssign())
+				$fieldInfo.setSingleMode(false)
+			#else
+				$fieldInfo.setSingleMode(true)
+			#end
+		#end
+
+		#if (!$fieldInfo.getType().equals("com.hp.idc.itsm.configure.fields.GridFieldInfo"))
+			$fieldInfo.getFormCode(150)
+			fld_${fieldInfo.getId()}.anchor = '98%';
+			#if($fieldInfo.isReadOnly()) 
+				fld_${fieldInfo.getId()}.style = 'border-top:1px solid #99BBE8;border-left:1px solid #99BBE8;border-bottom:1px solid #99BBE8;border-right:1px solid #99BBE8;';
+			#else
+				fld_${fieldInfo.getId()}.style = 'border-top:1px outset #99BBE8;border-left:1px ridge #99BBE8;border-bottom:1px solid #99BBE8;border-right:1px solid #99BBE8;';
+			#end
+		#else
+			$fieldInfo.getFormCode(false,120)
+		#end
+
+#end
+
+fld_reqTime.df.setMaxValue(new Date());
+fld_execute_user.params.filter = "/yunweirenyuan";
+
+/**************************Do some control****************************************************************************/
+/* 生成布局对象 */
+var column01Sub01 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 30 0 0',
+	items : [fld_reqMethod, fld_serviceType] 
+});
+
+var column01Sub02 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 0 0 30',
+	items : [fld_reqTime, fld_prior]
+});
+
+var column01 = new Ext.Panel({
+	layout : 'column',
+	border : false,
+	anchor : '100%',
+	items : [column01Sub01, column01Sub02]
+});
+
+var fieldset01 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '客户请求信息',
+	anchor:'98%',
+	collapsed: false,
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[column01,fld_title, fld_content]
+});
+
+var column02Sub01 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 30 0 0',
+	items : [fld_customerName, fld_customer_type, fld_custormer_login, fld_contact_person, fld_customer_phone, fld_customer_fax] 
+});
+
+var column02Sub02 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 0 0 30',
+	items : [fld_boss_coustomerNo,fld_custormerName1, fld_icp_linsence, fld_customer_address, fld_postcode, fld_customer_email]
+});
+
+var column02 = new Ext.Panel({
+	layout : 'column',
+	border : false,
+	anchor : '100%',
+	items : [column02Sub01, column02Sub02]
+});
+
+var fieldset02 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '客户基本信息',
+	anchor:'98%',
+	collapsed: false,
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[column02]
+});
+
+var fieldset04 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '工单流转',
+	anchor:'98%',
+	collapsed: false,
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[fld_execute_user]
+});
+
+simple.add(fieldset02, fieldset01, fieldset04);
+

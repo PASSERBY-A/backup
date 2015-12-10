@@ -1,0 +1,159 @@
+/* img { behavior: url(/extjs/resources/iepngfix.htc) } */
+
+.x-tree-node-collapsed .x-tree-node-icon,.x-tree-node-expanded .x-tree-node-icon,.x-tree-node-leaf .x-tree-node-icon{
+	height:16px
+}
+
+.x-column-tree .x-tree-node {
+    zoom:1;
+}
+.x-column-tree .x-tree-node-el {
+    /*border-bottom:1px solid #eee; borders? */
+    zoom:1;
+}
+.x-column-tree .x-tree-selected {
+    background: #d9e8fb;
+}
+.x-column-tree  .x-tree-node a {
+    line-height:18px;
+    vertical-align:middle;
+}
+.x-column-tree  .x-tree-node a span{
+	
+}
+.x-column-tree  .x-tree-node .x-tree-selected a span{
+	background:transparent;
+	color:#000;
+}
+.x-tree-col {
+    float:left;
+    overflow:hidden;
+    padding:0 1px;
+    zoom:1;
+}
+
+.x-tree-col-text, .x-tree-hd-text {
+    overflow:hidden;
+    -o-text-overflow: ellipsis;
+		text-overflow: ellipsis;
+    padding:3px 3px 3px 5px;
+    white-space: nowrap;
+    font:normal 11px arial, tahoma, helvetica, sans-serif;
+}
+
+.x-tree-headers {
+    background: #f9f9f9 url(../../resources/images/default/grid/grid3-hrow.gif) repeat-x 0 bottom;
+		cursor:default;
+    zoom:1;
+}
+
+.x-tree-hd {
+    float:left;
+    overflow:hidden;
+    border-left:1px solid #eee;
+    border-right:1px solid #d0d0d0;
+}
+
+
+.x-form-field-wrap .x-form-add-trigger{
+    background-image: url(../images/default/form/add-trigger.gif);
+    cursor:pointer;
+}
+.x-form-field-wrap .x-form-upload-trigger{
+    background-image: url(../images/default/form/upload-trigger.gif);
+    cursor:pointer;
+}
+.x-form-field-wrap .x-form-download-trigger{
+    background-image: url(../images/default/form/download-trigger.gif);
+    cursor:pointer;
+}
+.x-form-field-wrap .x-form-link-trigger{
+    background-image: url(../images/default/form/link-trigger.gif);
+    cursor:pointer;
+}
+
+.x-form-field-wrap .x-form-search2-trigger{
+    background-image: url(../images/default/form/search2-trigger.gif);
+    cursor:pointer;
+}
+
+.x-form-field-wrap .x-form-adv-trigger{
+    background-image: url(../images/default/form/adv-trigger.gif);
+    cursor:pointer;
+}
+
+.x-form-label-nowrap .x-form-item-label {
+	padding:2px;white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	-o-text-overflow: ellipsis;/*Opera*/
+	-ms-text-overflow: ellipsis;/*IE8*/
+	/*-moz-binding:url("moz-text-overflow.xml#ellipsis");Extensible Biding Language for Firefox
+		extjs与应用不在同一个tomcat下，moz-text-overflow.xml加载不上来，造成firefox里标签空白，
+		同一个tomcat下显示比较完美
+	*/
+
+}
+
+.x-window-dlg .ext-mb-download {
+    background:transparent url(/extjs/images/download.gif) no-repeat top left;
+    height:46px;
+}
+.ext-ie .x-menu-item-icon {left: -24px;}
+.ext-strict .x-menu-item-icon {left: 3px;}
+.ext-ie6 .x-menu-item-icon {left: -24px;}
+
+
+.textOverflow
+{
+	height:22px;
+	position:relative;
+	width:90%;
+	border-bottom:solid 1px #aaaaaa;
+	padding:2px;white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	-o-text-overflow: ellipsis;/*Opera*/
+	-ms-text-overflow: ellipsis;/*IE8*/
+	/*-moz-binding:url("moz-text-overflow.xml#ellipsis");Extensible Biding Language for Firefox*/
+}
+
+A.textOverflow
+{
+	height:20px;
+	position:relative;
+	width:90%;
+	text-decoration: none;
+	border-bottom:solid 1px #aaaaaa;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	-o-text-overflow: ellipsis;/*Opera*/
+	-ms-text-overflow: ellipsis;/*IE8*/
+	/*-moz-binding:url("moz-text-overflow.xml#ellipsis");Extensible Biding Language for Firefox*/
+}
+A.textOverflow:hover
+{
+	height:20px;
+	position:relative;
+	width:90%;
+	text-decoration: underline;
+	border-bottom:solid 1px #aaaaaa;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	-o-text-overflow: ellipsis;/*Opera*/
+	-ms-text-overflow: ellipsis;/*IE8*/
+	/*-moz-binding:url("moz-text-overflow.xml#ellipsis");Extensible Biding Language for Firefox*/
+}
+
+.text-disable{                                                               
+  	color:black;                                                
+  	cursor:default;                                             
+  	opacity:.6;                                                 
+  	-moz-opacity:.6;                                            
+  	filter:alpha(opacity=70);                                   
+  	font-weight: normal; 
+  }                                                             
+.text-disable *{color:black!important;cursor:default!important;}
+

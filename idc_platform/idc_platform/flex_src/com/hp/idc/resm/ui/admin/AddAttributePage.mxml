@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:compents="com.hp.idc.compents.*" 
+					 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="init()">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HtRemoteObject;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.resm.event.AttributeDefineEvent;
+			import com.hp.idc.resm.model.AttributeDefine;
+			import com.hp.idc.resm.model.AttributeType;
+			import com.hp.idc.resm.model.BooleanAttributeDefine;
+			import com.hp.idc.resm.model.DateAttributeDefine;
+			import com.hp.idc.resm.model.DateTimeAttributeDefine;
+			import com.hp.idc.resm.model.ExpressionAttributeDefine;
+			import com.hp.idc.resm.model.IntegerAttributeDefine;
+			import com.hp.idc.resm.model.NumberAttributeDefine;
+			import com.hp.idc.resm.model.ReferenceAttributeDefine;
+			import com.hp.idc.resm.model.StringAttributeDefine;
+			import com.hp.idc.resm.model.TableAttributeDefine;
+			import com.hp.idc.resm.model.TimeAttributeDefine;
+			import com.hp.idc.util.UserTool;
+			import com.hp.idc.util.json.JSON;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import mx.core.UIComponent;
+			import mx.events.IndexChangedEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.DropDownEvent;
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			[Bindable]
+			public var formLabelWidth : int = 75;
+			
+			private var data:AttributeDefine;
+			
+			
+			//保存扩展参数的ui对象名称，方便查找
+			private var params:Object = new Object();
+			
+			public function set attributeDefine(ad:AttributeDefine):void{
+				if(ad==null){
+					AttributeDefine_id_validator.enabled = false;
+					AttributeDefine_name_validator.enabled = false;
+					AttributeDefine_length_validator.enabled = false;
+					
+					AttributeDefine_id.text = "";
+					AttributeDefine_name.text = "";
+					AttributeDefine_unitName.text = "";
+					AttributeDefine_length.text = "";
+					AttributeDefine_important.selected = false;
+//					AttributeDefine_dimension.selected = false;
+					//AttributeDefine_remark.text = "";
+					
+					for(var j:int=0;j<params.length;j++){
+						var item:FormItem = extend_info_vgroup.getChildByName(params[j]) as FormItem;
+						(item.getElementAt(0) as TextInput).text = "";
+					}
+					
+					AttributeDefine_id_validator.enabled = true;
+					AttributeDefine_name_validator.enabled = true;
+					AttributeDefine_length_validator.enabled = true;
+					
+					return;
+				}
+				this.data = ad;
+				
+				AttributeDefine_id.text = this.data.id;
+				for(var i:int=0;i<attributeTypes.length;i++){
+					var temp:AttributeType = attributeTypes.getItemAt(i) as AttributeType;
+					if(temp.id==ad.type){
+						AttributeDefine_type.selectedItem = temp;
+						AttributeDefine_type.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE));
+						break;
+					}
+				}
+				AttributeDefine_name.text = this.data.name;
+				AttributeDefine_unitName.text = this.data.unitName;
+				AttributeDefine_length.text = this.data.length.toString();
+				AttributeDefine_important.selected = this.data.important;
+//				AttributeDefine_dimension.selected = this.data.dimension;
+				//AttributeDefine_remark.text = this.data.remark;
+			}
+			
+			
+			private function init():void{
+				attributeService.getAllAttributeTypes();
+				checkerClass = new ArrayCollection([
+					{name:'整型值校验器',className:'com.hp.idc.resm.util.checker'},
+					{name:'IP值校验器',className:'com.hp.idc.resm.util.checker'}
+				]);
+				
+				showCode();
+				showModel();
+			}
+			
+			private function resultHandler(event:ResultEvent):void
+			{
+				attributeTypes = event.result as ArrayCollection;
+			}
+			
+			//暂且不用
+//			private function changeExtendInfo(event:ResultEvent):void{
+//				var attributeType:AttributeType = event.result as AttributeType;
+//				for(var i:int=0;i<attributeType.argumentNames.length;i++){
+//					var argumentName:String = attributeType.argumentNames[i] as String;
+//					var formItem:FormItem = new FormItem();
+//					formItem.height = 22;
+//					formItem.label = argumentName;
+//					formItem.setStyle("labelWidth",formLabelWidth);
+//					formItem.name = "AttributeDefine_"+argumentName;
+//					var textinput:TextInput = new TextInput();
+//					formItem.addElement(textinput);
+//					extend_info_vgroup.addElement(formItem);
+//					//缓存名称
+//					//params.push("AttributeDefine_"+argumentName)
+//					this.params[argumentName] = textinput;
+//				}
+//			}
+			
+			private function changeExtendInfo(event:ResultEvent):void{
+				var attributeType:AttributeType = event.result as AttributeType;
+				for(var i:int=0;i<attributeType.argumentNames.length;i++){
+					var argumentName:String = attributeType.argumentNames[i] as String;
+					var formItem:FormItem = new FormItem();
+					formItem.height = 22;
+					formItem.label = argumentName;
+					formItem.setStyle("labelWidth",formLabelWidth);
+					formItem.name = "AttributeDefine_"+argumentName;
+					
+					var input:UIComponent = generateFromArgument(attributeType.id,argumentName);
+					formItem.addElement(input);
+					extend_info_vgroup.addElement(formItem);
+					//缓存名称
+					//params.push("AttributeDefine_"+argumentName)
+					this.params[argumentName] = input;
+				}
+			}
+			
+			
+			private function generateFromArgument(id:String,code:String):UIComponent {
+				if(id == "string"){
+					if(code == "codeType"){
+						var list:ComboBox = new ComboBox();
+						var codes:ArrayCollection = new ArrayCollection([
+							{text:'单行文本',id:0},
+							{text:'列表型',id:1},
+							{text:'树形列表',id:2},
+							{text:'多行文本',id:3}
+						]);
+						list.labelField = "text";
+						list.dataProvider = codes;
+						return list;
+					} else if (code == "codeId"){
+						var co:ComboBox = new ComboBox();
+						co.labelField = "name";
+						co.dataProvider = allCodes;
+						return co;
+					}
+				} else if(id == "reference"){
+					var mo:ComboBox = new ComboBox();
+					mo.labelField = "name";
+					mo.dataProvider = allModels;					
+					return mo;
+				}
+				return new TextInput();
+			}
+			
+			private function showCode():void{
+				var remoteService:HtRemoteObject = new HtRemoteObject("attributeService",null,false,true);
+				remoteService.onFault = FaultHandler.defaultFaultHandler;
+				remoteService.onResult = listCode;
+				remoteService.call("getAllCodes");
+			}
+			
+			private function showModel():void {
+				var remoteService1:HtRemoteObject = new HtRemoteObject("modelService",null,false,true);
+				remoteService1.onFault = FaultHandler.defaultFaultHandler;
+				remoteService1.onResult = listModel;
+				remoteService1.call("getAllModels", 0);
+			}
+						
+			
+			private function selectType(event:IndexChangeEvent):void{
+				if(AttributeDefine_type.selectedItem==null){
+					return
+				}
+				AttributeDefine_checker.selectedIndex = -1;
+				
+				//只有整型和数值型才有单位
+				if(AttributeDefine_type.selectedItem.id == "int" || AttributeDefine_type.selectedItem.id == "number" ){
+					attr_unitName.includeInLayout = true;
+					attr_unitName.visible = true;
+					extend_label.includeInLayout = false;
+					extend_label.visible = false;
+				} else {
+					//日期, 时间, 数字与整型没有扩展属性
+					if(AttributeDefine_type.selectedItem.id == "date" || AttributeDefine_type.selectedItem.id == "time" || AttributeDefine_type.selectedItem.id == "datetime"){
+						extend_label.includeInLayout = false;
+						extend_label.visible = false;
+					} else {
+						extend_label.includeInLayout = true;
+						extend_label.visible = true;
+					}
+					attr_unitName.includeInLayout = false;
+					attr_unitName.visible = false;
+				}
+				
+				if(AttributeDefine_type.selectedItem.id == "int" || AttributeDefine_type.selectedItem.id == "number" || AttributeDefine_type.selectedItem.id == "string"){
+					checker_info_label.includeInLayout = true;
+					checker_info_label.visible = true;
+				} else {
+					checker_info_label.includeInLayout = false;
+					checker_info_label.visible = false;
+				}
+				
+				if(AttributeDefine_type.selectedItem.id == "string"){
+					uniqueRadioButton.selection = radioButton0;
+					uniqForm.includeInLayout = true;
+					uniqForm.visible = true;
+				} else {
+					uniqForm.includeInLayout = false;
+					uniqForm.visible = false;
+				}
+				
+				//先删除扩展信息表单数据，在根据所选类型动态创建扩展信息
+				extend_info_vgroup.removeAllElements();
+				params = new Object();
+				attributeService.getAttributeTypeById(AttributeDefine_type.selectedItem.id as String);
+			}
+			
+			/**
+			 * 增加或修改资源属性回调函数
+			 */
+			private function updateAttributeResultHandler(event:ResultEvent):void{
+						
+				cursorManager.removeBusyCursor();
+				
+				PetAlert.show("添加资源属性定义成功！！！","提示",4,null,null,PetAlert.ICON_INFO);
+				attributeDefine = null;
+				
+				dispatchEvent(new AttributeDefineEvent(AttributeDefineEvent.ATTRIBUTEREFRESH,true));
+			}
+			
+			/**
+			 * 增加资源属性
+			 */
+			protected function updateAttributeHandler(event:MouseEvent):void
+			{
+				if(AttributeDefine_type.selectedIndex==-1||Validator.validateAll([AttributeDefine_id_validator,AttributeDefine_name_validator,AttributeDefine_length_validator]).length!=0){
+					PetAlert.show("请按正确格式填写数据！！！","错误提示",4,null,null,PetAlert.ICON_ERROR);
+					return;
+				}
+				
+				cursorManager.setBusyCursor();
+				
+				var ad:AttributeDefine;
+				if(AttributeDefine_type.selectedItem.id == "string"){
+					ad = new StringAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "boolean"){
+					ad = new BooleanAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "int"){
+					ad = new IntegerAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "number"){
+					ad = new NumberAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "date"){
+					ad = new DateAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "time"){
+					ad = new TimeAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "datetime"){
+					ad = new DateTimeAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "reference"){
+					ad = new ReferenceAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "table"){
+					ad = new TableAttributeDefine();
+				}else if(AttributeDefine_type.selectedItem.id == "expression"){
+					ad = new ExpressionAttributeDefine();
+				}
+				
+				
+				ad.id = AttributeDefine_id.text;
+				ad.name = AttributeDefine_name.text;
+				//ad.remark = AttributeDefine_remark.text;
+				ad.type = AttributeDefine_type.selectedItem.id as String;
+				ad.length =  int(AttributeDefine_length.text);
+				ad.unitName = AttributeDefine_unitName.text;
+				ad.enabled = true;
+				ad.important = AttributeDefine_important.selected;
+				//ad.dimension = AttributeDefine_dimension.selected;
+				
+				if(extend_label.visible){ //扩展属性可见
+					var paramsJSON:Object = new Object();
+					//循环查找类型变量
+					var paramsInfo:Object = ObjectUtil.getClassInfo(params);
+					var fieldNames:Array = paramsInfo["properties"] as Array; 
+					for each(var q:QName in fieldNames){
+						try{
+							if((params[q.localName] as ComboBox).selectedItem)
+								paramsJSON[q.localName] = (params[q.localName] as ComboBox).selectedItem.id;
+						} catch(e:Error){
+							paramsJSON[q.localName] = (params[q.localName] as TextInput).text;
+						}
+					}
+					ad.arguments = JSON.encode(paramsJSON);
+				}
+				
+				if(checker_info_label.visible){ //值校验器可见
+					ad.checker = uniqueRadioButton.selectedValue.toString()=="-1"?"":uniqueRadioButton.selectedValue.toString();
+					if(AttributeDefine_checker.selectedItem != null)
+						ad.checker = AttributeDefine_checker.selectedItem.className+";"+ad.checker;
+				}
+				
+				attributeUpdateService.updateAttribute(ad,UserTool.userId);
+			}
+			
+
+			protected function AttributeDefine_checker_changeHandler(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+			}
+			
+			private function listCode(event:ResultEvent):void {
+				allCodes = event.result as ArrayCollection;
+			}
+			
+			private function listModel(event:ResultEvent):void {
+				allModels = event.result as ArrayCollection;
+			}
+
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="attributeService" destination="attributeService">
+			<mx:method  name="getAllAttributeTypes" result="resultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method  name="getAttributeTypeById" result="changeExtendInfo(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:RemoteObject  id="attributeUpdateService" destination="attributeUpdateService">
+			<mx:method  name="updateAttribute" result="updateAttributeResultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>    
+		
+		<mx:ArrayCollection id="attributeTypes">
+		</mx:ArrayCollection>
+		
+		<mx:ArrayCollection id="checkerClass">
+		</mx:ArrayCollection>
+		
+		<mx:ArrayCollection id="allCodes">
+		</mx:ArrayCollection>
+		
+		<mx:ArrayCollection id="allModels">
+		</mx:ArrayCollection>
+		
+		<mx:Validator id="AttributeDefine_id_validator" source="{AttributeDefine_id}" property="text" requiredFieldError=" "/>
+		<mx:Validator id="AttributeDefine_name_validator" source="{AttributeDefine_name}" property="text" requiredFieldError=" "/>
+		<mx:NumberValidator id="AttributeDefine_length_validator" source="{AttributeDefine_length}" property="text" requiredFieldError=" "/>
+		<s:RadioButtonGroup  id="uniqueRadioButton" />
+		
+	</fx:Declarations>
+	<s:VGroup width="100%" paddingLeft="20" paddingRight="20" paddingTop="20">
+		<s:Label text="基本属性" width="100%" styleName="LabelTitle" height="30"/>
+		<s:Form width="100%">
+			<s:FormItem label="类型:" required="true" height="22">
+				<s:DropDownList id="AttributeDefine_type" dataProvider="{attributeTypes}" labelField="name" change="selectType(event)" width="150"/>
+			</s:FormItem>			
+			<s:FormItem label="ID:" required="true" height="22">
+				<s:TextInput id="AttributeDefine_id" restrict="0-9a-zA-z_"/>
+			</s:FormItem>
+			<s:FormItem label="名称:" required="true" height="22">
+				<s:TextInput id="AttributeDefine_name" restrict="^\~\!\@\#\$\%\^\*\(\)\_\+\-\=\:\;\,\(\)\?\/\>\&#38;\&#60;\&#92;\`\|\&#91;\&#93;\&#123;\&#125;"/>
+			</s:FormItem>
+			<s:FormItem label="单位:" height="22" includeInLayout="false" visible="false" id="attr_unitName">
+				<s:TextInput id="AttributeDefine_unitName"/>
+			</s:FormItem>
+			<s:FormItem label="字段长度:" required="true" height="22">
+				<s:TextInput id="AttributeDefine_length" restrict="0-9"/>
+			</s:FormItem>
+			<s:FormItem  height="22">
+				<s:CheckBox id="AttributeDefine_important" label="是否关键属性" />
+			</s:FormItem>
+			<!-- s:FormItem  height="22">
+				<s:CheckBox id="AttributeDefine_dimension" label="是否是维度"/>
+			</s:FormItem>
+			<s:FormItem label="备注"  height="50">
+				<s:TextArea height="50" id="AttributeDefine_remark" />
+			</s:FormItem-->
+			<s:HGroup height="22" includeInLayout="false" visible="false" id="uniqForm" gap="8" paddingLeft="15">
+				<s:RadioButton id="radioButton0"
+							   label="无"
+							   value="-1"
+							   group="{uniqueRadioButton}" />
+				<s:RadioButton id="radioButton1"
+							   label="全局唯一"
+							   value="/GU/"
+							   group="{uniqueRadioButton}" />
+				<s:RadioButton id="radioButton2"
+							   label="模型内唯一"
+							   value="/MU/"
+							   group="{uniqueRadioButton}" />
+				
+			</s:HGroup>
+		</s:Form>
+		<s:Label text="扩展属性" width="100%" styleName="LabelTitle" height="30" includeInLayout="false" visible="false" id="extend_label"/>
+		<s:Form id="extend_info_vgroup" width="100%">
+		</s:Form>	
+		<s:Label text="属性校验" width="100%" styleName="LabelTitle" height="30" id="checker_info_label" includeInLayout="false" visible="false"/>
+		<s:Form id="checker_info_vgroup" width="100%" includeInLayout="{checker_info_label.includeInLayout}" visible="{checker_info_label.visible}">
+			<s:FormItem label="值校验器:" height="22">
+				<s:ComboBox id="AttributeDefine_checker" dataProvider="{checkerClass}" labelField="name" 
+						    change="AttributeDefine_checker_changeHandler(event)"	
+							width="150"/>
+			</s:FormItem>
+		</s:Form>
+		<s:HGroup horizontalAlign="right" width="100%" paddingRight="10">
+			<s:Button label="提交" click="updateAttributeHandler(event)"/>
+		</s:HGroup>
+	</s:VGroup>		
+</s:NavigatorContent >

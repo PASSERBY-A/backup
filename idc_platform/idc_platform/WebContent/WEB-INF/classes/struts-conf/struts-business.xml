@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd" >
+<struts>
+	<package name="business" extends="default" namespace="/business">
+		<action name="queryProductCatalog" class="com.hp.idc.business.view.BusindessAction"
+			method="queryProductCatalog">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="queryProductCatalogDtl" class="com.hp.idc.business.view.BusindessAction"
+			method="queryProductCatalogDtl">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="queryProductCatalogDtl" class="com.hp.idc.business.view.BusindessAction"
+			method="queryProductCatalogDtl">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="queryProduct" class="com.hp.idc.business.view.BusindessAction"
+			method="queryProduct">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="queryService" class="com.hp.idc.business.view.BusindessAction"
+			method="queryService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="addProductCatalog" class="com.hp.idc.business.view.BusindessAction"
+			method="addProductCatalog">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="updateProductCatalog" class="com.hp.idc.business.view.BusindessAction"
+			method="updateProductCatalog">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="saveProductCatalogDtl" class="com.hp.idc.business.view.BusindessAction"
+			method="saveProductCatalogDtl">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="addProduct" class="com.hp.idc.business.view.BusindessAction"
+			method="addProduct">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="updateProduct" class="com.hp.idc.business.view.BusindessAction"
+			method="updateProduct">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="addService" class="com.hp.idc.business.view.BusindessAction"
+			method="addService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="updateService" class="com.hp.idc.business.view.BusindessAction"
+			method="updateService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="removeProductCatalog" class="com.hp.idc.business.view.BusindessAction"
+			method="removeProductCatalog">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="removeProductCatalogDtl" class="com.hp.idc.business.view.BusindessAction"
+			method="removeProductCatalogDtl">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="removeProduct" class="com.hp.idc.business.view.BusindessAction"
+			method="removeProduct">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="removeService" class="com.hp.idc.business.view.BusindessAction"
+			method="removeService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="detailProductCatalog" class="com.hp.idc.business.view.BusindessAction"
+			method="detailProductCatalog">
+			<result>jsp/catalog_detail.jsp</result>
+		</action>
+		
+		<action name="detailProduct" class="com.hp.idc.business.view.BusindessAction"
+			method="detailProduct">
+			<result>jsp/product_detail.jsp</result>
+		</action>
+		
+		<action name="detailService" class="com.hp.idc.business.view.BusindessAction"
+			method="detailService">
+			<result>jsp/service_detail.jsp</result>
+		</action>
+		
+		<action name="queryProductService" class="com.hp.idc.business.view.BusindessAction"
+			method="queryProductService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="addProductService" class="com.hp.idc.business.view.BusindessAction"
+			method="addProductService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="removeProductService" class="com.hp.idc.business.view.BusindessAction"
+			method="removeProductService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		
+		<action name="queryServiceResource" class="com.hp.idc.business.view.BusindessAction"
+			method="queryServiceResource">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="queryResource" class="com.hp.idc.business.view.BusindessAction"
+			method="queryResource">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="saveServiceResource" class="com.hp.idc.business.view.BusindessAction"
+			method="saveServiceResource">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="removeServiceResource" class="com.hp.idc.business.view.BusindessAction"
+			method="removeServiceResource">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+	</package>
+</struts>

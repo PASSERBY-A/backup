@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<rmlist>com.hp.idc.components.rmList</rmlist>
+	<baseinfo>com.hp.idc.components.BaseNavigatorContent</baseinfo>
+	<baseinfo1>com.hp.idc.components.BaseNavigatorContent</baseinfo1>
+	<datainfo>com.hp.idc.resm.ui.data.DataNavigate</datainfo>
+	<associate>com.hp.idc.components.Associate_im_navigatorContent</associate>
+	<history>com.hp.idc.components.HistoryInfoNavigatorContent</history>
+	<topo>com.hp.idc.components.TopoNavigatorContent</topo>
+	<resourceObjectUpdate>com.hp.idc.resm.resource.ResourceObjectUpdate</resourceObjectUpdate>
+	<resourceObjectView>com.hp.idc.resm.resource.ResourceObjectView</resourceObjectView>
+	<tasklink>com.hp.idc.resm.ui.tasklink.TaskLinkView</tasklink>
+</config>

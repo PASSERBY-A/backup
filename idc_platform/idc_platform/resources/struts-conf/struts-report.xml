@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd" >
+<struts>
+	<package name="report" extends="default" namespace="/report">
+
+		<action name="generateB1Chart" class="com.hp.idc.report.Action.ReportAction"
+			method="generateB1Chart">
+			<result name="success">/report/chart.jsp</result>
+		</action>
+		<action name="generateB2Chart" class="com.hp.idc.report.Action.ReportAction"
+			method="generateB2Chart">
+			<result name="success">/report/chart.jsp</result>
+		</action>
+		<action name="generateB3Chart" class="com.hp.idc.report.Action.ReportAction"
+			method="generateB3Chart">
+			<result name="success">/report/chart.jsp</result>
+		</action>
+		<action name="generateB4Chart" class="com.hp.idc.report.Action.ReportAction"
+			method="generateB4Chart">
+			<result name="success">/report/chart.jsp</result>
+		</action>
+		<action name="generateU1Chart" class="com.hp.idc.report.Action.ReportAction"
+			method="generateU1Chart">
+			<result name="success">/report/chart.jsp</result>
+		</action>
+		<action name="generateU4Chart" class="com.hp.idc.report.Action.ReportAction"
+			method="generateU4Chart">
+			<result name="success">/report/chart.jsp</result>
+		</action>
+		
+		
+		
+		<!-- 客户信息统计报告 -->
+		<action name="getCustomerFuwuCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getCustomerFuwuCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getCustomerQingdanCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getCustomerQingdanCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getCustomerBiandongmingxiCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getCustomerBiandongmingxiCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getCustomerBiandongtongjiCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getCustomerBiandongtongjiCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getCustomerBussnessTypeCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getCustomerBussnessTypeCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getCustomerWupinjinruCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getCustomerWupinjinruCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+
+		<!-- 业务信息统计报告 -->
+		<action name="getBussnessOrderCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getBussnessOrderCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getBussnessChangeCountReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getBussnessChangeCountReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getBasicBussnessInformationReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getBasicBussnessInformationReport">
+			<result name="str" type="str">str</result>
+		</action>
+		<action name="getPriceBussnessInformationReport" class="com.hp.idc.report.Action.ReportAction"
+			method="getPriceBussnessInformationReport">
+			<result name="str" type="str">str</result>
+		</action>
+
+		<!-- 导出客户信息统计报告 -->
+		<action name="exportCustomerFuwuCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportCustomerFuwuCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportCustomerQingdanCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportCustomerQingdanCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportCustomerBiandongmingxiCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportCustomerBiandongmingxiCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportCustomerBiandongtongjiCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportCustomerBiandongtongjiCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportCustomerBussnessTypeCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportCustomerBussnessTypeCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportCustomerWupinjinruCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportCustomerWupinjinruCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<!-- 导出业务信息统计报告 -->
+		<action name="exportBussnessOrderCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportBussnessOrderCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportBussnessChangeCountReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportBussnessChangeCountReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportBasicBussnessInformationReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportBasicBussnessInformationReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="exportPriceBussnessInformationReport" class="com.hp.idc.report.Action.ExportReportAction"
+			method="exportPriceBussnessInformationReport">
+			<result name="stream" type="stream">
+				<param name="contentType">${streamType}</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+	</package>
+</struts>

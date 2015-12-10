@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:components="com.hp.idc.components.*" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 creationComplete="init()">
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HSplitLine;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.resm.security.Role;
+			import com.hp.idc.resm.ui.find.MutiPersonSelector;
+			import com.hp.idc.resm.ui.find.MutiResourceSelector;
+			import com.hp.idc.resm.ui.find.SingleResourceSelector;
+			import com.hp.idc.skins.LinkButtonSkin;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import flash.utils.getDefinitionByName;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.collections.IList;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.EffectEvent;
+			import mx.managers.PopUpManager;
+			import mx.managers.ToolTipManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.Button;
+			import spark.components.HGroup;
+			import spark.components.Image;
+			import spark.components.Label;
+			import spark.components.RichText;
+			import spark.components.VGroup;
+			import spark.effects.Fade;
+			import spark.effects.Move;
+			import spark.effects.Resize;
+			import spark.effects.Scale;
+			import spark.utils.TextFlowUtil;
+	
+			
+			[Embed(source='images/09255.gif')]
+			private var iconClass:Class; 
+			
+			private function editClick(event:MouseEvent) :void {
+				var btn :Button = event.target as Button;
+				var ed:RoleEdit = new RoleEdit();
+				ed.view = this;
+				PopUpManager.addPopUp(ed, this, true);
+				PopUpManager.centerPopUp(ed);
+				var id:String = btn.getStyle("roleId") as String;
+				if (id != null)
+					ed.setRole(id);
+			}
+			
+			private var currentRoleId:String;
+			
+			private function linkPersonCb(persons:IList) :void {
+				var s:String = "";
+				for each (var res:ResourceObject in persons)
+					s += "," + res.id;
+				
+				// TODO: 登录用户
+				roleService.updateRolePerson(currentRoleId, s, 0);
+			}
+			
+			private function linkOrgCb(orgs:IList) :void {
+				var s:String = "";
+				for each (var res:ResourceObject in orgs)
+					s += "," + res.id;
+				
+				// TODO: 登录用户
+				roleService.updateRoleOrganization(currentRoleId, s, 0);
+			}
+			
+			private function linkOrgClick(event:MouseEvent) :void {
+				var btn :Button = event.target as Button;
+				var sel:MutiResourceSelector = new MutiResourceSelector;
+				sel.modelId = "organization";
+				var persons:Array = btn.getStyle("roleOrg") as Array;
+				currentRoleId  = btn.getStyle("roleId") as String; 
+				if (persons != null && persons.length > 0)
+				{
+					var s:String = "";
+					for each (var p:int in persons)
+					{
+						s += "," + p;
+					}
+					sel.defaultValue = s;
+					trace(s);
+				}
+				sel.callback = linkOrgCb;
+				PopUpManager.addPopUp(sel, this, true);
+				PopUpManager.centerPopUp(sel);
+			}
+			
+			private function linkPersonClick(event:MouseEvent) :void {
+				var btn :Button = event.target as Button;
+				var sel:MutiPersonSelector = new MutiPersonSelector;
+				var persons:Array = btn.getStyle("rolePerson") as Array;
+				currentRoleId  = btn.getStyle("roleId") as String; 
+				if (persons != null && persons.length > 0)
+				{
+					var s:String = "";
+					for each (var p:int in persons)
+					{
+						s += "," + p;
+					}
+					sel.defaultValue = s;
+					trace(s);
+				}
+				sel.callback = linkPersonCb;
+				PopUpManager.addPopUp(sel, this, true);
+				PopUpManager.centerPopUp(sel);
+			}
+			
+			private var curId :String;
+			private function removeClickHandler(event:CloseEvent) :void 
+			{
+				if (event.detail == PetAlert.YES)
+				{
+					// TODO: 登录用户
+					roleService.deleteRole(curId, 0);
+				}
+			}
+			
+			private function onRoleUpdated(event:ResultEvent):void
+			{
+				refreshClick(null);
+			}
+			
+			private function onRoleRemoved(event:ResultEvent):void
+			{
+				PetAlert.show("操作成功!", "提示", 4, null, null, PetAlert.ICON_INFO);
+				refreshClick(null);
+			}
+			
+			private function removeClick(event:MouseEvent) :void {
+				var btn :Button = event.target as Button;
+				var id:String = btn.getStyle("roleId") as String;
+				if (id != null)
+				{
+					PetAlert.show("您确定要删除角色“" + id + "”吗？", "提示", PetAlert.YES|PetAlert.NO,
+						null, removeClickHandler, PetAlert.ICON_WARNING, PetAlert.NO);
+					curId = id;
+				}
+			}
+			
+			public function refreshClick(event:MouseEvent) :void {
+				content.removeAllElements();
+				init();
+			}
+			
+			private function onDataLoaded(event:ResultEvent):void
+			{
+				content.removeAllElements();
+				var list :ArrayCollection = event.result as ArrayCollection;
+				for each (var p :Role in list)
+				{
+					var img:Image = new Image();
+					img.source = iconClass;
+					
+					var h:HGroup = new HGroup();
+					h.gap = 6;
+					var v1:VGroup = new VGroup();
+
+					h.addElement(img);
+					h.addElement(v1);
+					
+					
+					var h1:HGroup = new HGroup();
+					h1.verticalAlign = "middle";
+					h1.gap = 6;
+					var str:String;
+					str = "<p lineHeight=\"140%\">";
+					str += "<span fontSize=\"14\">" + p.name + "</span>"
+					str += "<span fontFamily=\"Courier New\" fontSize=\"12\" fontStyle=\"italic\">(" + p.id + ")</span></p>";
+					var r1:RichText = new RichText();
+					r1.textFlow = TextFlowUtil.importFromString(str);
+					r1.width = 160;
+					
+					h1.addElement(r1);
+					
+					var sp:Spacer = new Spacer;
+					sp.width = 25;
+					h1.addElement(sp);
+					
+					var btn1:Button = new Button();
+					btn1.label = "编辑";
+					btn1.setStyle("roleId", p.id);
+					btn1.setStyle("skinClass", LinkButtonSkin);
+					btn1.setStyle("icon", "images/edit.gif");
+					btn1.addEventListener(MouseEvent.CLICK, editClick);
+					h1.addElement(btn1);
+
+					var btn2:Button = new Button();
+					btn2.label = "关联组织";
+					btn2.setStyle("roleId", p.id);
+					btn2.setStyle("roleOrg", p.organizations);
+					btn2.setStyle("skinClass", LinkButtonSkin);
+					btn2.setStyle("icon", "images/09676.gif");
+					btn2.addEventListener(MouseEvent.CLICK, linkOrgClick);
+					h1.addElement(btn2);
+					
+					var btn4:Button = new Button();
+					btn4.label = "关联人员";
+					btn4.setStyle("roleId", p.id);
+					btn4.setStyle("rolePerson", p.persons);
+					btn4.setStyle("skinClass", LinkButtonSkin);
+					btn4.setStyle("icon", "images/09676.gif");
+					btn4.addEventListener(MouseEvent.CLICK, linkPersonClick);
+					h1.addElement(btn4);
+
+					var btn3:Button = new Button();
+					btn3.label = "删除";
+					btn3.setStyle("roleId", p.id);
+					btn3.setStyle("skinClass", LinkButtonSkin);
+					btn3.setStyle("icon", "images/delete.gif");
+					btn3.addEventListener(MouseEvent.CLICK, removeClick);
+					h1.addElement(btn3);
+
+					
+					str = "<p lineHeight=\"140%\">";
+					str += "<span color=\"#666666\" fontStyle=\"italic\" fontSize=\"12\">优先级:" + p.priority + "，" + p.remark + "<br/>";
+					str += p.relationDesc + "</span>";
+					str += "</p>";
+					var r2:RichText = new RichText();
+					r2.textFlow = TextFlowUtil.importFromString(str);
+					
+					v1.addElement(h1);
+					v1.addElement(r2);
+
+					content.addElement(h);
+					
+					
+					var hs :HSplitLine = new HSplitLine;
+					
+					content.addElement(hs);
+					
+				}
+				var btnGroup :HGroup = new HGroup();
+				
+				var btnAdd:Button = new Button();
+				btnAdd.label = "添加角色";
+				btnAdd.setStyle("skinClass", LinkButtonSkin);
+				btnAdd.setStyle("icon", "images/addRole.gif");
+				btnAdd.addEventListener(MouseEvent.CLICK, editClick);
+				btnGroup.addElement(btnAdd);
+				
+				var btnRefresh:Button = new Button();
+				btnRefresh.label = "刷新列表";
+				btnRefresh.setStyle("skinClass", LinkButtonSkin);
+				btnRefresh.setStyle("icon", "images/refresh.gif");
+				btnRefresh.addEventListener(MouseEvent.CLICK, refreshClick);
+				btnGroup.addElement(btnRefresh);
+	
+				content.addElement(btnGroup);
+			}
+	
+			private function init() : void
+			{
+				roleService.getAllRoles();
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="roleService" destination="roleService">
+			<mx:method  name="getAllRoles" result="onDataLoaded(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method  name="deleteRole" result="onRoleRemoved(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method  name="updateRolePerson" result="onRoleUpdated(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method  name="updateRoleOrganization" result="onRoleUpdated(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout paddingLeft="15"/>
+	</s:layout>
+
+	<s:Label text="资源管理角色列表" fontSize="24" color="#336699" />
+	<s:Spacer height="20" />
+	<s:Scroller  width="100%" height="100%">
+		<s:Group  width="100%" height="100%" id="content" clipAndEnableScrolling="true" >
+			<s:layout  >
+				<s:VerticalLayout gap="8"/>
+			</s:layout>
+		</s:Group>
+	</s:Scroller>
+
+</s:NavigatorContent>

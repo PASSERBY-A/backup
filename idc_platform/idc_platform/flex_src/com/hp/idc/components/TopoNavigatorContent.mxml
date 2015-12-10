@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:components="com.hp.idc.components.*"
+			   xmlns:ravis="org.un.cava.birdeye.ravis.graphLayout.visual.*"
+			   xmlns:lc="org.un.cava.birdeye.ravis.components.ui.controls.layouterControls.*"
+			   xmlns:vc="org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.*"
+			   xmlns:ui="org.un.cava.birdeye.ravis.components.ui.*"
+			   xmlns:dp="org.un.cava.birdeye.ravis.components.ui.dataPresentation.*"
+			   xmlns:flexlib="http://code.google.com/p/flexlib/"
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   minWidth="955" minHeight="600">
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.ui.FaultHandler;
+			import com.hp.idc.util.UiUtil;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import org.un.cava.birdeye.ravis.assets.icons.EmbeddedIcons;
+			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.DefaultEdgeLabelRenderer;
+			import org.un.cava.birdeye.ravis.components.renderers.nodes.IconNodeRenderer;
+			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.DegreesOfSeparation;
+			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.EdgeRendererSelector;
+			import org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.NodeRendererSelector;
+			import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.ConcentricRadialLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.BaseEdgeRenderer;
+			
+			public var params:Object = null;
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				if(params == null)
+					return;
+				relationService.getResourceRelationXml(int(params.toString()));
+				
+			}
+			
+			protected function imagelink1_clickHandler(event:MouseEvent):void
+			{
+				UiUtil.closeCurrent();
+			}
+			
+			private function resultHandler(event:ResultEvent):void {
+			
+				xmldata = new XML(event.result as String);
+				
+				/* init a graph object with the XML data */
+				vgraph.graph = new Graph("XMLAsDocsGraph",false,xmldata);
+				
+				/* assign start root */
+				vgraph.currentRootVNode = vgraph.graph.nodeByStringId(params.toString()).vnode;
+				
+				/* provide the control components with some initial settings */               
+				
+				//myDegreeOS.updateMaxVisDist();
+				
+				vgraph.layouter = new ConcentricRadialLayouter(vgraph);
+				(vgraph.layouter as ConcentricRadialLayouter).defaultMaxNode = 20;
+				vgraph.itemRenderer = new ClassFactory(IconNodeRenderer);
+				vgraph.edgeRendererFactory = new ClassFactory(BaseEdgeRenderer);
+				vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
+				
+				/* the following kicks it off .... */
+				vgraph.draw();
+				
+				myCenteredNodeLabel.myNodeNameLbl.text = vgraph.currentRootVNode.data.@name;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<fx:XML id="xmldata" />
+		<s:RemoteObject id="relationService" destination="relationService">
+			<s:method name="getResourceRelationXml" result="resultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)" />
+		</s:RemoteObject>
+	</fx:Declarations>
+	<s:HGroup width="100%" height="100%">
+		<s:HGroup width="300" height="100%">
+			<ui:Grip id="navGrip" 
+					 width="17" height="100%" horizontalAlign="center"
+					 gripTip="Show/Hide Control Panel" />
+			<s:VGroup width="100%" height="100%" paddingTop="30">
+				<components:HSplitLine/>
+				<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="关闭当前页面" click="imagelink1_clickHandler(event)"/>					
+				<components:HSplitLine/>
+				<lc:CommonLayoutControls id="myCommonLC" vgraph="{vgraph}" />
+				<dp:CenteredNodeLabel id="myCenteredNodeLabel" vgraph="{vgraph}" />
+				<dp:NoVisNodesLabel id="myNoVisNodeLabel" vgraph="{vgraph}" />
+				<vc:ScaleControls id="mySCs" vgraph="{vgraph}" />
+				<vc:DrawButton id="myDB" vgraph="{vgraph}" />
+				<vc:FullRefreshButton
+					id="myFRB"
+					vgraph="{vgraph}"
+					directional="false"
+					xmlData="{xmldata}" />
+			</s:VGroup>
+		</s:HGroup>
+		<s:BorderContainer borderStyle="solid" width="100%" height="100%" borderColor="#CCCCCC" backgroundColor="#FFFFFF">
+			<ravis:VisualGraph id="vgraph" width="100%" height="100%" 
+							   left="0" right="0" top="0" bottom="5" backgroundColor="#FFFFFF" alpha="1"
+							   resize="vgraph.draw(VisualGraph.DF_RESET_LL)"
+							   visibilityLimitActive="true"
+							   >
+			</ravis:VisualGraph>
+		</s:BorderContainer>		
+	</s:HGroup>		
+</s:NavigatorContent>

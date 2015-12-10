@@ -1,0 +1,168 @@
+.text{
+	font-size: 12px;
+	color: #ffffff;
+	font-weight: bold;
+	background-image: url(../images/text_bg.gif);
+}
+.list0{
+	background-color: #F1F4F8;line-height: 30px;
+	font-size: 12px;
+	color: #000000;
+}
+.today {font-weight:bold;BACKGROUND: #0099CC}
+.satday{color:green}
+.sunday{color:red}
+.days {font-weight:bold}
+
+.list1{
+	background-color: #ffffff;line-height: 30px;
+	font-size: 12px;
+	color: #000000;
+}
+.yd_table{
+	background-color: #4D76B3;
+}
+.yd_title{
+	font-size: 12px;
+	color: #ffffff;
+	font-weight: bold;
+	line-height: 20px;
+	background-image: url(../images/text_bg.gif);
+}
+.yd_ltd{
+	background-color: #f3f6fa;line-height: 30px;
+	font-weight: bold;
+}
+.yd_rtd{
+	background-color: #ffffff;line-height: 30px;
+}
+.yd_submit_td{
+	background-color: #efefef;
+	line-height: 30px;
+}
+.blackTable {
+	border: 2px solid #000000;
+	border-collapse: collapse;
+	empty-cells: show ;
+	line-height: 25px;
+}
+.blackTable td {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	empty-cells: show ;
+	padding: 1px;
+	margin: 0px;
+	line-height: 25px;
+	font-size: 14px;
+}
+DIV {
+	FONT-FAMILY: ms shell dlg; FONT-SIZE: 12px
+}
+FONT {
+	FONT-FAMILY: ms shell dlg; FONT-SIZE: 12px
+}
+.off {
+	DISPLAY: inline
+}
+.on {
+	DISPLAY: none
+}
+.menus {
+	BACKGROUND-COLOR: buttonface; BORDER-BOTTOM: black 1px solid; BORDER-LEFT: white 1px solid; BORDER-RIGHT: black 1px solid; BORDER-TOP: white 1px solid; CURSOR: hand; FONT-SIZE: 9pt; MARGIN: 0px; OVERFLOW: hidden; PADDING-BOTTOM: 1px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 1px; TEXT-ALIGN: left; WIDTH: 90px
+}
+#menutool {
+	LEFT: 6px; POSITION: absolute; WIDTH: 90px; Z-INDEX: 10
+}
+A {
+	COLOR: #2C4C78; FONT-SIZE: 9pt; TEXT-DECORATION: none; TEXT-TRANSFORM: none
+}
+A:hover {
+	COLOR: #06F; TEXT-DECORATION: underline
+}
+.tab_border {
+	BORDER-BOTTOM: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid
+}
+BODY {
+	FONT-FAMILY: "宋体", "Arial"; FONT-SIZE: 9pt;
+}
+TD {
+	FONT-FAMILY: "宋体", "Arial"; FONT-SIZE: 9pt;line-height: 20px
+}
+TABLE {
+	FONT-FAMILY: "宋体", "Arial"; FONT-SIZE: 9pt
+}
+.heading {
+	FONT-FAMILY: "宋体", "Arial"; FONT-SIZE: 14px
+}
+.show {
+	FONT-FAMILY: "宋体", "Arial"; FONT-SIZE: 14px; LINE-HEIGHT: 20px
+}
+.form {
+	FONT-FAMILY: "宋体", "Arial"; FONT-SIZE: 9pt; HEIGHT: 12pt
+}
+INPUT.buttonface {
+	BACKGROUND: #cccccc; BORDER-BOTTOM: #636563 1px solid; BORDER-LEFT: #636563 1px solid; BORDER-RIGHT: #636563 1px solid; BORDER-TOP: #636563 1px solid; COLOR: #000000; FONT-SIZE: 9pt; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; LINE-HEIGHT: normal
+}
+INPUT.smallInput {
+	BORDER-BOTTOM: #636563 1px solid; BORDER-LEFT: #636563 1px solid; BORDER-RIGHT: #636563 1px solid; BORDER-TOP: #636563 1px solid; FONT-SIZE: 9pt; FONT-STYLE: normal; FONT-VARIANT: normal; FONT-WEIGHT: normal; HEIGHT: 18px; LINE-HEIGHT: normal
+}
+INPUT {
+	BACKGROUND-COLOR: #ffffff; HEIGHT: 18px
+}
+TEXTAREA {
+
+}
+pa {
+	PADDING-BOTTOM: 5pt; PADDING-LEFT: 5pt; PADDING-RIGHT: 5pt; PADDING-TOP: 5pt
+}
+INPUT {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 1px; PADDING-LEFT: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 9pt; BORDER-LEFT-COLOR: #cccccc; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #cccccc; PADDING-BOTTOM: 1px; BORDER-TOP-COLOR: #cccccc; PADDING-TOP: 1px; HEIGHT: 18px; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: #cccccc; HEIGHT: 20px
+}
+textarea, select {
+	border-width: 1; border-color: #000000; background-color: #ffffff; font-family: 宋体; font-size: 9pt; font-style: bold;
+}
+.txt1 {
+	font-family: "宋体"; font-size: 12px;
+}
+.txt2 {
+	font-family: "宋体", "Arial"; font-size: 13px;
+}
+.txt {
+	font-family: "宋体"; font-size: 12px; font-style: normal;COLOR: #ffffff
+}
+.txt3 {
+	font-family: "宋体", "Arial"; font-size: 14px;
+}
+A {
+	COLOR: #000000; TEXT-DECORATION: none
+}
+A:link {
+	COLOR: #000000; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #000000; TEXT-DECORATION: none
+}
+/*A:visited {
+	COLOR: #2C4C78; TEXT-DECORATION: none
+}*/
+A:hover {
+	COLOR: #06F; TEXT-DECORATION: underline
+}
+A:active {
+	COLOR: #06F; TEXT-DECORATION: none
+}
+/*A:active {
+	COLOR: #FF6600; TEXT-DECORATION: none
+}*/
+.txt4 {
+	font-family: "Arial", "Helvetica", "sans-serif"; font-size: 16px; font-weight: bold;
+}
+.etxt {
+	font-family: "Arial", "Helvetica", "sans-serif"; font-size: 11px;
+}
+.textarea {
+	background-color: #ffffff;
+	font-size: 12px;
+	color: #000000;
+	border: 0px solid #ffffff;
+}

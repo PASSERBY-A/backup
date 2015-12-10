@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" title="请选择" creationComplete="panel1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:VerticalLayout paddingBottom="20" paddingLeft="20" paddingRight="20" paddingTop="10" gap="10"/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HtRemoteObject;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.components.TreeItemRenderer;
+			import com.hp.idc.resm.model.AttributeDefine;
+			import com.hp.idc.resm.model.Model;
+			import com.hp.idc.resm.resource.AttributeBase;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.resm.ui.PageInfo;
+			import com.hp.idc.resm.ui.PageQueryInfo;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import flash.utils.getQualifiedClassName;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.gridClasses.GridColumn;
+			import spark.events.GridSelectionEvent;
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			public var callback:Function = null;
+			
+			[Bindable]
+			public var defaultValue:String = "";
+			
+			protected function okBtn_clickHandler(event:MouseEvent):void
+			{
+				if (callback != null)
+					callback.call(null, resourceGrid.selectedItem);
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function cancelBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+			private function onResourceLoaded(event:ResultEvent):void
+			{
+				var pi:PageInfo = event.result as PageInfo;
+				trace("ret = " + pi.data.length);
+				resourceGrid.dataProvider = pi.data;
+			}
+
+			private var pq:PageQueryInfo = null;
+			
+			protected function searchBtn_clickHandler(event:MouseEvent):void
+			{
+				if (pq == null)
+				{
+					pq = new PageQueryInfo;
+					pq.pageCount = 999999;
+					pq.sortBy = "name";
+					pq.startPage = 1;
+				}
+				okBtn.enabled = false;
+				resourceService.listResource(modelId, searchContent.text, pq);
+			}
+
+
+			public var modelId:String;
+
+			protected function panel1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var remoteService:HtRemoteObject = new HtRemoteObject("modelService",null,false,true);
+				remoteService.onFault = FaultHandler.defaultFaultHandler;
+				remoteService.onResult = getHeaderHandler;
+				remoteService.call("getModelById",modelId);
+			}
+
+
+			protected function resourceGrid_selectionChangeHandler(event:GridSelectionEvent):void
+			{
+				okBtn.enabled = ((event.target as DataGrid).selectedItem != null);
+			}
+
+			protected function searchContent_keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == 13)
+					searchBtn_clickHandler(null);
+			}
+
+
+			protected function resourceGrid_doubleClickHandler(event:MouseEvent):void
+			{
+				if (resourceGrid.selectedItem != null)
+					okBtn_clickHandler(null);
+			}
+			
+			private function getHeaderHandler(event:ResultEvent):void{
+				var headers:ArrayCollection = (event.result as Model).header;
+				
+				var cols:ArrayCollection = new ArrayCollection();
+				for(var i:int=0;headers!=null&&i<headers.length;i++){
+					var attributeDefine:AttributeDefine = headers.getItemAt(i) as AttributeDefine;
+					var gridColumn:GridColumn = new GridColumn();
+					gridColumn.headerText = attributeDefine.name;
+					gridColumn.dataField = attributeDefine.id;
+					gridColumn.labelFunction = ResourceObject.getLabelFunction(attributeDefine.id);;
+					cols.addItem(gridColumn);
+				}
+				resourceGrid.columns = cols;
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject id="resourceService" destination="resourceService">
+			<mx:method name="listResource" result="onResourceLoaded(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<s:HGroup width="100%" verticalAlign="middle">
+		<s:Label text="模糊查找:"/>
+		<s:TextInput width="100%" text="{defaultValue}" id="searchContent" />
+		<s:Button label="查找" id="searchBtn" click="searchBtn_clickHandler(event)" />
+		<s:Image source="@Embed(source='images/help.gif')" id="helpImg" />
+	</s:HGroup>
+	<s:HGroup height="200">
+		<s:DataGrid width="450" height="100%" id="resourceGrid" selectionChange="resourceGrid_selectionChangeHandler(event)" doubleClickEnabled="true" doubleClick="resourceGrid_doubleClickHandler(event)">
+		</s:DataGrid>
+	</s:HGroup>
+	<s:HGroup horizontalAlign="right" width="100%" gap="15">
+		<s:Button id="okBtn" label="确定" enabled="false" click="okBtn_clickHandler(event)" />
+		<s:Button id="cancelBtn" label="取消" click="cancelBtn_clickHandler(event)" />
+	</s:HGroup>
+</s:Panel>

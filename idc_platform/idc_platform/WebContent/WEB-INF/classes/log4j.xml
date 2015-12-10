@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration>
+    <appender name="RootAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/applog/idc.log"/>
+        <param name="MaximumFileSize" value="2000000"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="2MB"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p]-[%t]-[%c{1}] (%F:%L) %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p]-[%t]-[%c{1}] (%F:%L) %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="itsmAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/applog/itsm.log"/>
+        <param name="MaximumFileSize" value="2000000"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="2MB"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p]-[%t]-[%c{1}] (%F:%L) %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="resmAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/applog/resm.log"/>
+        <param name="MaximumFileSize" value="2000000"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="2MB"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p]-[%t]-[%c{1}] (%F:%L) %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="portalAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/applog/resm.log"/>
+        <param name="MaximumFileSize" value="2000000"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="2MB"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p]-[%t]-[%c{1}] (%F:%L) %m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="kbmAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${catalina.home}/applog/kbm.log"/>
+        <param name="MaximumFileSize" value="2000000"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="2MB"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p]-[%t]-[%c{1}] (%F:%L) %m%n"/>
+        </layout>
+    </appender>
+    
+    <logger name="com.hp.idc.itsm">
+        <level value="INFO"/>   
+        <appender-ref ref="itsmAppender"/>     
+    </logger>
+
+    <logger name="com.hp.idc.resm">
+        <level value="INFO"/>   
+        <appender-ref ref="resmAppender"/>     
+    </logger>
+
+    <logger name="com.hp.idc.portal">
+        <level value="INFO"/>   
+        <appender-ref ref="portalAppender"/>     
+    </logger>
+
+    <logger name="com.hp.idc.kbm">
+        <level value="INFO"/>   
+        <appender-ref ref="kbmAppender"/>     
+    </logger>
+    
+    <logger name="com.hp.idc">
+        <level value="INFO"/>   
+        <appender-ref ref="RootAppender"/>     
+    </logger>
+    
+    <root>
+        <priority value ="ERROR" />
+        <appender-ref ref="ConsoleAppender"/>
+        <appender-ref ref="RootAppender"/>
+    </root>
+</log4j:configuration>

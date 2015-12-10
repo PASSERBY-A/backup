@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="itsmPropertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:conf/itsm.properties</value>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>true</value>
+		</property>
+	</bean>
+
+	<bean id="connectManager" class="com.hp.idc.itsm.util.ConnectManager">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+
+	<bean id="itsmContext" class="com.hp.idc.itsm.common.Consts"
+		depends-on="DSMCenter">
+		<property name="ITSM_HOME">
+			<value>${itsm.home}</value>
+		</property>
+		<property name="EXTJS_HOME">
+			<value>${extjs.home}</value>
+		</property>
+
+		<property name="ITSM_TS_TAB">
+			<value>${itsm.ts.tab}</value>
+		</property>
+		<property name="ITSM_TS_IDX">
+			<value>${itsm.ts.idx}</value>
+		</property>
+
+		<property name="UPLOAD_SERVLET">
+			<value>${itsm.upload.servlet}</value>
+		</property>
+		<property name="DOWNLOAD_SERVLET">
+			<value>${itsm.download.servlet}</value>
+		</property>
+		<property name="ROLLBACK_COUNT">
+			<value>${itsm.rollback.count}</value>
+		</property>
+	</bean>
+
+	<bean id="smsTemplate" class="com.hp.idc.itsm.common.SMSTemplate"
+		init-method="init">
+		<property name="smsNew">
+			<value>${itsm.sms.new}</value>
+		</property>
+		<property name="smsDealed">
+			<value>${itsm.sms.dealed}</value>
+		</property>
+		<property name="smsRollback">
+			<value>${itsm.sms.rollback}</value>
+		</property>
+		<property name="smsOvertime">
+			<value>${itsm.sms.overtime}</value>
+		</property>
+		<property name="smsOverdue">
+			<value>${itsm.sms.overdue}</value>
+		</property>
+		<property name="smsRemind">
+			<value>${itsm.sms.remind}</value>
+		</property>
+	</bean>
+
+	<!--
+		bean id="itsmBean" class="com.hp.idc.itsm.common.ItsmBean"
+		init-method="init" destroy-method="destroy"> <property
+		name="taskFactory"><ref bean="taskFactory"/></property> </bean
+	-->
+
+	<bean id="loadCache" class="com.hp.idc.itsm.common.Cache"
+		init-method="init" depends-on="ITSMTaskManager">
+	</bean>
+
+	<!-- Service thread pool -->
+	<bean id="serviceThreadPool" class="com.hp.idc.itsm.common.ThreadPool">
+		<property name="corePoolSize">
+			<value>2</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>5</value>
+		</property>
+		<!--单位秒-->
+		<property name="keepAliveTime">
+			<value>10</value>
+		</property>
+		<property name="blockQueueNum">
+			<value>20</value>
+		</property>
+	</bean>
+
+	<bean id="taskFactory" class="com.hp.idc.itsm.task.TaskFactory">
+		<property name="threadPool">
+			<ref bean="serviceThreadPool" />
+		</property>
+	</bean>
+
+	<bean id="ITSMTaskManager" class="com.hp.idc.itsm.impl.ITSMTaskManagerImpl">
+		<property name="taskFactory">
+			<ref bean="taskFactory" />
+		</property>
+	</bean>
+
+	<bean id="dbListener" class="com.hp.idc.itsm.task.listener.DBListener"
+		init-method="init">
+		<property name="taskFactory">
+			<ref bean="taskFactory" />
+		</property>
+		<!--
+			throwException,如果是true，则主程序不会因为此监听发生异常而终止下面的处理
+			额外的接口赋此属性时请慎重，最好设成false
+		-->
+		<property name="throwException">
+			<value>true</value>
+		</property>
+	</bean>
+
+	<bean id="DSMCenter" class="com.hp.idc.itsm.dsm.DSMCenter"
+		init-method="init" depends-on="connectManager">
+		<property name="remoteAddress">
+			<value>${dsm.remoteURL}</value>
+		</property>
+		<property name="localAddress">
+			<value>${dsm.localURL}</value>
+		</property>
+		<property name="wfStr">
+			<value>${dsm.wfstr}</value>
+		</property>
+	</bean>
+
+	<bean id="itsmAucRegister" class="com.hp.idc.itsm.security.impl.CacheLoad"
+		init-method="registerClass">
+	</bean>
+
+	<!-- 短信发送类 -->
+	<bean id="ITSMSMSSender" class="com.hp.idc.sms.IDCSmsSender"
+		init-method="init">
+	</bean>
+
+	<!-- 检查短信表,并发送短信 -->
+	<bean id="itsmBean" class="com.hp.idc.itsm.common.ItsmBean"
+		init-method="init" destroy-method="destroy">
+		<property name="taskFactory">
+			<ref bean="taskFactory" />
+		</property>
+		<property name="isSendSms">
+			<value>${isSendSms}</value>
+		</property>
+	</bean>
+
+</beans>

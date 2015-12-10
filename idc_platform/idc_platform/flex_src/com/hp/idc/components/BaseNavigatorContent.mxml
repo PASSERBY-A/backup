@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:components="com.hp.idc.components.*"
+					xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+					creationComplete="navigatorcontent1_creationCompleteHandler(event)"
+					>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.model.Model;
+			import com.hp.idc.resm.model.template.*;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.ui.FaultHandler;
+			import com.hp.idc.util.UiUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.IVisualElement;
+			import mx.events.FlexEvent;
+			import mx.rpc.AbstractOperation;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.remoting.RemoteObject;
+
+			[Bindable]
+			public var params:ResourceObject;
+			
+			[Bindable]
+			private var model:Model;
+			
+			public var room1:room;
+			public var rack1:rack;
+			public var slot1:slot;
+			
+			protected function close_current(event:Event):void{
+				UiUtil.closeCurrent();
+			}
+			
+			protected function history_handle(event:Event):void{
+				UiUtil.changUi("history");
+			}
+			
+			protected function topo_handle(event:Event):void{
+				//UiUtil.changUi("topo");
+				UiUtil.changUiObject("topo",params.id);
+			}
+			
+			protected function tasklink_handle(event:Event):void{
+				var taskLink:String = params.getAttribute("task_link");
+				if(taskLink.length == 0){
+					PetAlert.show("此资源无关联工单", "信息");
+					return;
+				}
+				var p:Array = taskLink.split(":",3);
+				var _params:Object = new Object();
+				var url:String = "/idc_platform/itsm/task/taskHistoryView2.jsp?origin=ITSM&taskOid="+p[0]+"&wfOid="+p[1]+"&wfVer="+p[2];
+				_params.url = url;
+				_params.wfOid = p[1];
+				UiUtil.changUiObject("tasklink", _params);
+			}
+			
+			private function getModelById(event:ResultEvent):void
+			{
+				model = event.result as Model;
+				try{
+					var cla:Class=getDefinitionByName("com.hp.idc.resm.model.template."+model.id) as Class;
+					var instance:Object=new cla();
+					instance.resourceObject = params;
+				
+					detailContent.addElement(instance as IVisualElement);
+				} catch(e:Error) {
+					//nothing to do
+				}
+			}
+			
+			protected function navigatorcontent1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var remoteOperation:RemoteObject = new RemoteObject();   
+				remoteOperation.destination = "modelService"; 
+				
+				var op0:AbstractOperation = remoteOperation.getOperation( "getModelById" );  
+				op0.addEventListener(ResultEvent.RESULT,getModelById);      
+				op0.addEventListener(FaultEvent.FAULT,FaultHandler.defaultFaultHandler);  
+				remoteOperation.getModelById(params.modelId);
+				
+				if(params.getAttribute('customer_id').length == 0 || params.getAttribute('customer_id') == "-1")
+					return;
+				
+				var str:String = " 客户编号为 [" + params.getAttribute('customer_id') + "]";
+				if(params.getAttribute('status') == "使用中")
+					str = str + " 合同时间为 [" + params.getAttribute('contract_start') + "] 至 [" + params.getAttribute('contract_end') + "]";
+				resource_status_detail.text = resource_status_detail.text + str;
+			}
+
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:Fade id="fadeIn" duration="400" alphaFrom="0.0" alphaTo="1.0"/>
+		<mx:Fade id="fadeOut" duration="800" alphaFrom="1.0" alphaTo="0.0"/>
+	</fx:Declarations>
+	<s:Scroller width="100%" height="100%" id="base_info" showEffect="{fadeIn}" hideEffect="{fadeOut}">
+		<s:VGroup width="100%" height="100%"  gap="10" paddingRight="10" paddingBottom="10" paddingLeft="10" paddingTop="5">
+			<s:HGroup width="100%" height="30%">
+				<s:VGroup width="200" horizontalAlign="center">
+					<mx:Image width="128" height="128" source="/idc_platform/IconLibrary/{model.largeIcon}" x="28" y="19"/>
+					<s:Label x="68" y="155" text="{model.name}"/>
+					<s:Label x="58" y="176" text="[{params.getAttribute('name')}]"/>
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%" paddingLeft="20" verticalAlign="middle" gap="10">
+						<s:Label x="20" y="20" text="◆ 该资源对象创建于 [{params.getAttribute('create_time')}] 配置管理员为 [{params.getAttribute('resource_admin')}]"/>
+						<s:Label x="20" y="50" text="◆ 该对象于 [{params.getAttribute('last_update_time')}] 由 [{params.getAttribute('last_update_by')}] 更新"/>
+						<s:Label id="resource_status_detail" x="20" y="80" text="◆ 该资源当前状态 [{params.getAttribute('status')}] "/>
+						<s:Label x="20" y="110" width="600" text="◆ 资源描述:{params.getAttribute('description')}"/>
+				</s:VGroup>
+			</s:HGroup>
+			<components:HSplitLine width="100%"/>
+			<s:HGroup width="100%" height="100%">
+				<s:VGroup width="200" height="100%" top="10" gap="10">
+					<s:Label text="操作控制" fontSize="14" color="0x666666" width="100%" fontWeight="bold" textAlign="left"/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="关闭当前页" click="close_current(event)"/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="拓扑结构" click="topo_handle(event)"/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="关联工单" click="tasklink_handle(event)"/>
+					<!--components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="历史展现" click="history_handle(event)"/-->
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%">					
+					<s:Group id="detailContent" width="100%" height="100%" />
+				</s:VGroup>
+			</s:HGroup>
+		</s:VGroup>
+	</s:Scroller>	
+</s:NavigatorContent>

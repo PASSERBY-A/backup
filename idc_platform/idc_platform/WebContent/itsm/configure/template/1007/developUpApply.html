@@ -1,0 +1,204 @@
+/* 解决TextArea100%时宽度过长换行问题 */
+Ext.override(Ext.form.Field, {
+    adjustWidth : function(tag, w){
+        tag = tag.toLowerCase();
+        if(typeof w == 'number' && !Ext.isSafari){
+            if(Ext.isIE && (tag == 'input' || tag == 'textarea')){
+                if(!Ext.isStrict){
+                    return this.inEditor ? w : w - 3;
+                }
+                if(tag == 'input' && Ext.isStrict){
+                    return w - (Ext.isIE6 ? 4 : 1);
+                }
+                if(tag == 'textarea' && Ext.isStrict){
+                    return w-4;
+                }
+            }else if(Ext.isOpera && Ext.isStrict){
+                if(tag == 'input'){
+                    return w + 2;
+                }
+                if(tag == 'textarea'){
+                    return w-2;
+                }
+            }
+        }
+        return w;
+    }
+});
+
+/* 生成Ext对象 */
+#set($i = 0)
+#foreach ($fieldInfo in $fieldList)
+	##if (!$fieldInfo.getType().equals("com.linkage.toptea.itsm.configure.fields.FileFieldInfo"))
+		#if ($fieldInfo.getType().equals("com.linkage.toptea.itsm.configure.fields.PersonFieldInfo"))
+			#if(!$origin.equals("ITSM"))
+				$fieldInfo.setOrigin($origin)
+			#end
+		#end
+		#if ($fieldInfo.getId().equals($FLD_EXECUTE_USER))
+			#if($fromNode && ($fromNode.getType() == $TYPE_BRANCH_BEGIN) && $actionInfo.isMutiAssign())
+				$fieldInfo.setSingleMode(false)
+			#else
+				$fieldInfo.setSingleMode(true)
+			#end
+		#end
+
+		#if (!$fieldInfo.getType().equals("com.linkage.toptea.itsm.configure.fields.GridFieldInfo"))
+			$fieldInfo.getFormCode(150)
+			fld_${fieldInfo.getId()}.anchor = '100%';
+			#if($fieldInfo.isReadOnly()) 
+				fld_${fieldInfo.getId()}.style = 'border-top:1px solid #99BBE8;border-left:1px solid #99BBE8;border-bottom:1px solid #99BBE8;border-right:1px solid #99BBE8;';
+			#else
+				fld_${fieldInfo.getId()}.style = 'border-top:1px outset #99BBE8;border-left:1px ridge #99BBE8;border-bottom:1px solid #99BBE8;border-right:1px solid #99BBE8;';
+			#end
+		#else
+			$fieldInfo.getFormCode2()
+		#end
+
+#end
+
+/**************************Do some control****************************************************************************/
+fld_execute_user.fieldLabel = "审批领导";
+#if($actionInfo.getActionId().equals("act10"))
+fld_req_test_record.setReadOnly(true);
+#end
+
+
+/* 生成布局对象 */
+var column01Sub01 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 30 0 0',
+	items : [fld_req_no, fld_req_happen_time, fld_req_person] 
+});
+
+var column01Sub02 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 0 0 30',
+	items : [fld_req_department, fld_req_plan_end_time, fld_req_sender]
+});
+
+var column01 = new Ext.Panel({
+	layout : 'column',
+	border : false,
+	anchor : '100%',
+	items : [column01Sub01, column01Sub02]
+});
+
+var fieldset01 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '需求信息',
+	collapsed: false,
+	anchor:'98%',
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[column01,fld_req_title,  fld_req_attachements]
+});
+
+if('$taskData.getOwner().getCreatedBy()' == 'oa'){
+	fieldset01.on('render', function(){
+		Ext.DomHelper.append(fieldset01.getEl(), '<div id="desc" class="x-form-item x-form-label-nowrap" tabindex="-1"><label style="width:85px;padding:2px 0px 0px 7px;">需求描述:</label><iframe onload="repaint()" scrolling=no style="border-top:1px solid #99BBE8;border-left:1px solid #99BBE8;border-bottom:1px solid #99BBE8;border-right:1px solid #99BBE8; padding:2px" width=100% height=400 src=$Consts.ITSM_HOME/weboffice/showsealfile.jsp?taskOid=$taskOid></iframe></div>');
+	 
+	});
+} else {
+	
+	
+	fieldset01.add(fld_req_description);
+}
+
+var column02Sub01 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 30 0 0',
+	//至工作组
+	items : [fld_req_priority, fld_req_type, fld_req_dev_end_time, fld_req_long]
+});
+
+var column02Sub02 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 0 0 30',
+	items : [fld_req_urgent_level, fld_req_business_type, fld_req_system_conn, fld_req_handler]
+});
+
+var column02 = new Ext.Panel({
+	layout : 'column',
+	border : false,
+	anchor : '100%',
+	items : [column02Sub01, column02Sub02]
+});
+
+var fieldset02 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	collapsed: false,
+	anchor:'98%',
+	title: '分析结果',
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[column02, fld_req_deep_desc]
+});
+
+var column04Sub01 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 30 0 0',
+	//至工作组
+	items : [fld_req_handler_begin_time]
+});
+
+var column04Sub02 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 0 0 30',
+	items : [fld_req_handler_end_time]
+});
+
+var column04 = new Ext.Panel({
+	layout : 'column',
+	border : false,
+	anchor : '100%',
+	items : [column04Sub01, column04Sub02]
+});
+
+var fieldset04 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	anchor:'98%',
+	//collapsed: true,
+	title: '开发过程',
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[column04, fld_req_dev_process, fld_req_test_scheme]
+});
+
+var fieldset05 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	anchor:'98%',
+	//collapsed: true,
+	title: '用户测试记录',
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[fld_req_test_record]
+});
+
+var fieldset06 = new Ext.form.FieldSet({
+	collapsible: false,
+	autoHeight: true,
+	anchor:'98%',
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[fld_execute_user, fld_req_remark]
+});
+
+var scheme = new Ext.Panel({
+	border : false,
+	anchor:'98%',
+	items : [req_dev_scheme]
+});
+
+simple.add(fieldset01, fieldset02, scheme, fieldset04, fieldset05, fieldset06);

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:components="com.hp.idc.components.*" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 creationComplete="init()">
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HSplitLine;
+			import com.hp.idc.resm.ui.Menu;
+			import com.hp.idc.resm.ui.actions.IUiAction;
+			import com.hp.idc.skins.LinkButtonSkin;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.Image;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.Button;
+			import spark.components.HGroup;
+			import spark.components.Label;
+			
+			private var actionDictionary:Dictionary = new Dictionary();
+			
+			private var _dynClasses :Array = [ModelAdd,ModelDelete,ModelEdit, ModelList, 
+				AttributeAdd,AttributeEdit,AttributeDelete, AttributeList,
+				ModelRelationList,ModelRelationAdd,ModelRelationDelete,
+				RelationList, RelationTopo];
+			
+			
+			private function onMenuLoaded(event:ResultEvent):void
+			{
+				var list :ArrayCollection = event.result as ArrayCollection;
+				var lastGroup :String = "";
+				var hg0 :HGroup = null;
+				var vg0 :VGroup = null;
+				//保存第一个按钮，用于初始化数据
+				var firstBtn:Button = null;
+				for (var i :int = 0; i < list.length; i++)
+				{
+					var m :Menu = list.getItemAt(i) as Menu;
+					if (m.groupName != lastGroup)
+					{
+						if (lastGroup != "") {
+							var ooo :HSplitLine = new HSplitLine();
+							navi.addElement(ooo);
+						}
+						lastGroup = m.groupName;
+						var lbl :Label = new Label();
+						
+						lbl.text = m.groupName;;
+						lbl.percentWidth = 100;
+						lbl.height = 30;
+						lbl.styleName = "LabelTitle";
+						hg0 = new HGroup();
+						hg0.percentWidth = 100;
+						hg0.verticalAlign = "middle";
+						navi.addElement(hg0);
+						vg0 = new VGroup();
+						vg0.percentWidth = 100;
+						hg0.addElement(vg0);
+						vg0.addElement(lbl);
+					}
+					var hg :HGroup = new HGroup();
+					hg.paddingLeft = 20;
+					hg.verticalAlign = "middle";
+					var btn :Button = new Button();
+					btn.setStyle("skinClass",LinkButtonSkin);
+					btn.label = m.name;
+					btn.addEventListener(MouseEvent.CLICK, btnClick);
+					
+					
+					//保存第一个按钮，用于初始化数据
+					if(firstBtn == null){
+						firstBtn = btn;
+					}
+					if (m.action != null)
+					{
+						var c:Class = getDefinitionByName(m.action) as Class;
+						if (c != null)
+						{
+							var act :IUiAction = new c() as IUiAction;
+							act.setTarget(content, m.actionParam);
+	//						btn.data = act;
+							this.actionDictionary[btn] = act
+							btn.toolTip = m.remark;
+						}
+					}
+					
+					var img :Image = new Image();
+					img.source = "images/right.gif";
+					hg.addElement(img);
+					hg.addElement(btn);
+					vg0.addElement(hg);
+				}
+				
+				
+				if(firstBtn!=null){
+					firstBtn.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+				}
+			}
+			
+			private function btnClick(ev :Event) :void
+			{
+				var btn :Button = ev.target as Button;
+//				var act :IUiAction = btn.data as IUiAction;
+				var act :IUiAction = this.actionDictionary[btn] as IUiAction;
+				act.doAction(null);
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.fault.faultString,"错误");
+			}
+			
+			private function init() : void
+			{
+				uiService.getMenus("root", 4);
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="uiService" destination="uiService">
+			<mx:method  name="getMenus" result="onMenuLoaded(event)" fault="defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+
+	<!--mx:Image id="bg0" source="/resm/images/admin_bg.jpg" width="100%" height="100%" alpha="0.1" maintainAspectRatio="false"/-->
+	<components:VSplitLine id="sp0" height="100%" x="179" y="0" />
+	<s:VGroup clipAndEnableScrolling="true" id="navi" x="0" y="0" width="180"/>
+	<mx:ViewStack x="180" y="0" width="100%" height="100%" id="content" />
+</s:NavigatorContent>

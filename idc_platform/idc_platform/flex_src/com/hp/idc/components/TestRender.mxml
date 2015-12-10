@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<s:layout >
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.model.ModelAttribute;
+			[Bindable]
+			private var xx :ModelAttribute;
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				xx = value as ModelAttribute;
+			}
+			
+
+
+
+			protected function checkId_changeHandler(event:Event):void
+			{
+				xx.inheritable = checkId.selected;
+			}
+
+		]]>
+	</fx:Script>
+	<s:CheckBox id="checkId" change="checkId_changeHandler(event)" selected="{xx.inheritable}"/>
+</s:GridItemRenderer>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ========================================================================
+ ==
+ == This file is part of yFiles FLEX 1.4.2.
+ ==
+ == yWorks proprietary/confidential. Use is subject to license terms.
+ ==
+ == Unauthorized redistribution of this file or of a byte-code version
+ == of this file is strictly forbidden.
+ ==
+ == Copyright (c) 2006-2010 by yWorks GmbH, Vor dem Kreuzberg 28,
+ == 72070 Tuebingen, Germany. All rights reserved.
+ ==
+ ========================================================================== -->
+<mx:TitleWindow title="Server Configuration" xmlns:fx="http://ns.adobe.com/mxml/2009"  xmlns:mx="library://ns.adobe.com/flex/mx"  xmlns:s="library://ns.adobe.com/flex/spark" 
+                horizontalAlign="center" verticalAlign="top"
+                paddingTop="20" paddingLeft="20"
+                paddingRight="20" paddingBottom="20"
+                horizontalScrollPolicy="off"
+                width="400">
+
+    <fx:Metadata>
+        [Event(name="complete",type="flash.events.Event")]
+    </fx:Metadata>
+
+    <fx:Script>
+		<![CDATA[
+
+        public static const COMPLETE:String = "complete";
+
+        private static const MESSAGE_HEADER_CONNECT:String =
+                "This yFiles FLEX " +
+                "demo application requires client-server communication. " +
+                "However, connecting to the yFiles FLEX server component did not succeed.";
+                
+        private static const MESSAGE_HEADER_DEPLOY:String =
+                "This yFiles FLEX " +
+                "demo application requires a yFiles FLEX server component. " + 
+                "However, the yFiles FLEX server application has not been correctly " + 
+                "deployed.";               
+
+        private static const MESSAGE_LOCALE_WITH_FILE:String =
+                "This application currently runs in the \"local-with-filesystem\" " + 
+                "sandbox and may therefore not access the server component at all. " + 
+                "The easiest way to allow for network access, is to set the application " +
+                "as trusted using the Flash Player configuration dialog.<br><br>" + 
+                "Alternatively, the use-network=true compiler flag can be used. " + 
+                "However, this will also require a crossdomain.xml policy file to be located " + 
+                "in the server's root directory."
+                
+
+
+        private var _errorMessage:String;
+
+        private var _connectionFailed:Boolean = true;
+        
+        public function set connectionFailed( value:Boolean ):void {
+        	this._connectionFailed = value;
+        }
+        
+        public function get errorMessage():String {
+            return _errorMessage;
+        }
+        [Bindable]
+        public function set errorMessage(value:String):void {
+            _errorMessage = value;
+
+        }
+        public function message(errorMessage:String):String {
+        	var header:String = this._connectionFailed ? MESSAGE_HEADER_CONNECT : MESSAGE_HEADER_DEPLOY;
+            var msg:String = "<font size='14'>" + header + "</font>" + "<br><br>";
+
+            msg += "<font size='12'>";
+
+            if (errorMessage != null && errorMessage.length > 0) {
+                msg += errorMessage;
+            } else {
+                msg += MESSAGE_LOCALE_WITH_FILE;
+            }
+            msg += "</font>";
+            return msg;
+        }
+
+        private function onExitHit(evt:Event = null):void {
+            dispatchEvent(new Event(COMPLETE));
+        }
+
+		]]>
+	</fx:Script>
+
+    <mx:Text width="100%" id="msgLabel" htmlText="{ message(errorMessage) }" paddingBottom="15"/>
+
+    <mx:Button label="exit" id="exitBtn" click="onExitHit()"/>
+
+</mx:TitleWindow>

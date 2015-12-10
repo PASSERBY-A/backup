@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<mx:ComboBox  xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="initComponent()"> 
+	<mx:Script> 
+		<![CDATA[ 
+			import mx.events.FlexEvent;  
+			[Bindable]  
+			private var _label:String;  
+			[Bindable]  
+			public var treeSelectedItem:Object;
+			
+			[Bindable]
+			private var _treewidth:Number;
+			[Bindable]
+			private var _treeheight:Number;
+			
+			public function set treewidth(value:Number):void{
+				this._treewidth = value;
+			}
+			
+			public function set treeheight(value:Number):void{
+				this._treeheight = value;
+			}
+			[Bindable]
+			public function get treewidth():Number{
+				return this._treewidth;
+			}
+			[Bindable]
+			public function get treeheight():Number{
+				return this._treeheight;
+			}
+			
+			
+			public function initComponent():void 
+			{ 
+			} 
+			
+			public function updateLabel(event:*):void{  
+				_label = event.currentTarget.selectedItem[this.labelField];      
+				treeSelectedItem = event.currentTarget.selectedItem;  
+			}  
+			
+			override protected function updateDisplayList(unscaledWidth:Number, 
+														  unscaledHeight:Number):void 
+			{ 
+				super.updateDisplayList(unscaledWidth, unscaledHeight);   
+				
+				if(dropdown && _label != null){    
+					text = _label;  
+				}  
+			} 
+			
+			
+			
+		]]> 
+	</mx:Script> 
+	<mx:dropdownFactory> 
+		<mx:Component>  
+			<mx:Tree creationComplete="initTree()" change="outerDocument.updateLabel(event)" showRoot="false" labelField="@label" height="{outerDocument.treeheight}" width="{outerDocument.treewidth}"> 
+				<mx:Script> 
+					<![CDATA[
+						public function initTree():void {
+							//var len:int=super.dataProvider.length; 
+							super.selectedItem=outerDocument.treeSelectedItem; 
+						}
+					]]>
+				</mx:Script> 
+			</mx:Tree> 
+		</mx:Component> 
+	</mx:dropdownFactory> 
+</mx:ComboBox> 
+

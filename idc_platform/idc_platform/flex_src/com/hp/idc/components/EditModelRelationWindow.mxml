@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="600" height="320" title="模型关联关系"
+			   close="PopUpManager.removePopUp(this);"
+			   creationComplete="init(event)">
+	<s:layout>
+		<s:HorizontalLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		
+		<mx:RemoteObject  id="relationUpdateService" destination="relationUpdateService">
+			<mx:method  name="addModelRelation" result="addModelRelationHandle(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:RemoteObject  id="srv" destination="modelService">
+			<mx:method  name="getModelTree" result="resultTreeHandler(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:RemoteObject  id="relationService" destination="relationService">
+			<mx:method  name="getAllRelationDefines" result="getAllRelationDefines(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+		
+	</fx:Declarations>
+	<s:VGroup width="100%" height="100%">
+		<s:HGroup width="100%" height="100%">
+			<s:VGroup width="34%" height="100%">
+				<s:Label text="模型" width="100%" styleName="LabelTitle" height="30"/>
+				<s:HGroup width="100%" height="100%">
+					<mx:Spacer width="10" />
+					<mx:Tree id="tree" doubleClickEnabled="true" borderVisible="false" itemRenderer="com.hp.idc.components.SparkTreeItemRenderer"
+							 showRoot="false"  
+							 labelField="@label" 
+							 width="100%"
+							 height="100%"
+							 />
+				</s:HGroup>
+			</s:VGroup>
+			<s:VGroup width="33%" height="100%">
+				<s:Label text="关联关系" width="100%" styleName="LabelTitle" height="30"/>
+				<s:HGroup width="100%" height="100%">
+					<mx:Spacer width="10" />
+					<s:List id="relationList" width="100%" height="100%" labelField="name" borderVisible="false">
+					</s:List>
+				</s:HGroup>
+			</s:VGroup>
+			<s:VGroup width="34%" height="100%">
+				<s:Label text="关联模型" width="100%" styleName="LabelTitle" height="30"/>
+				<s:HGroup width="100%" height="100%">
+					<mx:Spacer width="10" />
+					<mx:Tree id="tree2" doubleClickEnabled="true" borderVisible="false" itemRenderer="com.hp.idc.components.SparkTreeItemRenderer"
+							 showRoot="false"  
+							 labelField="@label" 
+							 width="100%"
+							 height="100%"
+							 />
+				</s:HGroup>
+			</s:VGroup>
+		</s:HGroup>
+		<s:HGroup width="100%" horizontalAlign="right" paddingRight="10" paddingBottom="10">
+			<s:Button label="保存" click="addModelRelationHandler(event)"/>
+			<s:Button label="取消" click="closeWindow(event)"/>
+		</s:HGroup>
+	</s:VGroup>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.event.ModelRelationEvent;
+			import com.hp.idc.resm.model.ModelRelation;
+			import com.hp.idc.resm.model.RelationDefine;
+			import com.hp.idc.util.UserTool;
+			
+			import mx.collections.IList;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var modelRelation:ModelRelation;
+			
+			private function addModelRelationHandle(event:ResultEvent):void{
+				var e:ModelRelationEvent = new ModelRelationEvent(ModelRelationEvent.MODELRELATIONADD,modelRelation);
+				dispatchEvent(e);
+				
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function resultTreeHandler(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				var treeDate : XML = new XML(returnString);   
+				
+				tree.dataProvider = treeDate;   
+				tree2.dataProvider = treeDate;
+			}
+			
+			
+			private function getAllRelationDefines(event:ResultEvent):void
+			{
+				relationList.dataProvider = event.result as IList;   
+			}
+			
+			private function faultHandler(event:FaultEvent):void
+			{
+				PetAlert.show(event.fault.getStackTrace(),"错误");
+			}
+
+			protected function init(event:FlexEvent):void
+			{
+				relationService.getAllRelationDefines();
+				srv.getModelTree();
+			}
+
+
+			protected function addModelRelationHandler(event:MouseEvent):void
+			{
+				//验证
+				if(tree.selectedItem==null||tree2.selectedItem==null||relationList.selectedItem==null){
+					PetAlert.show("请先选择对象！！！","错误",4,null,null,PetAlert.ICON_ERROR);
+					return;
+				}
+				
+				var relation:RelationDefine = relationList.selectedItem as RelationDefine;
+				this.modelRelation.relationId = relation.id;
+				
+				this.modelRelation.modelId = tree.selectedItem.@id;
+				this.modelRelation.modelName = tree.selectedItem.@label;
+				this.modelRelation.modelId2 = tree2.selectedItem.@id;
+				this.modelRelation.modelName2 = tree2.selectedItem.@label;
+				
+				
+				relationUpdateService.addModelRelation(modelRelation,UserTool.userId);
+				
+			}
+			
+			private function closeWindow(event:MouseEvent):void{
+				this.dispatchEvent(new CloseEvent(CloseEvent.CLOSE,true));
+				PopUpManager.removePopUp(this);
+			}
+
+		]]>
+	</fx:Script>
+</s:TitleWindow>

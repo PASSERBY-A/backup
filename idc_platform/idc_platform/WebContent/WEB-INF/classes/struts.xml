@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd" >
+<struts>
+	<package name="default" extends="struts-default,json-default">
+		<result-types>
+			<result-type name="str"
+				class="com.hp.idc.report.util.StringResultType">
+			</result-type>
+		</result-types>
+		<action name="login" class="com.hp.idc.system.security.view.LoginAction"
+			method="login">
+			<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+
+		<action name="logout" class="com.hp.idc.system.security.view.LoginAction"
+			method="logout">
+			<result name="success">
+				/index.jsp
+			</result>
+		</action>
+
+	</package>
+
+    <package name="jfreechart-default" extends="struts-default">
+    
+    	<result-types>
+    		<result-type name="chart" class="org.apache.struts2.dispatcher.ChartResult">
+    			<param name="height">150</param>
+    			<param name="width">200</param>
+    		</result-type>
+    	</result-types>
+    </package>
+
+
+
+		<!-- add include file here -->
+		<include file="struts-conf/struts-bulletin.xml" />
+		<include file="struts-conf/struts-system.xml" />
+		<include file="struts-conf/struts-kbm.xml" />
+		<include file="struts-conf/struts-network.xml" />
+		<include file="struts-conf/struts-business.xml" />
+		<include file="struts-conf/struts-cusrelation.xml" />
+		<include file="struts-conf/struts-report.xml" />
+		<include file="struts-conf/struts-customer.xml" />
+		
+</struts>

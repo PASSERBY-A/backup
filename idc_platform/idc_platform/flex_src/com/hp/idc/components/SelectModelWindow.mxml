@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" title="{wintitle}" close="PopUpManager.removePopUp(this);" creationComplete="init(event)">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="srv" destination="modelService">
+			<mx:method  name="getModelTree" result="resultTreeHandler(event)" fault="faultHandler(event)"/>
+			<mx:method  name="getModelById" result="getModelHandler(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+		
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.event.ModelEvent;
+			import com.hp.idc.resm.model.Model;
+			
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			[Bindable]
+			private var _wintitle:String
+			
+			[Bindable]
+			public function set wintitle(title:String):void{
+				this._wintitle = title;
+			}
+			
+			public function get wintitle():String{
+				return this._wintitle;
+			}
+			
+			private function init(event:FlexEvent):void{
+				srv.getModelTree();
+			}
+			
+			
+			private function resultTreeHandler(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				var treeDate : XML = new XML(returnString);   
+				
+				tree.dataProvider = treeDate;   
+			}
+			
+			private function faultHandler(event:FaultEvent):void
+			{
+				PetAlert.show(event.fault.getStackTrace(),"错误");
+			}
+			
+			private function selectModelHandler(enent:MouseEvent):void{
+				if(tree.selectedItem == null ){
+					return;
+				}
+				
+				var id:String = tree.selectedItem.@id;
+				
+				srv.getModelById(id);
+			}
+			
+			private function getModelHandler(event:ResultEvent):void{
+				var model:Model = event.result as Model;
+				
+				var e:ModelEvent = new ModelEvent(ModelEvent.MODELSELECT,model);
+				this.dispatchEvent(e);
+				PopUpManager.removePopUp(this);
+				
+			}
+			
+			private function closeWindow(event:MouseEvent):void{
+				this.dispatchEvent(new CloseEvent(CloseEvent.CLOSE,true));
+				PopUpManager.removePopUp(this);
+			}
+
+		]]>
+	</fx:Script>
+	<s:VGroup width="100%" height="100%">
+		<s:HGroup width="100%" height="100%">
+			<mx:Spacer width="10" />
+			<mx:Tree id="tree" doubleClickEnabled="true" doubleClick="selectModelHandler(event)" borderVisible="false" itemRenderer="com.hp.idc.components.SparkTreeItemRenderer"
+					 showRoot="false"  
+					 labelField="@label" 
+					 width="100%"
+					 height="100%"
+					 />
+		</s:HGroup>
+		<s:HGroup width="100%" horizontalAlign="right" paddingRight="10" paddingBottom="10">
+			<s:Button label="保存" click="selectModelHandler(event)"/>
+			<s:Button label="取消" click="closeWindow(event)"/>
+		</s:HGroup>
+	</s:VGroup>
+</s:TitleWindow>

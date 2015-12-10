@@ -1,0 +1,95 @@
+var columnSub1 = new Ext.Panel({
+	columnWidth:.5,
+  layout: 'form',
+  border:false
+});
+var columnSub2 = new Ext.Panel({
+	columnWidth:.5,
+  layout: 'form',
+  border:false
+});
+var column = new Ext.Panel({
+	layout:'column',
+	border:false,
+	anchor:'100%',
+
+  items:[columnSub1,columnSub2]
+});
+
+var columnCross = new Ext.Panel({
+	layout:'form',
+	border:false,
+	labelAlign : 'right',
+	items:[column]
+});
+
+var gridTabPanel = new Ext.TabPanel({
+	border:true,
+  activeTab:0,
+  region:'center',
+  margins:'1 1 1 1',
+  hidden :true,
+  buttonAlign :'center',
+  height:235
+});
+simple.add(columnCross,gridTabPanel)
+
+#set($i = 0)
+#foreach ($fieldInfo in $fieldList)
+	##if (!$fieldInfo.getType().equals("com.linkage.toptea.itsm.configure.fields.FileFieldInfo"))
+		#if ($fieldInfo.getType().equals("com.linkage.toptea.itsm.configure.fields.PersonFieldInfo"))
+			#if(!$origin.equals("ITSM"))
+				$fieldInfo.setOrigin($origin)
+			#end
+		#end
+		#if ($fieldInfo.getId().equals($FLD_EXECUTE_USER))
+			#if($fromNode && ($fromNode.getType() == $TYPE_BRANCH_BEGIN) && $actionInfo.isMutiAssign())
+				$fieldInfo.setSingleMode(false)
+			#else
+				$fieldInfo.setSingleMode(true)
+			#end
+		#end
+		$fieldInfo.getFormCode(150,$request)
+
+		#set($flds=$fieldInfo.getFormFields())
+		#set($regulation=$fieldInfo.getRegulationL())
+
+		##大文本框占两列
+		#set($cross=false)
+		#set($grid=false)
+		#if ($fieldInfo.getType().equals("com.linkage.toptea.itsm.configure.fields.StringFieldInfo") && $fieldInfo.isMutiline())
+			#set($cross=true)
+		#elseif($fieldInfo.getType().equals("com.linkage.toptea.itsm.configure.fields.GridFieldInfo"))
+			#set($grid=true)
+		#else
+			#set($i=$i + 1)
+		#end
+		#foreach ($fld in $flds)
+			##$formFields.add($fld)
+			#if($cross)
+				${fld}.anchor ="97%";
+				columnCross.add($fld);
+			#elseif($grid)
+				gridTabPanel.show();
+				gridTabPanel.add($fld);
+			#else
+				${fld}.anchor ="95%";
+				#if($i%2==1)
+					columnSub1.add($fld);
+				#else
+					columnSub2.add($fld);
+				#end
+			#end
+			##增加字段的规则
+			#foreach ($rule in $regulation)
+				${fld}.on("$ItsmUtil.getObjectFromArray($rule,0)",$ItsmUtil.getObjectFromArray($rule,1));
+			#end
+		#end
+	##end
+#end
+
+#if ($formFields.size() > 0)
+	#foreach ($formFie in $formFields)
+		##simple.add($formFie);
+	#end
+#end

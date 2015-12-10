@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:tool="com.hp.idc.util.*"
+			   xmlns:components="com.hp.idc.components.*" 
+			   xmlns:widgets="com.hp.idc.components.widgets.*" 
+			   xmlns:yworks="http://www.yworks.com/xml/yfiles-flex/1.3/mxml"
+			   xmlns:layout="http://www.yworks.com/xml/yfiles-flex-layout/1.0/mxml"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ui="com.hp.idc.resm.ui.*"
+			   creationComplete="init()"
+			   minWidth="955" minHeight="400"
+			   >
+	<fx:Style source="ResourceManagement.css"/>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.util.UiUtil;
+			
+			private function init() : void {
+				//this.styleManager.loadStyleDeclarations2("defaultStyle.swf");
+				UiUtil.vs = vs1;
+				UiUtil.progress = progress;
+				UiUtil.application = this;
+				UiUtil.addToVs("index", new ResourceHome());//添加主页content
+				
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		
+		<!--tool:ConfigTool id="dct" serverRequired="true"/ -->
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<mx:ViewStack id="vs1" width="100%" height="100%">
+	</mx:ViewStack>
+	<widgets:ProgressPanel width="100%" height="100%" id="progress" visible="false" />
+</s:Application>

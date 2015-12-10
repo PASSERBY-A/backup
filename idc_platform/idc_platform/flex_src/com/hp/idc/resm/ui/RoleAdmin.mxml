@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:components="com.hp.idc.components.*" 
+			   xmlns:yworks="http://www.yworks.com/xml/yfiles-flex/1.3/mxml"
+			   xmlns:layout="http://www.yworks.com/xml/yfiles-flex-layout/1.0/mxml"
+			   xmlns:resm="com.hp.idc.resm.*" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   creationComplete="init()">
+	<fx:Style source="ResourceManagement.css"/>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.resm.security.ModelPermission;
+			import com.hp.idc.resm.ui.find.MutiPersonSelector;
+			import com.hp.idc.resm.ui.find.SinglePersonSelector;
+			import com.hp.idc.resm.ui.role.PermissonView;
+			import com.hp.idc.resm.ui.role.RolePermissionView;
+			import com.hp.idc.resm.ui.role.RoleView;
+			import com.hp.idc.resm.ui.role.UserRoleView;
+			import com.hp.idc.skins.LinkButtonSkin;
+			
+			import mx.managers.PopUpManager;
+			
+			import spark.components.gridClasses.GridItemRenderer;
+			
+			private var temp0 :ModelPermission; // import only
+		
+			private function init() : void {
+				//this.styleManager.loadStyleDeclarations2("defaultStyle.swf");
+				roleView(null);
+			}
+
+			protected function viewUserRoleCb(res:ResourceObject):void
+			{
+				var roleView:UserRoleView = new UserRoleView;
+				roleView.userId = res.id;
+				content.removeAllElements();
+				content.addElement(roleView);
+			}
+			
+			protected function viewUserRole(event:MouseEvent):void
+			{
+				var view:SinglePersonSelector = new SinglePersonSelector();
+				view.callback = viewUserRoleCb;
+				PopUpManager.addPopUp(view, this, true);
+				PopUpManager.centerPopUp(view);
+			}
+			
+			protected function rolePermissionView(event:MouseEvent):void
+			{
+				var view:RolePermissionView = new RolePermissionView();
+				content.removeAllElements();
+				content.addElement(view);
+			}
+			
+			protected function roleView(event:MouseEvent):void
+			{
+				var view:RoleView = new RoleView();
+				content.removeAllElements();
+				content.addElement(view);
+			}
+			
+			protected function permissionView(event:MouseEvent):void
+			{
+				var view:PermissonView = new PermissonView();
+				content.removeAllElements();
+				content.addElement(view);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	<!-- 背景 -->
+	<s:Rect left="0" right="0" top="0" height="100" radiusX="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry 
+					color="0xD4EDE9" 
+					alpha="1" />
+				<s:GradientEntry 
+					color="0xFFFFFF" 
+					alpha="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" right="0" top="100" bottom="0" radiusX="0">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" />
+		</s:fill>
+	</s:Rect>
+	<s:HGroup gap="15" width="100%" height="100%" paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15">
+		<components:RoundCornerPanel width="200" id="links">
+			<components:layout>
+				<s:VerticalLayout gap="3" paddingLeft="2" paddingRight="2" paddingTop="5" paddingBottom="15"/>
+			</components:layout>
+			<mx:Spacer height="5" />
+			<s:HGroup>
+				<mx:Spacer width="15" />
+				<mx:Image source="@Embed(source='images/icon11.png')" />
+				<s:Label text="权限管理" fontSize="14" />
+			</s:HGroup>
+			<mx:Spacer height="5" />
+			<components:HSplitLine/>
+			<s:Group>
+				<s:layout >
+					<s:HorizontalLayout paddingLeft="10" />
+				</s:layout>
+				<s:Button icon="@Embed(source='images/right.gif')" label="查看用户权限" skinClass="com.hp.idc.skins.LinkButtonSkin" click="viewUserRole(event)"/>
+			</s:Group>
+			<components:HSplitLine/>
+			<s:Group>
+				<s:layout >
+					<s:HorizontalLayout paddingLeft="10"/>
+				</s:layout>
+				<s:Button icon="@Embed(source='images/right.gif')" label="管理角色权限" skinClass="com.hp.idc.skins.LinkButtonSkin"  click="rolePermissionView(event)"/>
+			</s:Group>
+			<components:HSplitLine/>
+			<s:Group>
+				<s:layout >
+					<s:HorizontalLayout paddingLeft="10" />
+				</s:layout>
+				<s:Button icon="@Embed(source='images/right.gif')" label="管理角色定义" skinClass="com.hp.idc.skins.LinkButtonSkin" click="roleView(event)"/>
+			</s:Group>
+			<components:HSplitLine/>
+			<s:Group>
+				<s:layout >
+					<s:HorizontalLayout paddingLeft="10" />
+				</s:layout>
+				<s:Button icon="@Embed(source='images/right.gif')" label="查看基本权限" skinClass="com.hp.idc.skins.LinkButtonSkin" click="permissionView(event)"/>
+			</s:Group>
+		</components:RoundCornerPanel>
+		<s:Group width="100%" height="100%" id="content">
+		</s:Group>
+	</s:HGroup>
+</s:Application>

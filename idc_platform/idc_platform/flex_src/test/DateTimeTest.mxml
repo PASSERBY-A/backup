@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			   xmlns:widgets="com.hp.idc.components.widgets.*"  creationComplete="application1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				//PetAlert.show(date.selectedDate.toString());
+				//date.selectedDate.getHours();
+				//PetAlert.show(time.width+"");
+				//ProgressPanel.openProgress();
+				
+			}
+
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				//ProgressPanel.closeProgress();
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.widgets.ProgressPanel;
+			import com.hp.idc.util.DateTimeUtil;
+			
+			import mx.events.FlexEvent;
+
+			
+			private var panelBar:ProgressPanel;
+			
+//			private var timer:Timer; 
+			
+			private function init():void {  
+//				timer = new Timer(10);  
+//				timer.addEventListener(TimerEvent.TIMER, timer_timer);  
+			} 
+			
+			private function timer_timer(evt:TimerEvent):void {  
+//				progressBar.setProgress(progressBar.value + 1, 100);  
+			}  
+			
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// panelBar = new ProgressPanel(test,"请等待...");
+				// TODO Auto-generated method stub
+//				time.time = 1;
+//				date.selectedDate = new Date();
+				//PetAlert.show(""+time.time)
+//				playProgressBar()
+//				progressBar.setProgress(100, 100);  
+				
+				var d:Date = new Date();
+				PetAlert.show(DateTimeUtil.stringToDateTime("2012-12-28 23:11:23","YYYY-MM-DD JJ:NN:SS")+"","");
+			}
+			
+			
+			private function progressBar_complete(evt:Event):void {  
+//				timer.stop();  
+			}  
+			
+			private function playProgressBar():void {  
+				resetProgressBar();  
+//				timer.start();  
+			}  
+			
+			private function resetProgressBar():void {  
+//				progressBar.setProgress(0, 100);  
+//				progressBar.scaleX = 1.0; // 100%  
+//				progressBar.scaleY = 1.0; // 100%  
+//				progressBar.alpha = 1.0; // 100%  
+			}  
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:Parallel id="progressBar_completeEffect">  
+			<mx:Fade alphaTo="0.0" />  
+			<mx:Zoom zoomHeightTo="0" />  
+		</mx:Parallel>  
+
+	</fx:Declarations>
+	
+	
+	<!--s:VGroup width="100%" height="100%">
+		<widgets:TimeField id="time"/>
+		<mx:DateField id="date" formatString="YYYY-MM-DD"/>
+		<s:Button click="button1_clickHandler(event)"/>
+	</s:VGroup-->
+	
+	<!--mx:Button label="Play" 
+			click="playProgressBar();" /> 
+	
+	<mx:Button label="Reset" 
+			click="resetProgressBar();" /--> 
+	<s:VGroup id="test" width="100%" height="90%" alpha="1">
+		
+	</s:VGroup>
+	<s:Button click="button1_clickHandler(event)"/>
+	<s:Button click="button2_clickHandler(event)"/>
+</s:Application>

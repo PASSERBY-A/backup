@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:ui="com.hp.idc.components.*" 
+			   xmlns:ui2="com.hp.idc.resm.ui.data.*" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" applicationComplete="init()" >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="modelService" destination="modelService">
+			<mx:method  name="getModelTree" result="modelQueryComplete(event)" fault="faultHandler(event)"/>
+			<mx:method  name="getModelAttributesByModelId" result="modelAttributesQueryComplete(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			
+			import flash.utils.getQualifiedClassName;
+			
+			import mx.collections.IList;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.IndexChangeEvent;
+			
+			private function init() : void
+			{
+				this.styleManager.loadStyleDeclarations2("defaultStyle.swf");
+				modelService.getModelTree();
+			}
+			
+			private function modelQueryComplete(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				modelTree.dataProvider = TreeItem.createDataProvider(returnString);
+			}
+			
+			
+			private function modelAttributesQueryComplete(event:ResultEvent):void
+			{
+				modelAttribute.dataProvider = event.result as ArrayCollection;
+			}
+			
+			private function faultHandler(event:FaultEvent):void{
+				PetAlert.show(event.fault.getStackTrace(),"错误");
+			}
+
+			protected function modelTree_changeHandler(event:IndexChangeEvent):void
+			{
+				modelService.getModelAttributesByModelId(modelTree.selectedItem.id);
+			}
+
+
+			protected function modelAttribute_changeHandler(event:IndexChangeEvent):void
+			{
+				// TODO Auto-generated method stub
+			}
+
+		]]>
+		
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%">
+
+		<s:Form>
+			<s:layout>
+				<s:FormLayout gap="0" paddingTop="0"  paddingBottom="0"/>
+			</s:layout>
+			<s:FormItem label="选择模型:">
+				<s:DropDownList id="modelTree"  itemRenderer="com.hp.idc.components.TreeItemRenderer"
+							labelField="label" change="modelTree_changeHandler(event)">
+				</s:DropDownList>
+			</s:FormItem>
+			<s:FormItem label="过滤条件:">
+				<s:layout>
+					<s:HorizontalLayout/>
+				</s:layout>
+				<s:ComboBox width="90" id="modelAttribute" labelField="name" change="modelAttribute_changeHandler(event)">
+				</s:ComboBox>
+				<s:ComboBox width="70" id="op">
+				</s:ComboBox>
+				<s:ComboBox width="120">
+				</s:ComboBox>
+			</s:FormItem>
+			<s:FormItem>
+				<s:layout>
+					<s:HorizontalLayout/>
+				</s:layout>
+				<s:Button label="增加"/>
+				<s:Button label="修改"/>
+				<s:Button label="删除"/>
+				<s:Button label="加（"/>
+				<s:Button label="去（"/>
+				<s:Button label="AND"/>
+				<s:Button label="OR"/>
+			</s:FormItem>
+			<s:FormItem label="条件列表">
+				<s:DataGrid height="100" width="300">
+					<s:columns>
+						<s:ArrayCollection>
+							<s:GridColumn headerText="括号" dataField="括号"/>
+							<s:GridColumn headerText="比较"/>
+							<s:GridColumn headerText="字段"/>
+							<s:GridColumn headerText="约束"/>
+							<s:GridColumn headerText="值"/>
+						</s:ArrayCollection>
+					</s:columns>
+				</s:DataGrid>
+			</s:FormItem>
+			<s:FormItem label="说明">
+				<s:TextArea editable="false" />
+			</s:FormItem>
+		</s:Form>
+		<s:HGroup>
+			<s:Button label="确定"/>
+			<s:Button label="取消"/>
+		</s:HGroup>
+	</s:VGroup>
+</s:Application>

@@ -1,0 +1,102 @@
+<html>
+<head>
+  <title>查看节点信息</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=gbk">
+	<link rel="stylesheet" type="text/css" href="$request.getContextPath()/js/resources/css/ext-all.css" />
+	<link rel="stylesheet" type="text/css" href="$request.getContextPath()/itsm/style.css" />
+	<script type="text/javascript" src="$request.getContextPath()/js/ext-base.js"></script>
+	<script type="text/javascript" src="$request.getContextPath()/js/ext-all.js"></script>
+	<script type="text/javascript" src="$request.getContextPath()/js/ext-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="$request.getContextPath()/js/ext-ext.js"></script>
+	<script type="text/javascript" src="$request.getContextPath()/itsm/js/itsm.js"></script>
+</head>
+<body leftmargin=20>
+<div id="task_info_center">
+#parse("/default/nodeViewForm.html") 
+<br>
+</div>
+<script defer>
+var window_viewTask = new Ext.Window({});
+
+#parse("/default/taskLinkPanel.html")
+
+	var task_info_panel = new Ext.TabPanel({
+		#if($actionList.size()>0 && $taskData.getAssignTo().equals($userId))
+			region:'north',
+		#else
+			region:'center',
+		#end
+    split:true,
+    margins:'1 1 1 1',
+    height:200,
+    minSize: 100,
+    maxSize: 400,
+    border: false,
+    collapsible: true,
+    useSplitTips:true,
+   	collapsibleSplitTip:'拖动改变大小,双击隐藏',
+   	activeTab:0,
+   	items:[{
+      contentEl:'task_info_center',
+      title:'表单信息',
+      autoScroll:true
+  	},linkTaskGrid],
+		minButtonWidth :50,
+		buttons:[
+		#set($hasR=false)
+		#if ($btnList.size()>0)
+			#foreach ($item in $btnList)
+				#if ($velocityCount>1),#end
+				$item
+			#end
+      #set($hasR=true)
+    #end
+    #if ($hasR==true),#end
+		{
+			text:"返回",
+			handler:function(){
+				history.go(-1);
+			}
+		}
+		]
+	});
+
+	#if($actionList.size()>0 && $taskData.getAssignTo().equals($userId))
+	var task_action_panel = new Ext.TabPanel({
+		region:'center',
+    split:true,
+    minSize: 175,
+    maxSize: 400,
+    margins:'1 1 1 1',
+    splitTip:"拖动改变大小",
+    useSplitTips:true,
+    activeTab: 0,
+    autoScroll :true,
+    items:[
+    	#foreach ($actionInfo in $actionList)
+    		#if ($velocityCount>1),#end
+    		new Ext.ux.IFrameComponent({title: '$actionInfo.getActionName()',
+	      	id:'act_$nodeInfo.getId()_$actionInfo.getToNodeId()',
+	      	iconCls: 'views',
+	      	url:'$Consts.ITSM_HOME/task/taskActionNode.jsp?origin=$taskInfo.getOrigin()&wfOid=$taskInfo.getWfOid()&taskOid=$taskInfo.getOid()&taskDataId=$taskData.getDataId()&toNodeId=$actionInfo.getToNodeId()',
+	      	autoScroll:true,
+	      	closable:false
+	     })
+    	#end
+    ]
+	});
+	#end
+	
+Ext.onReady(function() {
+	var viewport = new Ext.Viewport({
+			layout:'border',
+      items:[task_info_panel
+      #if ($actionList.size()>0 && $taskData.getAssignTo().equals($userId))
+      //,task_action_panel
+    	#end]
+	});
+});
+
+</script>
+</body>
+</html>

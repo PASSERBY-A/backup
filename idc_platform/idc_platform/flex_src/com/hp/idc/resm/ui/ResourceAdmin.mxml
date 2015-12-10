@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:components="com.hp.idc.components.*" 
+			   xmlns:yworks="http://www.yworks.com/xml/yfiles-flex/1.3/mxml"
+			   xmlns:layout="http://www.yworks.com/xml/yfiles-flex-layout/1.0/mxml"
+			   xmlns:resm="com.hp.idc.resm.*" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="400"
+			   creationComplete="init()">
+	<fx:Style source="ResourceManagement.css"/>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.ui.actions.PopupWindowAction;
+			import com.hp.idc.resm.ui.actions.SwitchWindowAction;
+			import com.hp.idc.resm.ui.admin.AdminNavigate;
+			import com.hp.idc.resm.ui.data.DataNavigate;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.Button;
+			import mx.controls.LinkButton;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			private var _temp:Array = [ SwitchWindowAction, PopupWindowAction,
+				AdminNavigate, DataNavigate ];
+
+			private var sw :SwitchWindowAction;
+
+			private function onModuleClick(event:Event): void 
+			{
+				var me :MouseEvent = event as MouseEvent;
+				var btn :Button = me.currentTarget as Button;
+				var m : Module = btn.data as Module;
+				showWindow(m.className); 
+			}
+			
+			private function onModuleLoaded(event:ResultEvent):void
+			{
+				var list : ArrayCollection = event.result as ArrayCollection;
+				for (var i : int = 0; i < list.length; i++) {
+					var m : Module = list.getItemAt(i) as Module;
+					if(m.name!="资源管理配置"){
+						continue;
+					}
+					var btn :LinkButton = new LinkButton();
+					btn.label = m.name;
+					btn.setStyle("color", "0xFFFFFF");
+					//moduleBar.addChild(btn);
+					btn.data = m;
+					btn.addEventListener(MouseEvent.CLICK, onModuleClick);
+					//if (i == 0)
+					showWindow(m.className);
+				}
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.fault.faultString,"错误");
+			}
+			
+		
+			public function init():void {
+				this.styleManager.loadStyleDeclarations2("defaultStyle.swf");
+				
+				sw = new SwitchWindowAction();
+				sw.setTarget(main, null);
+				//uiService.getModules("root");  
+				showWindow("com.hp.idc.resm.ui.admin.AdminNavigate");
+			}   
+
+			public function showWindow(windowId:String) : void 
+			{
+				sw.doAction(windowId);
+
+			}
+			//agdjAEIbnnaeabmfaudfm_~+*+~_%57)%4123(30*###@false@@*@@01/01/2010@@1.4.2@@@@domain@@support@yworks.com@@yWorks GmbH@@yFiles FLEX@agdjAEIbnnaeabmfaudfm_~+*+~_%57)%4123(30*###
+			//agdjAEIbnnaeabmfaudfm_~+*+~_%57)%4123(30*###@false@@*@@01/01/2010@@1.0.0.1@@@@eval@@support@yworks.com@@yWorks GmbH@@yFiles FLEX Client Layout Extension@agdjAEIbnnaeabmfaudfm_~+*+~_%57)%4123(30*###
+			//agdjAEIbnnaeabmfaudfm_~+*+~_%57)%4123(30*###		
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="uiService" destination="uiService">
+			<mx:method  name="getModules" result="onModuleLoaded(event)" fault="defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+	</fx:Declarations>
+	<s:VGroup width="100%" height="100%" gap="0">
+		<!--mx:HBox width="100%" id="moduleBar" height="30" verticalAlign="middle" paddingLeft="15" backgroundColor="0x0C80A5" /-->
+		<components:HSplitLine />
+		<mx:ViewStack id="main" width="100%" height="100%">
+		</mx:ViewStack>
+	</s:VGroup>
+</s:Application>

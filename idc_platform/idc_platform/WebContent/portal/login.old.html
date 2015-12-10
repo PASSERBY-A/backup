@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<title>IDC业务运营管理平台</title>
+
+<script type="text/javascript" src="/extjs/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="/extjs/ext-all.js"></script>
+<script type="text/javascript" src="/extjs/extends/gridextend.js"></script>
+<script type="text/javascript" src="/extjs/extends/gridextendsforremotesort.js"></script>
+<script type="text/javascript" src="/extjs/extends/datetimeextend.js"></script>
+<script type="text/javascript" src="/extjs/source/locale/ext-lang-zh_CN.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all.css" />
+
+<link href="css/css.css" type="text/css" rel="stylesheet" />
+</head>
+<script type="text/javascript">
+	document.onkeydown = function(e) {  
+	    // 兼容FF和IE和Opera  
+	    var theEvent = e || window.event;  
+	    var code = theEvent.keyCode || theEvent.which || theEvent.charCode;   
+	    if (code == 13) {  
+	        submitForm();
+	        return false;  
+	    }  
+	    return true;  
+	}  
+	function resetForm(){
+		document.getElementById("userName").value = "";
+		document.getElementById("userPassword").value = "";
+	}
+
+	function trim(str) {
+  		return str.replace(/(^\s+)|(\s+$)/g, "");
+	}
+	
+	function submitForm(){
+		var userName = document.getElementById("username").value;
+		var userPwd = document.getElementById("password").value;
+
+		if(trim(userName)=="" || userName==null){
+			Ext.Msg.alert("提示","请输入用户名");
+			return;
+		}
+		
+		Ext.Msg.wait("登录中......","登录");
+		Ext.Ajax.request({
+		    url:'login.action',
+		    params: {
+		    	userId:userName,
+		    	password:userPwd
+		    },
+			method: 'post',
+			success:function(response){
+				var responseArray = Ext.util.JSON.decode(response.responseText)
+				if(responseArray.success==true){
+					window.location.href = '/idc_platform'+Ext.decode(response.responseText).message;
+				}else{
+					Ext.MessageBox.alert("登录失败",Ext.decode(response.responseText).message);
+				}
+				
+	        },
+			failure:function(action){
+				Ext.MessageBox.alert(lblFailure,lblDao+lblFailure);
+			}
+		});
+	}
+
+</script>
+<body >
+<div class="loginBar" style="height: 500px;" id="pageHeight">
+	<div class="logo"></div>
+	<div class="loginpic"></div>
+	<div class="txtpic"></div>
+	<div class="username">
+	<input type="text" id="username"/></div>
+	<div class="password">
+	<input type="password" id="password"/></div>
+	<div class="btn"><a href="javascript:submitForm();"><img src="images/btn_denglu.jpg" border="0" /></a> 
+	<a href="javascript:resetForm();"><img src="images/btn_reset.jpg" border="0" /></a></div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+sizeHandler();
+function sizeHandler(){
+	var screenHeight = document.documentElement.clientHeight;
+	$("pageHeight").style.height = screenHeight + "px";
+}
+function $(id){
+	  	return document.getElementById(id);
+} 
+window.onresize = function(){
+		sizeHandler(); 
+};
+</script>

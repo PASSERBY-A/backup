@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="500" height="300"
+			   close="PopUpManager.removePopUp(this);" >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject  id="serviceService" destination="serviceService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.business.mapping.Service;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			public function show(title:String,_id:int,_name:String,_type:int,_desc:String):void{
+				this.title = title;
+				serviceId.text = String(_id);
+				serviceName.text = _name;
+				serviceType.selectedIndex = _type;
+				serviceDesc.text = _desc;
+			}
+			
+			public function updateService():void{
+				
+				var service:Service = new Service();
+				service.id = int(serviceId.text);
+				service.name = serviceName.text;
+				service.type = serviceType.selectedIndex;
+				service.description = serviceDesc.text;
+				
+				serviceService.updateService(service);
+			}
+			
+			private function resultHander(event:ResultEvent):void {
+				var form:BusinessServiceForm = this;
+				Alert.show(this.title+"成功","提示",Alert.OK,null,function(event:CloseEvent):void{
+					PopUpManager.removePopUp(form);
+					(form.parentApplication.myView.getElementAt(0) as BusinessService).init();
+				})
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.toString(),"错误");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<mx:Form>
+		<mx:FormItem label="编号:">
+			<s:TextInput id="serviceId" editable="false" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="名称:">
+			<s:TextInput id="serviceName" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="类型:">
+			<s:DropDownList selectedIndex="0" fontFamily="宋体" id="serviceType">
+				<s:dataProvider>
+					<s:ArrayList>
+						<fx:String>基础服务</fx:String>
+						<fx:String>增值服务</fx:String>
+					</s:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+		</mx:FormItem>
+		<mx:FormItem label="描述:">
+			<s:TextArea id="serviceDesc" height="50" width="200" />
+		</mx:FormItem>
+		<mx:FormItem >
+			<s:HGroup>
+				<s:Button label="确定" fontFamily="宋体" click="updateService()" />
+				<s:Button label="取消" fontFamily="宋体" click="PopUpManager.removePopUp(this)" />
+			</s:HGroup>
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+</s:TitleWindow>

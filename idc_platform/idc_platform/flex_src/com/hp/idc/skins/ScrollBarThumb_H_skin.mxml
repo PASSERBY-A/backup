@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" >
+	<fx:Metadata>
+		[HostComponent("spark.components.Button")]
+	</fx:Metadata>
+	<s:states>
+		<s:State name="up" />
+		<s:State name="over" />
+		<s:State name="down" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<s:Rect top="0" height="15" minWidth="24" width="100%">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:entries>
+					<s:GradientEntry color="0xFFFFFF" ratio="0" alpha="0.85" alpha.over="0.5"/>
+					<s:GradientEntry color="0xD8D8D8" ratio="1" alpha="0.85" alpha.over="0.5"/>
+				</s:entries>
+			</s:LinearGradient>
+		</s:fill>
+		<s:stroke>
+			<s:SolidColorStroke color="#8A9199" />				
+		</s:stroke>
+	</s:Rect>
+	<s:Rect top="1" left="1" right="2" bottom="1" includeIn="over">
+		<s:stroke>
+			<s:SolidColorStroke color="#FFFFFF" alpha="0.5"/>
+		</s:stroke>
+	</s:Rect>	
+
+	<s:HGroup top="4" width="8" gap="1" horizontalCenter="0">
+		<s:Line xFrom="0" xTo="0" yFrom="0" yTo="7">
+			<s:stroke>
+				<s:SolidColorStroke color="#909293"/>
+			</s:stroke>
+		</s:Line>
+		<s:Line xFrom="0" xTo="0" yFrom="0" yTo="7">
+			<s:stroke>
+				<s:SolidColorStroke color="#909293"/>
+			</s:stroke>
+		</s:Line>
+		<s:Line xFrom="0" xTo="0" yFrom="0" yTo="7">
+			<s:stroke>
+				<s:SolidColorStroke color="#909293"/>
+			</s:stroke>
+		</s:Line>
+		<s:Line xFrom="0" xTo="0" yFrom="0" yTo="7">
+			<s:stroke>
+				<s:SolidColorStroke color="#909293"/>
+			</s:stroke>
+		</s:Line>
+	</s:HGroup>
+</s:Skin>

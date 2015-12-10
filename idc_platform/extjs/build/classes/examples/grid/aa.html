@@ -1,0 +1,41 @@
+<head>
+	<style type="text/css">
+	.ab/bb {
+		font-size: 30px;
+		background: #fff;
+		border: 1px solid #aaa;
+	}
+	</style>
+<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+
+</head>
+<script type="text/javascript">
+
+function renderItem() {
+        var pos,itemT;
+        var ren = false;
+        var g = document.getElementById('example-grid');
+        pos = g.getAttribute('class').indexOf('ab/bb');
+	alert(pos);	
+        //clearInterval(t);
+
+}
+var t = 0;
+$(document).ready(function(){
+        //t = setInterval('renderItem()',100);
+	//alert("ab/bb".indexOf('ab/bb'));
+        var g = document.getElementById('example-grid');
+	g.onclick = 'renderItem();'	
+}
+);
+</script>
+
+
+<html>
+
+<body>
+	<div id='example-grid' class="ab/bb">adfasdfaf</div>
+	
+	
+</body>
+<html>

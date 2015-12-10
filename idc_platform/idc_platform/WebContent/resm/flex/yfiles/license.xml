@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<license version="1.1">
+	<product>yFiles FLEX</product>
+	<company>yWorks GmbH</company>
+	<email>support@yworks.com</email>
+	<type>domain</type>
+	<watermark><![CDATA[]]></watermark>
+	<version>1.4.2</version>
+	<date>01/01/2010</date>
+	<domains>
+		<domain>*</domain>
+	</domains>
+	<localhost>false</localhost>
+	<key>4dead54f7bdc86836a95bd20987c99b0415b0975</key>
+</license> 

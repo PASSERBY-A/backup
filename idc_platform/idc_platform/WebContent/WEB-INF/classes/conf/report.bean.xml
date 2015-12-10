@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="reportDao" class="com.hp.idc.report.dao.ReportDaoImp">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="reportService" class="com.hp.idc.report.service.ReportServiceImp">
+		<property name="reportDao" ref="reportDao" />
+	</bean>
+</beans>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:compents="com.hp.idc.compents.*" 
+					 xmlns:components="com.hp.idc.components.*"
+					 xmlns:mx="library://ns.adobe.com/flex/mx" 
+					 xmlns:resm="com.hp.idc.resm.*" 
+					 xmlns:admin="com.hp.idc.resm.ui.admin.*"
+					 width="100%" height="100%" creationComplete="init()" >
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace compents "com.hp.idc.compents.*";
+		@namespace components "com.hp.idc.components.*";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace resm "com.hp.idc.resm.*";
+		@namespace admin "com.hp.idc.resm.ui.admin.*";
+		.disableModel{
+			color:red;
+		}
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.SparkTreeItemRenderer;
+			import com.hp.idc.resm.model.Model;
+			import com.hp.idc.resm.ui.actions.PopupWindowAction;
+			import com.hp.idc.resm.ui.actions.SwitchWindowAction;
+			import com.hp.idc.resm.ui.admin.ModelAdd;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Image;
+			import mx.events.CloseEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			private var data:Model;
+			
+			
+			private function resultHandler(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				var treeDate : XML = new XML(returnString);   
+				
+				tree.dataProvider = treeDate;   
+			}
+			
+			private function resultHandler2(event:FaultEvent):void
+			{
+				PetAlert.show(event.fault.getStackTrace(),"错误");
+			}
+			
+			public function init():void {
+				srv.getModelTree();   
+				
+				//默认显示模型信息：业务类资源
+				//srv.getModelById("bussiness");
+			}   
+			
+			
+			
+			
+			protected function tree_clickHandler(event:MouseEvent):void
+			{
+				if(tree.selectedItem == null ){
+					return;
+				}
+				var string:String = tree.selectedItem.@id;
+				srv.getModelById(string);
+			}
+			
+			
+			private function viewModel(event:ResultEvent):void{
+				var model:Model = event.result as Model;
+				if(model!=null){
+					this.model = model;
+				}
+			}
+			
+			private function labelFunction_Handle(item:Object, column:GridColumn):String{
+				if(item.inheritable as Boolean){
+					return "是";
+				}else{
+					return "否";
+				}
+			}
+			
+			public function set model(model:Model):void{
+				this.data = model;
+				//基本信息置空
+				restTypeContent1.removeAllElements();
+				restTypeContent2.removeAllElements();
+				
+				//模型id
+				var id_lable:Label = new Label();
+				id_lable.text = "◆ 模型ID为 "+"["+model.id+"]";
+				//模型父id
+				var parentId_label:Label = new Label();
+				parentId_label.text = "◆ 父模型ID为 "+"["+model.parentId+"]";
+				//模型名称
+				var name_label:Label = new Label();
+				name_label.text = "◆ 模型名称为 "+"["+model.name+"]";
+				
+				var directory:Label = new Label();
+				if(model.directoryOnly){
+					directory.text = "◆ 该模型是一个目录"
+				}else{
+					directory.text = "◆ 该模型是一个资源对象模型"
+				}
+				
+				var dim:Label = new Label();
+				if(model.dimModel){
+					dim.text = "◆ 该模型是一个维度模型";
+				}else{
+					dim.text = "◆ 该模型不是一个维度模型";
+				}
+				
+				//模型状态
+				var enabled:Label = new Label();
+				if(model.enabled){
+					enabled.styleName = "";
+					enabled.text = "◆ 该模型使用正常";
+				}else{
+					enabled.styleName = "disableModel";
+					enabled.text = "◆ 该模型已停用";
+				}
+				
+				var hgroup:HGroup = new HGroup();
+				hgroup.paddingLeft = 20;
+				hgroup.gap = 20;
+				var icon:Image = new Image();
+				icon.width = 32;
+				icon.height = 32;
+				icon.source = "/idc_platform/IconLibrary/"+model.icon;
+				var largeIcon:Image = new Image();
+				largeIcon.source = "/idc_platform/IconLibrary/"+model.largeIcon;
+				largeIcon.width = 64;
+				largeIcon.height = 64;
+				hgroup.addElement(icon);
+				hgroup.addElement(largeIcon);
+				
+				restTypeContent1.addElement(id_lable);
+				if(model.parentId!=""){
+					restTypeContent1.addElement(parentId_label);
+				}
+				restTypeContent1.addElement(name_label);
+				restTypeContent1.addElement(directory);
+//				restTypeContent1.addElement(dim);
+				
+				
+				var iconLabel:Label = new Label();
+				iconLabel.text = "◆ 显示图标：";
+				restTypeContent2.addElement(enabled);
+				restTypeContent2.addElement(iconLabel);
+				restTypeContent2.addElement(hgroup);
+				
+				
+				relationService.getModelRelationsByModelId(model.id);
+				modelService.getModelAttributesByModelId(model.id);
+			}
+			
+			private function resultHandler1(event:ResultEvent):void{
+				attributegrid.dataProvider = event.result as ArrayCollection;
+			}
+			
+			private function getModelRelationsByModelId(event:ResultEvent):void{
+				var list : ArrayCollection = event.result as ArrayCollection;
+				relationgrid.dataProvider = list;
+			}
+			
+		]]>
+		
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="srv" destination="modelService">
+			<mx:method  name="getModelTree" result="resultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method  name="getModelById" result="viewModel(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:RemoteObject  id="modelService" destination="modelService">
+			<mx:method  name="getModelAttributesByModelId" result="resultHandler1(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:RemoteObject  id="relationService" destination="relationService">
+			<mx:method  name="getModelRelationsByModelId" result="getModelRelationsByModelId(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+	</fx:Declarations>
+	
+	<s:HGroup left="0" right="0" top="0" bottom="0" width="100%" height="100%">
+		<mx:Tree id="tree"  doubleClick="tree_clickHandler(event)" doubleClickEnabled="true"  itemRenderer="com.hp.idc.components.SparkTreeItemRenderer"
+				 showRoot="false"  
+				 labelField="@label"  
+				 width="200"  height="100%"
+				 >
+		</mx:Tree>
+		<s:VGroup height="100%" width="100%" paddingLeft="20" paddingRight="20" paddingTop="20" paddingBottom="20" id="modelContent">
+			<s:Label text="基本属性" width="100%" styleName="LabelTitle" height="30"/>
+			<s:HGroup width="100%">
+				<s:VGroup id="restTypeContent1" width="33%" gap="15" paddingLeft="10" paddingTop="10">
+				</s:VGroup>
+				<s:VGroup width="33%" id="restTypeContent2" gap="15"  paddingLeft="10" paddingTop="10">
+				</s:VGroup>
+				<s:DataGrid width="33%" id="relationgrid" focusEnabled="false">
+					<s:columns>
+						<s:ArrayCollection>
+							<s:GridColumn headerText="关系" dataField="relationName" width="80"/>
+							<s:GridColumn headerText="关联模型" dataField="modelName2"/>
+						</s:ArrayCollection>
+					</s:columns>
+				</s:DataGrid>
+			</s:HGroup>
+			<s:Label text="关联字段" width="100%" styleName="LabelTitle" height="30"/>
+			<s:DataGrid width="100%" height="100%" id="attributegrid" focusEnabled="false">
+				<s:columns>
+					<s:ArrayCollection>
+						<s:GridColumn headerText="类型" dataField="modelId"/>
+						<s:GridColumn headerText="属性ID" dataField="attrId"/>
+						<s:GridColumn headerText="属性名称" dataField="name"/>
+						<s:GridColumn headerText="允许继承"  dataField="inheritable" labelFunction="labelFunction_Handle"/>
+						<s:GridColumn headerText="备注" dataField="remark"/>
+					</s:ArrayCollection>
+				</s:columns>
+			</s:DataGrid>
+		</s:VGroup>
+	</s:HGroup>
+</s:NavigatorContent >

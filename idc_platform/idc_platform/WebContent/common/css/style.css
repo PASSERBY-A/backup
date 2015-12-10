@@ -1,0 +1,76 @@
+
+
+
+.add {
+    background-image:url(../images/add.gif) !important;
+}
+
+.edit {
+    background-image:url(../images/new_window.gif) !important;
+}
+.close {
+    background-image:url(../images/closes.gif) !important;
+}
+
+.leaf {
+    background-image:url(../images/view_list.gif) !important;
+}
+.new-tab {
+    background-image:url(../images/new_tab.gif) !important;
+}
+
+.tabs {
+    background-image: url(../images/tabs.gif ) !important;
+}
+.views {
+    background-image: url(../images/view_list.gif ) !important;
+}
+.config {
+    background-image: url(../images/config.gif ) !important;
+}
+.report {
+    background-image: url(../images/report.gif ) !important;
+}
+
+.option {
+    background-image:url(../images/plugin.gif) !important;
+}
+.remove {
+    background-image:url(../images/delete.gif) !important;
+}
+.save {
+    background-image:url(../images/save.gif) !important;
+}
+.update {
+	background-image:url(../images/arrow-up.gif) !important;
+}
+
+.up {
+    background-image:url(../images/arrow-up.gif) !important;
+}
+.down {
+	background-image:url(../images/arrow-down.gif) !important;
+}
+.left {
+	background-image:url(../images/arrow-left.gif) !important;
+}
+.right {
+	background-image:url(../images/arrow-right.gif) !important;
+}
+.help {
+	background-image:url(../images/docs.gif) !important;
+}
+.search {
+	background-image:url(../images/search.gif) !important;
+}
+
+
+.pdf {
+	background-image:url(../images/pdf.gif) !important;
+}
+.excel {
+	background-image:url(../images/xls.gif) !important;
+}
+.word {
+	background-image:url(../images/rtf.gif) !important;
+}

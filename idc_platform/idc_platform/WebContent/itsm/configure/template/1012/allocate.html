@@ -1,0 +1,159 @@
+/* 解决TextArea100%时宽度过长换行问题 */
+Ext.override(Ext.form.Field, {
+    adjustWidth : function(tag, w){
+        tag = tag.toLowerCase();
+        if(typeof w == 'number' && !Ext.isSafari){
+            if(Ext.isIE && (tag == 'input' || tag == 'textarea')){
+                if(!Ext.isStrict){
+                    return this.inEditor ? w : w - 3;
+                }
+                if(tag == 'input' && Ext.isStrict){
+                    return w - (Ext.isIE6 ? 4 : 1);
+                }
+                if(tag == 'textarea' && Ext.isStrict){
+                    return w-4;
+                }
+            }else if(Ext.isOpera && Ext.isStrict){
+                if(tag == 'input'){
+                    return w + 2;
+                }
+                if(tag == 'textarea'){
+                    return w-2;
+                }
+            }
+        }
+        return w;
+    }
+});
+
+/* 生成Ext对象 */
+#set($i = 0)
+#foreach ($fieldInfo in $fieldList)
+	##if (!$fieldInfo.getType().equals("com.hp.idc.itsm.configure.fields.FileFieldInfo"))
+		#if ($fieldInfo.getType().equals("com.hp.idc.itsm.configure.fields.PersonFieldInfo"))
+			#if(!$origin.equals("ITSM"))
+				$fieldInfo.setOrigin($origin)
+			#end
+		#end
+		#if ($fieldInfo.getId().equals($FLD_EXECUTE_USER))
+			#if($fromNode && ($fromNode.getType() == $TYPE_BRANCH_BEGIN) && $actionInfo.isMutiAssign())
+				$fieldInfo.setSingleMode(false)
+			#else
+				$fieldInfo.setSingleMode(true)
+			#end
+		#end
+
+		#if (!$fieldInfo.getType().equals("com.hp.idc.itsm.configure.fields.GridFieldInfo"))
+			$fieldInfo.getFormCode(150)
+			fld_${fieldInfo.getId()}.anchor = '98%';
+			#if($fieldInfo.isReadOnly()) 
+				fld_${fieldInfo.getId()}.style = 'border-top:1px solid #99BBE8;border-left:1px solid #99BBE8;border-bottom:1px solid #99BBE8;border-right:1px solid #99BBE8;';
+			#else
+				fld_${fieldInfo.getId()}.style = 'border-top:1px outset #99BBE8;border-left:1px ridge #99BBE8;border-bottom:1px solid #99BBE8;border-right:1px solid #99BBE8;';
+			#end
+		#else
+			$fieldInfo.getFormCode(false,120)
+		#end
+
+#end
+
+/**************************Do some control****************************************************************************/
+/* 生成布局对象 */
+var column01Sub01 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 30 0 0',
+	items : [fld_task_oid,fld_orderNo,fld_carry_deadline] 
+});
+
+var column01Sub02 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 0 0 30',
+	items : [fld_task_state, fld_doneCode]
+});
+
+var column01 = new Ext.Panel({
+	layout : 'column',
+	border : false,
+	anchor : '100%',
+	items : [column01Sub01, column01Sub02]
+});
+
+var fieldset01 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '工单基本信息',
+	anchor:'98%',
+	collapsed: false,
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[column01,fld_title, fld_content,fld_attatchment]
+});
+
+var column02Sub01 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 30 0 0',
+	items : [fld_customerName, fld_customer_type, fld_custormer_login, fld_contact_person, fld_customer_phone, fld_customer_fax] 
+});
+
+var column02Sub02 = new Ext.Panel({
+	columnWidth : .5,
+	layout : 'form',
+	border : false,
+	bodyStyle : 'padding: 0 0 0 30',
+	items : [fld_boss_coustomerNo,fld_custormerName1, fld_icp_linsence, fld_customer_address, fld_postcode, fld_customer_email]
+});
+
+var column02 = new Ext.Panel({
+	layout : 'column',
+	border : false,
+	anchor : '100%',
+	items : [column02Sub01, column02Sub02]
+});
+
+var fieldset02 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '客户基本信息',
+	anchor:'98%',
+	collapsed: false,
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[column02]
+});
+
+var fieldset05 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '资源需求',
+	anchor:'98%',
+	collapsed: false,
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[fld_busi_res_req]
+});
+
+var fieldset06 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '审核意见',
+	anchor:'98%',
+	collapsed: false,
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[fld_checkResult, fld_checkIdea]
+});
+
+var fieldset03 = new Ext.form.FieldSet({
+	collapsible: true,
+	autoHeight: true,
+	title: '资源分配',
+	collapsed: false,
+	anchor:'98%',
+	bodyStyle : 'padding: 0 6 0 6',
+	items :[fld_cis]
+});
+
+simple.add(fieldset01, fieldset02, fieldset05, fieldset06, fieldset03);
+

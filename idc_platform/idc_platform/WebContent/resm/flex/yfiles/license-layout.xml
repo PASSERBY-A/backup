@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<license version="1.2">
+	<product>yFiles FLEX Client Layout Extension</product>
+	<company>yWorks GmbH</company>
+	<email>support@yworks.com</email>
+	<type>eval</type>
+	<watermark><![CDATA[]]></watermark>
+	<version>1.0.0.1</version>
+	<date>01/01/2010</date>
+	<domains>
+		<domain>*</domain>
+	</domains>
+	<localhost>false</localhost>
+	<key>92d256ccd298b4ed80f3653e8b7e792ed6d9132a</key>
+</license>
+
+
+

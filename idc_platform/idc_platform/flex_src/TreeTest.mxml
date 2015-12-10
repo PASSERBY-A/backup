@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:comp="com.hp.idc.components.*"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" creationComplete="application1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HtRemoteObject;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.components.TreeItemRenderer;
+			
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			
+			private function resultHandler(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				var treeDate : XML = new XML(returnString);   
+				
+				tree.dataProvider = TreeItem.createDataProvider(treeDate);   
+			}
+			
+			private function resultHandler1(event:ResultEvent):void
+			{
+//				var s:Object = event.result;
+				PetAlert.show(event.result+"111");
+			}
+			
+			private function faultHandler(event:FaultEvent):void{
+				PetAlert.show(event.fault.getStackTrace(),"错误");
+			}
+
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				//srv.getModelTree();
+				//srv1.getResourceById(1000);
+				
+				var s:HtRemoteObject = new HtRemoteObject("resourceService",null,false,true);
+				s.onResult = resultHandler1;
+				s.call("getResourceById",1000);
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				PetAlert.show(tree.selectedItem.id+"");
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="srv" destination="modelService">
+			<mx:method  name="getModelTree" result="resultHandler(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		
+		<mx:RemoteObject  id="srv1" destination="resourceService">
+			<mx:method  name="getResourceById" result="resultHandler1(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	<s:VGroup>
+		<s:DropDownList id="tree" itemRenderer="com.hp.idc.components.TreeItemRenderer" width="250"/>
+		
+		<s:Button click="button1_clickHandler(event)"/>
+		
+	</s:VGroup>
+</s:Application>

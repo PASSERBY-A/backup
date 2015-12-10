@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:components="com.hp.idc.components.*" 
+		 xmlns:ravis="org.un.cava.birdeye.ravis.graphLayout.visual.*"
+		 xmlns:yworks="http://www.yworks.com/xml/yfiles-flex/1.3/mxml"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="init()" xmlns:resm="com.hp.idc.resm.*" xmlns:admin="com.hp.idc.resm.ui.admin.*">
+
+	<fx:Script>
+		import mx.controls.Alert;
+		import mx.rpc.events.FaultEvent;
+		import mx.rpc.events.ResultEvent;
+		import com.hp.idc.ui.FaultHandler;
+		
+		private function resultHandler(event:ResultEvent):void
+		{
+			var result:XML = new XML(event.result as String);
+		}
+		
+		public function init():void {
+			relationService.getModelRelationXml();
+		}
+		
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="relationService" destination="relationService">
+			<mx:method  name="getModelRelationXml" result="resultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+
+	</fx:Declarations>
+
+	<s:HGroup left="1" right="0" top="1" bottom="0" width="100%" height="100%">
+		<!--ravis:VisualGraph id="vgraph" width="100%" height="100%"
+						   backgroundColor="#FFFFFF" alpha="1"
+						   resize="vgraph.draw(VisualGraph.DF_RESET_LL)"
+						   visibilityLimitActive="true" dropShadowVisible="false"
+						   >
+		</ravis:VisualGraph-->
+	</s:HGroup>
+</s:NavigatorContent >

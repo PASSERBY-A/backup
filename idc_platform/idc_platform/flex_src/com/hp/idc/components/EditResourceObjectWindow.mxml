@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="800" height="600" 
+			   close="PopUpManager.removePopUp(this);"
+			   creationComplete="init(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="srv" destination="modelService">
+			<mx:method  name="getModelTree" result="resultTreeHandler(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:RemoteObject  id="srv1" destination="modelService">
+			<mx:method  name="getModelAttributesByModelId" result="resultModelAttributes(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+		
+	</fx:Declarations>
+	<s:VGroup width="100%" height="100%">
+		<s:HGroup width="100%" height="100%">
+			<s:VGroup width="200" height="100%">
+				<s:Label text="模型" width="100%" styleName="LabelTitle" height="30"/>
+				<s:HGroup width="100%" height="100%" paddingLeft="10">
+					<mx:Tree id="tree" doubleClickEnabled="true" borderVisible="false"
+							 showRoot="false"  
+							 labelField="@label" 
+							 width="100%"
+							 height="100%"
+							 doubleClick="tree_doubleClickHandler(event)"
+							 />
+				</s:HGroup>
+			</s:VGroup>
+			<s:Scroller width="100%" height="100%">
+				<s:VGroup width="100%" height="100%" id="form">
+				</s:VGroup>
+			</s:Scroller>
+		</s:HGroup>
+		<s:HGroup width="100%" horizontalAlign="right" paddingRight="10" paddingBottom="10">
+			<s:Button label="保存"/>
+		</s:HGroup>
+	</s:VGroup>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.resource.edit.base.BaseGroup;
+			import com.hp.idc.components.resource.edit.base.physics.PhysicsGroup;
+			import com.hp.idc.components.resource.edit.base.physics.server.ServerGroup;
+			import com.hp.idc.resm.model.ModelAttribute;
+			
+			import mx.collections.ArrayCollection;
+			import mx.containers.FormItem;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.TextInput;
+			
+			private var labelWidth:int = 75;
+			
+			protected function init(event:FlexEvent):void
+			{
+				srv.getModelTree();
+			}
+			
+			private function resultTreeHandler(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				var treeDate : XML = new XML(returnString);   
+				
+				tree.dataProvider = treeDate;   
+			}
+			
+			private function resultModelAttributes(event:ResultEvent):void{
+				form.removeAllElements();
+				var list:ArrayCollection = event.result as ArrayCollection;
+				var base:BaseGroup = new BaseGroup(list,false);
+				form.addElement(base.getContainer());
+				
+				var physics:PhysicsGroup = new PhysicsGroup(list,false);
+				form.addElement(physics.getContainer());
+				
+				var server:ServerGroup = new ServerGroup(list,false);
+				form.addElement(server.getContainer());
+			}
+			
+			
+//			private function clearRow():void{
+//				var formItems:Array=lookupValueForm.getChildren();
+//				for each(var formitem:* in formItems){
+//					if(formitem is FormItem){
+//						for each(var it:* in formitem.getChildren()){
+//							if(it is mx.controls.TextInput|| it is mx.controls.TextArea){
+//								it.text="";
+//							} else if(it is mx.controls.CheckBox){
+//								it.selected=false;
+//							}else if(it is mx.controls.DateField){
+//								it.selectedDate=null;
+//							}
+//						}
+//					}
+//					
+//				}
+//			}
+			
+
+			
+			private function faultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.fault.getStackTrace(),"错误");
+			}
+
+			protected function tree_doubleClickHandler(event:MouseEvent):void
+			{
+				var id:String = tree.selectedItem.@id;
+				srv1.getModelAttributesByModelId(id);
+			}
+
+		]]>
+	</fx:Script>
+</s:TitleWindow>

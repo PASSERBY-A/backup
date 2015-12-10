@@ -1,0 +1,39 @@
+@charset "gbk";
+* {margin: 0; padding: 0;}
+body {font-size: 12px; font-family: Tahoma;}
+ul {list-style: none;}
+.header {background: url(../images/img_header.gif); height: 79px;}
+.header .title {background: url(../images/img_title.jpg) left no-repeat; height: 79px;}
+.header .title .bulletinTitle {float: right; margin: 10px 20px 0 0; color: #CADBED; }
+.header .title .bulletin {float: right; width:200px; height:20px; margin: 10px 20px 0 0; color: #CADBED; display:none;}
+.header .title .bulletin a {color: #cadbed; text-decoration: none;}
+.header .title .rigthTop {float: right; margin: 10px 20px 0 0; color: #CADBED;}
+.header .title .rigthTop a {color: #cadbed; text-decoration: none;}
+.header .title .rigthTop span {background: url(../images/ico_user.png) left center no-repeat; padding-left: 15px;}
+
+.menu {background: url(../images/img_menubg.png); height: 37px; padding: 0 45px;}
+.menu em {float: left; display: block; font-style: normal; cursor: pointer; position: relative; z-index: 999; background: url(../images/img_line.png) right no-repeat;}
+.menu em span {height: 37px; display: block; text-align: center; width: 122px; height: 37px; color: #fff; font-size: 14px; line-height: 37px;}
+.menu em .icomenu01 {background: url(../images/ico_menu01.png) 25px center no-repeat; padding-left: 15px;}
+.menu em .icomenu02 {background: url(../images/ico_menu02.png) 25px center no-repeat; padding-left: 15px;}
+.menu em .icomenu03 {background: url(../images/ico_menu03.png) 25px center no-repeat; padding-left: 15px;}
+.menu em .icomenu04 {background: url(../images/ico_menu04.png) 25px center no-repeat; padding-left: 15px;}
+.menu em .icomenu05 {background: url(../images/ico_menu05.png) 25px center no-repeat; padding-left: 15px;}
+.menu em .icomenu06 {background: url(../images/ico_menu06.png) 25px center no-repeat; padding-left: 15px;}
+.menu em .icomenu07 {background: url(../images/ico_menu07.png) 25px center no-repeat; padding-left: 15px;}
+.menu em.focus {background: url(../images/img_menufocusbg.png);}
+.menu em a {color: #3A507F; text-decoration: none; display: block; text-align: center; height: 25px; line-height: 25px;}
+.menu em a:hover {color: #3A507F; text-decoration: underline;}
+.menu em .display {position: absolute; top: 37px; left: -3px; width: 143px; font-size: 12px;}  
+.menu em .displaytop {background: url(../images/img_displaytop.png); height: 5px; overflow: hidden;}
+.menu em .displaymid {background: url(../images/img_displaymid.png); height: 1%; padding: 5px 0;}
+.menu em .displaybtm {background: url(../images/img_displaybtm.png); height: 5px; overflow: hidden;}
+
+.loginBar {background: url(../images/img_logbg.gif) left repeat-y; position: relative;}
+.loginBar .logo {background: url(../images/hplogo.png); height: 94px; width: 94px; position: absolute; top: 40px; left: 530px;}
+.loginBar .loginpic {background: url(../images/img_loginpic.jpg); width: 507px; height: 341px; position: absolute; top: 140px; left: 137px;}
+.loginBar .txtpic {background: url(../images/img_txtpic.jpg); height: 68px; width: 299px; position: absolute; top: 160px; left: 645px;}
+.loginBar .username {position: absolute; top: 293px; left: 650px;}
+.loginBar .password {position: absolute; top: 323px; left: 650px;}
+.loginBar input {background: url(../images/img_inputbg.jpg); height: 18px; width: 153px; border: 1px solid #7FAFC5; font-size: 12px; font-family: Tahoma;}
+.loginBar .btn {position: absolute; top: 352px; left: 652px;}

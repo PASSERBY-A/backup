@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:components="com.hp.idc.components.*" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 creationComplete="init()">
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HSplitLine;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.components.TreeItemCollection;
+			import com.hp.idc.components.TreeItemRenderer;
+			import com.hp.idc.resm.security.BasicPermission;
+			import com.hp.idc.resm.security.Role;
+			import com.hp.idc.resm.security.RolePermission;
+			import com.hp.idc.skins.LinkButtonSkin;
+			
+			import flash.utils.getDefinitionByName;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.EffectEvent;
+			import mx.managers.PopUpManager;
+			import mx.managers.ToolTipManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.Button;
+			import spark.components.HGroup;
+			import spark.components.Image;
+			import spark.components.Label;
+			import spark.components.RichText;
+			import spark.components.VGroup;
+			import spark.effects.Fade;
+			import spark.effects.Move;
+			import spark.effects.Resize;
+			import spark.effects.Scale;
+			import spark.events.IndexChangeEvent;
+			import spark.utils.TextFlowUtil;
+	
+			
+			[Embed(source='images/09255.gif')]
+			private var iconClass:Class; 
+			
+			public function refreshClick(event:MouseEvent) :void {
+				content.removeAllElements();
+				okBtn_clickHandler(null);
+			}
+			
+			private function editClick(event:MouseEvent) :void {
+				var btn :Button = event.target as Button;
+				var ed:RolePermissionEdit = new RolePermissionEdit();
+				ed.view = this;
+				PopUpManager.addPopUp(ed, this, true);
+				PopUpManager.centerPopUp(ed);
+				ed.currentRole.roleId = roleCombo.selectedItem.id;
+				var id:String = btn.getStyle("rpId") as String;
+				if (id != null)
+					ed.setRolePermission(parseInt(id));
+			}
+			
+			private function onRoleLoaded(event:ResultEvent):void
+			{
+				var list :ArrayCollection = event.result as ArrayCollection;
+				roleCombo.dataProvider = list;
+			}
+			
+			private var permissions :ArrayCollection;
+			
+			private function onBasicPermissionLoaded(event:ResultEvent):void
+			{
+				permissions = event.result as ArrayCollection;
+				okBtn.enabled = true;
+			}
+			
+			
+			private var curId :String;
+			private function removeClickHandler(event:CloseEvent) :void 
+			{
+				if (event.detail == PetAlert.YES)
+				{
+					// TODO: 登录用户
+					roleService.deleteRolePermission(parseInt(curId), 0);
+				}
+			}
+			
+			private function onRolePermissionRemoved(event:ResultEvent):void
+			{
+				PetAlert.show("操作成功!", "提示", 4, null, null, PetAlert.ICON_INFO);
+				refreshClick(null);
+			}
+			
+			private function removeClick(event:MouseEvent) :void {
+				var btn :Button = event.target as Button;
+				var id:String = btn.getStyle("rpId") as String;
+				if (id != null)
+				{
+					PetAlert.show("您确定要删除这个角色权限吗？", "提示", PetAlert.YES|PetAlert.NO,
+						null, removeClickHandler, PetAlert.ICON_WARNING, PetAlert.NO);
+					curId = id;
+				}
+			}
+			
+			private function onDataLoaded(event:ResultEvent):void
+			{
+				content.removeAllElements();
+				var list :ArrayCollection = event.result as ArrayCollection;
+				for each (var p :RolePermission in list)
+				{
+					var perm :BasicPermission;
+					for each (var b :BasicPermission in permissions)
+					{
+						if (b.id == p.permId)
+						{
+							perm = b;
+							break;
+						}
+					}
+					
+					var img:Image = new Image();
+					img.source = iconClass;
+					
+					var h:HGroup = new HGroup();
+					h.gap = 6;
+					var v1:VGroup = new VGroup();
+
+					h.addElement(img);
+					h.addElement(v1);
+					
+					
+					var h1:HGroup = new HGroup();
+					h1.verticalAlign = "middle";
+					h1.gap = 6;
+					var str:String;
+					str = "<p lineHeight=\"140%\">";
+					str += "<span fontSize=\"14\">" + perm.name + "</span>"
+					str += "<span fontFamily=\"Courier New\" fontSize=\"12\" fontStyle=\"italic\">(" + perm.id + ")</span></p>";
+					var r1:RichText = new RichText();
+					r1.textFlow = TextFlowUtil.importFromString(str);
+					
+					h1.addElement(r1);
+					
+					var sp:Spacer = new Spacer;
+					sp.width = 25;
+					h1.addElement(sp);
+					
+					var btn1:Button = new Button();
+					btn1.label = "编辑";
+					btn1.setStyle("rpId", "" + p.id);
+					btn1.setStyle("skinClass", LinkButtonSkin);
+					btn1.setStyle("icon", "images/edit.gif");
+					btn1.addEventListener(MouseEvent.CLICK, editClick);
+					h1.addElement(btn1);
+
+					var btn3:Button = new Button();
+					btn3.label = "删除";
+					btn3.setStyle("rpId", "" + p.id);
+					btn3.setStyle("skinClass", LinkButtonSkin);
+					btn3.setStyle("icon", "images/delete.gif");
+					btn3.addEventListener(MouseEvent.CLICK, removeClick);
+					h1.addElement(btn3);
+					v1.addElement(h1);
+
+					str = "<p lineHeight=\"140%\">";
+					str += "<span color=\"#666666\" fontStyle=\"italic\" fontSize=\"12\">优先级:" + p.priority + "，" + p.remark + "<br/>";
+					if (p.paramDesc != null && p.paramDesc.length > 0)
+						str += p.paramDesc + "<br/>";
+					str += "</span>";
+					str += "</p>";
+					var r2:RichText = new RichText();
+					r2.textFlow = TextFlowUtil.importFromString(str);
+					
+					v1.addElement(r2);
+
+					content.addElement(h);
+					
+				}
+				var btnGroup :HGroup = new HGroup();
+				
+				var btnAdd:Button = new Button();
+				btnAdd.label = "关联权限";
+				btnAdd.setStyle("skinClass", LinkButtonSkin);
+				btnAdd.setStyle("icon", "images/addRole.gif");
+				btnAdd.addEventListener(MouseEvent.CLICK, editClick);
+				btnGroup.addElement(btnAdd);
+				
+				var btnRefresh:Button = new Button();
+				btnRefresh.label = "刷新列表";
+				btnRefresh.setStyle("skinClass", LinkButtonSkin);
+				btnRefresh.setStyle("icon", "images/refresh.gif");
+				btnRefresh.addEventListener(MouseEvent.CLICK, refreshClick);
+				btnGroup.addElement(btnRefresh);
+	
+				content.addElement(btnGroup);
+			}
+	
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				PetAlert.show(event.fault.faultString, "错误");
+			}
+			
+			private function init() : void
+			{
+				roleService.getAllPermissions();
+				roleService.getAllRoles();
+			}
+
+			protected function roleCombo_changeHandler(event:IndexChangeEvent):void
+			{
+				if (okBtn.enabled)
+					okBtn_clickHandler(null);
+			}
+
+
+			protected function okBtn_clickHandler(event:MouseEvent):void
+			{
+				if (roleCombo.selectedItem != null)
+					roleService.getRolePermissions(roleCombo.selectedItem.id);
+			}
+
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="roleService" destination="roleService">
+			<mx:method  name="getAllRoles" result="onRoleLoaded(event)" fault="defaultFaultHandler(event)"/>
+			<mx:method  name="getAllPermissions" result="onBasicPermissionLoaded(event)" fault="defaultFaultHandler(event)"/>
+			<mx:method  name="getRolePermissions" result="onDataLoaded(event)" fault="defaultFaultHandler(event)"/>
+			<mx:method  name="deleteRolePermission" result="onRolePermissionRemoved(event)" fault="defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout paddingLeft="15"/>
+	</s:layout>
+
+	<s:Label text="资源管理角色权限列表" fontSize="24" color="#336699" />
+	<s:Spacer height="20" />
+	<s:HGroup verticalAlign="middle" paddingBottom="20">
+		<s:Label text="请选择角色: " />
+	<s:DropDownList  id="roleCombo" labelField="name" change="roleCombo_changeHandler(event)"/>
+		<s:Button label="确定" id="okBtn" enabled="false" click="okBtn_clickHandler(event)"/>
+	</s:HGroup>
+	<s:Scroller  width="100%" height="100%">
+		<s:Group  width="100%" height="100%" id="content" clipAndEnableScrolling="true" >
+			<s:layout  >
+				<s:VerticalLayout gap="8"/>
+			</s:layout>
+		</s:Group>
+	</s:Scroller>
+
+</s:NavigatorContent>

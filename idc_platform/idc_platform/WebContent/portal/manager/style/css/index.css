@@ -1,0 +1,50 @@
+.search-toolbar{
+    border:0 none;
+   	/*border-top:1px solid #d0d0d0;*/
+    background:transparent;
+	background-color:#dfe8f6;
+}
+
+
+.icon-download {
+    background-image: url(../images/download.gif) !important;
+}
+
+.icon-upload {
+    background-image: url(../images/upload.gif) !important;
+}
+
+.icon-search {
+    background-image: url(../images/search.gif) !important;
+}
+
+.icon-help {
+    background-image: url(../images/help.png) !important;
+}
+.icon-edit {
+    background-image: url(../images/edit.gif) !important;
+}
+.icon-add {
+    background-image: url(../images/add.gif) !important;
+}
+.icon-delete {
+    background-image: url(../images/delete.gif) !important;
+}
+.icon-share {
+    background-image: url(../images/share.gif) !important;
+}
+.icon-save {
+    background-image: url(../images/save.gif) !important;
+}
+.icon-cancel {
+    background-image: url(../images/cancel.gif) !important;
+}
+.icon-update {
+    background-image: url(../images/update.png) !important;
+}
+.icon-finish {
+    background-image: url(../images/finish.gif) !important;
+}
+.icon-review {
+    background-image: url(../images/review.gif) !important;
+}

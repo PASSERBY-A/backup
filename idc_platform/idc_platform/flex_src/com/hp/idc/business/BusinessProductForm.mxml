@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="500" height="300"
+			   close="PopUpManager.removePopUp(this);" >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject  id="productService" destination="productService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+		<mx:RemoteObject  id="serviceService" destination="serviceService"
+						  result="resultServiceHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.business.mapping.Product;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			private var serviceList:ArrayCollection;
+			
+			public function show(title:String,_id:int,_name:String,_param:String,_desc:String):void{
+				this.title = title;
+				productId.text = String(_id);
+				productName.text = _name;
+				productParam.text = _param;
+				productDesc.text = _desc;
+			}
+			
+			public function updateProduct():void{
+				
+				var product:Product = new Product();
+				product.id = int(productId.text);
+				product.name = productName.text;
+				product.subParam = productParam.text;
+				product.desc = productDesc.text;
+				
+				productService.updateProduct(product);
+			}
+			
+			private function resultHander(event:ResultEvent):void {
+				var form:BusinessProductForm = this;
+				Alert.show(this.title+"成功","提示",Alert.OK,null,function(event:CloseEvent):void{
+					PopUpManager.removePopUp(form);
+					(form.parentApplication.myView.getElementAt(0) as BusinessProduct).init();
+				})
+			}
+			
+			private function resultServiceHander(event:ResultEvent):void {
+				serviceList = ArrayCollection(event.result);
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.toString(),"错误");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<mx:Form>
+		<mx:FormItem label="编号:">
+			<s:TextInput id="productId" editable="false" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="名称:">
+			<s:TextInput id="productName" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="订购参数:">
+			<s:TextInput id="productParam" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="关联服务">
+			<s:ComboBox id="services" dataProvider="{serviceList}" labelField="name" width="200" click="serviceService.queryResultList(new Object())" />			
+		</mx:FormItem>
+		<mx:FormItem label="描述:">
+			<s:TextArea id="productDesc" height="50" width="200" />
+		</mx:FormItem>
+		<mx:FormItem >
+			<s:HGroup>
+				<s:Button label="确定" fontFamily="宋体" click="updateProduct()" />
+				<s:Button label="取消" fontFamily="宋体" click="PopUpManager.removePopUp(this)" />
+			</s:HGroup>
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+</s:TitleWindow>

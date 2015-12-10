@@ -1,0 +1,71 @@
+	var linkds = new Ext.data.GroupingStore({
+      proxy: new Ext.data.HttpProxy({
+          url: '$Consts.ITSM_HOME/task/taskLinkQuery.jsp'
+      }),
+      baseParams:{'linkOidStr':'$taskInfo.getLinkedTaskStr()'},
+      reader: new Ext.data.JsonReader({
+          root: 'items',
+          totalProperty: 'totalCount'
+      }, [
+      		{name: 'oid', mapping: 'oid'},
+      		{name: 'origin', mapping: 'origin'},
+      		{name: 'title', mapping: 'title'},
+      		{name: 'status', mapping: 'status'},
+      		{name: 'wfName', mapping: 'wfName'},
+      		{name: 'wfOid', mapping: 'wfOid'},
+      		{name: 'wfVer', mapping: 'wfVer'},
+      		{name: 'create_time', mapping: 'create_time'},
+      		{name: 'create_by', mapping: 'create_by'}
+      	]
+      )
+  });
+  
+  var linkcm = new Ext.grid.ColumnModel([
+			new Ext.grid.RowNumberer(),
+			{header:'OID',dataIndex:'oid',width:40},
+			{header:'来源',dataIndex:'origin',width:40},
+			{header:'标题',dataIndex:'title',width:40},
+			{header:'创建人',dataIndex:'create_by',width:40},
+			{header:'创建时间',dataIndex:'create_time',width:40},
+			{header:'流程',dataIndex:'wfName',width:40},
+			{header:'状态',dataIndex:'status',width:40}
+	]);
+  var linkTaskGrid = new Ext.grid.GridPanel({
+  	title:'关联工单',
+    store: linkds,
+    cm: linkcm,
+		sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+		border:false,
+		loadMask: true,
+		enableColLock:false,
+		tbar:[{
+	      text: '增加',
+	      tooltip:'增加一行',
+	      iconCls:'add',
+	      handler: function()
+				{
+					Ext.loadRemoteScript("$Consts.ITSM_HOME/task/taskLinkAdd.jsp");
+				}
+	  }, '-', {
+	      text: '删除',
+	      tooltip:'删除选择行',
+	      iconCls:'remove',
+	      handler: function()
+				{
+					var row = linkTaskGrid.getSelectionModel().getSelected();
+					if (row != null)
+						linkds.remove(row);
+				}
+	  }],
+		viewConfig: {
+			forceFit:true
+		},
+		listeners:{
+			rowdblclick:function(grid, rowIndex, e) {
+				var p = grid.getStore().getAt(rowIndex);
+				taskHistoryView2(p.get("oid"),p.get("origin"),p.get("wfOid"),p.get("wfVer"));
+			}
+		}
+	});
+	linkds.load({params:{start:0}});
+	

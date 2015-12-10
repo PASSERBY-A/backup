@@ -1,0 +1,21 @@
+<div>
+	#set($wpmgr = $contextUtil.getBean("workPlanMgr"))
+	#set($workPlanList = $wpmgr.getBeanByUserId($userId))
+	<table width="$node.getWidth()" height="$node.getHeight()">
+		#foreach($workPlan in $workPlanList)
+			#if($velocityCount>6) 
+				#break
+			#end
+			#if($velocityCount%2==0) 
+				#set($bgcolor = '#e7ebe6')
+			#else 
+				#set($bgcolor = '#FFFFFF')
+			#end
+		<tr bgcolor="$bgcolor">
+			<td width="100" style="text-align: center;"><a href="#">$workPlan.getType()</a></td>
+			<td width="215"><a href="#" title="$workPlan.getName()">$workPlan.getTitle()</a></td>
+			<td width="100">$sdf.format($workPlan.getCreateTime())</td>
+		</tr>
+		#end
+	</table>
+</div>

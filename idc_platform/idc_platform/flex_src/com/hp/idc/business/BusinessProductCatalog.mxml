@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+	  	creationComplete="init();"
+		>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject  id="productCatalogService" destination="productCatalogService"
+			 result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+		<mx:RemoteObject  id="productCatalogDtlService" destination="productCatalogService"
+						  result="resultHanderForDtl(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+		<mx:RemoteObject  id="productCatalogDtlDelService" destination="productCatalogService"
+						  result="resultHanderDelForDtl(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.util.json.JSON;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.ItemClickEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.TitleWindow;
+			
+			[Bindable]
+			private var catalogList:ArrayCollection;
+			
+			[Bindable]
+			private var catalogDtlList:ArrayCollection;
+			
+			private var cataId:int;
+			
+			public function init():void {
+				productCatalogService.queryProductCatalog(new Object());
+			}
+			
+			private function resultHander(event:ResultEvent):void {
+			
+				catalogList = ArrayCollection(event.result);
+			}
+			
+			private function resultHanderForDtl(event:ResultEvent):void {
+				
+				catalogDtlList = ArrayCollection(event.result);
+			}
+			
+			private function resultHanderDelForDtl(event:ResultEvent):void {
+				var _catalog:BusinessProductCatalog = this;
+				Alert.show("删除成功","提示",Alert.OK,null,function(event:CloseEvent):void{
+					_catalog.getAllDtl();
+				});
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.toString(),"错误");
+			}
+			
+			public function detail():void{
+				currentState = 'detl';
+				productNameDtl.text = productCatalogGrid.selectedItem.name;
+				productDescDtl.text = productCatalogGrid.selectedItem.description;
+				this.cataId = int(productCatalogGrid.selectedItem.id);
+				
+				this.getAllDtl();
+			}
+
+			protected function dtlLinkBar_itemClickHandler(event:ItemClickEvent):void
+			{
+				if(event.index == 0){
+					var form:BusinessProductCatalogDtlForm = BusinessProductCatalogDtlForm(PopUpManager.createPopUp(this,BusinessProductCatalogDtlForm,true));
+					PopUpManager.centerPopUp(form);
+					form.pm = this;
+					form.cataId = this.cataId;
+					form.show("添加目录产品",0,0,0,0,100000,1,"");
+				} else if(event.index == 1) {
+					
+					var sel:Object = productCatalogDtlGrid.selectedItem;
+					if(sel == null){
+						Alert.show("请选择一行", "提示");
+						return;
+					}
+					Alert.show("确认删除此目录产品?","删除确认",Alert.OK|Alert.CANCEL,null,function(event:CloseEvent):void{
+						if(event.detail == Alert.OK){
+							productCatalogDtlDelService.removeProductCatalogDtl(int(sel.dtlId));
+						}
+					})
+				}
+				
+			}
+
+			public function getAllDtl():void{
+				
+				productCatalogDtlService.queryProductCatalogAllDtl(this.cataId);
+			}
+			
+			public function showProductInfo(pId:int):void{
+				Alert.show(pId+"");
+			}
+			
+			public function searchDtl():void{
+				Alert.show("search");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="grid" />
+		<s:State name="detl" />
+	</s:states>
+	<mx:DataGrid id="productCatalogGrid" width="100%" height="100%" dataProvider="{catalogList}" horizontalScrollPolicy="off" 
+				 editable="false" includeIn="grid" >
+		<mx:columns>
+			<mx:DataGridColumn headerText="编号" dataField="id" width="70" editable="false"/>
+			<mx:DataGridColumn headerText="名称" dataField="name" width="100" editable="false"/>
+			<mx:DataGridColumn headerText="状态" dataField="status" width="90" editable="false"/>
+			<mx:DataGridColumn headerText="创建人" dataField="creator" width="90" editable="false" />
+			<mx:DataGridColumn headerText="创建日期" dataField="createDate" width="140" editable="false" />
+			<mx:DataGridColumn headerText="生效日期" dataField="effectDate" width="140" editable="false" />
+			<mx:DataGridColumn headerText="失效日期" dataField="expireDate" width="140" editable="false" />
+			<mx:DataGridColumn headerText="更新日期" dataField="upldateDate" width="140" editable="false" />
+			<mx:DataGridColumn headerText="更新人" dataField="updateOperId" width="140" editable="false" />
+			<mx:DataGridColumn headerText="目录明细" width="75" editable="false">
+				<mx:itemRenderer>
+					<fx:Component>
+						<mx:LinkButton label="明细" click="outerDocument.detail()" color="#0000FF" />
+					</fx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+		</mx:columns>
+	</mx:DataGrid>
+	<s:Group includeIn="detl" fontFamily="宋体" width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout />
+		</s:layout>
+		<mx:LinkButton label="返回" includeIn="detl" click="currentState='grid'" color="#0000FF" fontFamily="宋体" />
+		<s:FormItem label="名称:">
+			<mx:Text id="productNameDtl" />
+		</s:FormItem>
+		<s:FormItem label="描述:">
+			<mx:Text id="productDescDtl" />
+		</s:FormItem>
+		<s:HGroup width="100%" paddingRight="10" verticalAlign="bottom">
+			<s:TextInput id="queryDtl" width="100" />
+			<mx:LinkButton icon="@Embed(source='images/search.gif')" click="searchDtl()" />
+			<s:Spacer width="100%" />
+			<mx:LinkBar color="#0000FF" fontWeight="bold" id="dtlLinkBar" itemClick="dtlLinkBar_itemClickHandler(event)">
+				<mx:dataProvider>
+					<fx:Array>
+						<fx:String id="addproduct">添加产品</fx:String>
+						<!--fx:String id="modifyproduct">编辑产品</fx:String-->
+						<fx:String id="removeproduct">移除</fx:String>
+					</fx:Array>
+				</mx:dataProvider>
+			</mx:LinkBar>	
+		</s:HGroup>
+		<mx:DataGrid id="productCatalogDtlGrid" width="100%" height="100%" dataProvider="{catalogDtlList}" horizontalScrollPolicy="off" 
+					 editable="false" >
+			<mx:columns>
+				<mx:DataGridColumn headerText="产品编号" width="70" editable="false" >
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:LinkButton label="{data.productId}" click="outerDocument.showProductInfo(data.productId)" color="green" />
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn headerText="生效类型" dataField="effectType" width="90" editable="false"/>
+				<mx:DataGridColumn headerText="选中标志" dataField="selectFlag" width="90" editable="false" />
+				<mx:DataGridColumn headerText="最小定购数量" dataField="minQuanity" width="100" editable="false" />
+				<mx:DataGridColumn headerText="最大定购数量" dataField="maxQuanity" width="100" editable="false" />
+				<mx:DataGridColumn headerText="默认数量" dataField="defaultQuanity" width="100" editable="false" />
+				<mx:DataGridColumn headerText="选中提示" dataField="note" width="150" editable="false" />
+			</mx:columns>
+		</mx:DataGrid>
+	</s:Group>
+	
+</s:NavigatorContent>
+
+

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			   >
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>		
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.external.ExternalInterface;
+			
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var user:SharedObject;
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				addLoginStatusHandler();
+				service.send();
+				loginBtn.enabled = false;
+				
+				if(rememberMe.selected){
+					user=SharedObject.getLocal("user"); 
+					user.data.userName = userName.text;
+					user.data.rememberMe=rememberMe.selected;
+					user.flush();
+				}
+			}
+			
+			public function loginSuccessHandler(event:ResultEvent):void{
+				removeLoginStatusHandler()
+				loginBtn.enabled = true;
+				
+				var ret:String = event.result.toString();
+				if(ret == '0'){
+					ExternalInterface.call('login','/portal');
+				} else if(ret == '1') {
+					Alert.show("用户不存在");
+				} else if(ret == '2'){
+					Alert.show("密码错误");
+				} else if(ret == '3'){
+					Alert.show("用户被禁用");
+				} else {
+					ExternalInterface.call('login',ret);
+				}
+			}
+			public function loginFailedHandler(event:FaultEvent):void{
+				removeLoginStatusHandler()
+				loginBtn.enabled = true;
+				Alert.show(event.fault.toString());
+				
+			}
+			private function addLoginStatusHandler():void{
+				var l:LoginStatusBar = new LoginStatusBar();
+				loginStatus.addElement(l);
+			}
+			private function removeLoginStatusHandler():void{
+				loginStatus.removeAllElements();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject id="LoginManagerSvc" destination="LoginManagerDest"
+						 result="loginSuccessHandler(event);"
+						 fault="loginFailedHandler(event);"/>
+		
+		<mx:HTTPService id="service" url="login.action" result="loginSuccessHandler(event)" fault="loginFailedHandler(event)"  method="POST" >     
+			<mx:request xmlns="">  
+				<userId>  
+					{userName.text}  
+				</userId>
+				<password>
+					{passWord.text}
+				</password>  
+			</mx:request>    
+		</mx:HTTPService>  
+		
+	</fx:Declarations>
+	<s:BorderContainer borderVisible="false" skinClass="com.hp.idc.login.skins.LoginBorderSkin" width="100%" height="100%">
+		<s:HGroup  horizontalAlign="center" verticalAlign="middle" width="100%" height="100%">
+			<s:BorderContainer skinClass="com.hp.idc.login.skins.LoginFormBgSkin" width="480" height="350">
+				<s:Label text="甘肃移动IDC运营管理平台"  x="18" y="13" fontSize="14">
+				</s:Label>
+				<mx:Form  y="70" x="67">
+					<mx:FormItem fontSize="16" label="帐号">
+						<s:TextInput color="0x000000" width="227" height="36" x="152" id="userName" y="96" text="{user.data.userName}"/>
+					</mx:FormItem>
+					<mx:FormItem fontSize="16" label="密码" >
+						<s:TextInput color="0x000000" width="227" height="36" id="passWord" displayAsPassword="true" x="152" y="146" text=""/>
+					</mx:FormItem>
+					<mx:FormItem width="100%">
+						<s:HGroup width="100%" horizontalAlign="right">
+							<s:Button buttonMode="true"  id="loginBtn" x="210" y="176" label="登陆" click="button1_clickHandler(event)"/>
+						</s:HGroup>
+					</mx:FormItem>
+					<mx:FormItem>
+						<s:Group id="loginStatus" contentBackgroundAlpha="0">
+						</s:Group>
+					</mx:FormItem>
+					<s:FormItem>
+						<mx:CheckBox id="rememberMe" label="记住用户名" selected="{user.data.rememberMe}" />
+					</s:FormItem>
+				</mx:Form>
+			</s:BorderContainer>
+		</s:HGroup>
+		<s:HGroup paddingTop="10" width="50%" paddingLeft="40">
+			<s:BitmapImage source="@Embed('assets/images/logo.png')" fillMode="clip" left="0" top="0" bottom="0" right="0">
+			</s:BitmapImage>
+			<s:BitmapImage source="@Embed('assets/images/logo_title.png')" fillMode="clip" left="0" top="0" bottom="0" right="0">
+			</s:BitmapImage>
+		</s:HGroup>
+	</s:BorderContainer>
+</s:Application>

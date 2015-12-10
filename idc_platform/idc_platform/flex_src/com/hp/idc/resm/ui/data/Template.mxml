@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="446" height="276" title="模板下载"
+			   close="PopUpManager.removePopUp(this);"
+			   creationComplete="init();"
+			   >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.login.LoginStatusBar;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import mx.managers.CursorManager;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			private var fileRef:FileReference; //这是要主要的地方
+			private function completeHandler(event:Event):void {
+				nextBtn.enabled = true;
+				PetAlert.show("文件下载成功","操作结果",4,null,null,PetAlert.ICON_INFO);
+				
+			}
+			private function init() : void
+			{
+				fileRef = new FileReference();
+				fileRef.addEventListener(ProgressEvent.PROGRESS, processEvent); 
+				fileRef.addEventListener(Event.COMPLETE, completeHandler);
+				fileRef.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);  
+				modelService.getModelTree();
+			}
+			private function modelQueryComplete(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				modelTree.dataProvider = TreeItem.createDataProvider(returnString);
+			}
+			
+			protected function modelTree_changeHandler(event:IndexChangeEvent):void
+			{
+				//modelService.getModelAttributesByModelId(modelTree.selectedItem.id);
+			}
+			protected function nextBtn_clickHandler(event:MouseEvent):void
+			{
+				nextBtn.enabled = false;
+				fileRef.download(new URLRequest("/idc_platform/download?modelId="+modelTree.selectedItem.id), modelTree.selectedItem.id+".xls");
+			}
+
+			protected function cancelBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function processEvent(event:ProgressEvent):void{  
+				mydlBar.maximum=event.bytesTotal;  
+				mydlBar.setProgress(event.bytesLoaded,event.bytesTotal);   
+				mydlBar.label="已下载："+Math.round((event.bytesLoaded * 100 /event.bytesTotal))+"%";  
+			}  
+			private function ioErrorHandler(event:IOErrorEvent):void{  
+				PetAlert.show(event.toString(),"IO错误", 4, null, null, PetAlert.ICON_ERROR);
+			}  
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="modelService" destination="modelService">
+			<mx:method  name="getModelTree" result="modelQueryComplete(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	<s:DropDownList id="modelTree"  itemRenderer="com.hp.idc.components.TreeItemRenderer" x="101" y="20" width="208"
+					labelField="label" change="modelTree_changeHandler(event)">
+	</s:DropDownList>
+	<s:Label x="32" y="30" text="资源模型"/>	
+	<s:Button x="239" y="180" label="下载" id="nextBtn" click="nextBtn_clickHandler(event)"/>
+	<s:Button x="339" y="180" label="取消" id="cancelBtn" click="cancelBtn_clickHandler(event)"/>
+	<mx:ProgressBar id="mydlBar" x="32" y="186" label="已下载0%" />
+</s:TitleWindow>

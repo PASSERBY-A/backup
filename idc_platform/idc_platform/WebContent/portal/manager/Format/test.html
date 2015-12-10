@@ -1,0 +1,803 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0028)http://192.168.11.25/portal/ -->
+<HTML xmlns="http://www.w3.org/1999/xhtml">
+	<HEAD>
+		<TITLE>业务支撑网运营管理系统</TITLE>
+		<META content="text/html; charset=gbk" http-equiv=Content-Type>
+		<LINK rel=stylesheet type=text/css href="业务支撑网运营管理系统_files/index.css">
+		<SCRIPT language=javascript type=text/javascript
+			src="业务支撑网运营管理系统_files/base.js"></SCRIPT>
+
+		<SCRIPT language=javascript type=text/javascript
+			src="业务支撑网运营管理系统_files/jquery-1.5.1.min.js"></SCRIPT>
+		<!--[if lt IE 7]>
+<script type="text/javascript" src="/portal/style/iepngfix/iepngfix_tilebg.js"></script>
+<![endif]-->
+		<SCRIPT type=text/javascript
+			src="业务支撑网运营管理系统_files/jquery.scrollTo-1.4.2.js"></SCRIPT>
+
+		<SCRIPT language=javascript type=text/javascript>
+$(document).ready(function(){
+	$(".index_line1Span6").click(function(){
+		$(".cover_divBig").show("slow");
+		$(".cover_divBig").css("background-color","transparent");
+		$(".btn1").fadeIn();
+		$(".cover_divSmall").fadeIn();
+	});			   
+	$("#index_line1Span7").click(function(){
+		$(".cover_divBig").show("slow");
+		$(".cover_divBig").css("background-color","transparent");
+		$(".btn1").fadeIn();
+		$(".cover_divSmall").fadeIn();
+	});			   
+	
+	$("#close_message_win").click(function(){
+		$(".cover_divBig").hide("slow");
+		$(this).fadeOut();
+		$(".cover_divSmall").fadeOut();
+	});
+	initDate();
+	getWorkPlan();
+	getMessage();
+	getKBM();
+	getMessageCount();
+});
+
+function searchUser(){
+	if($("#keyWord")[0].value==""){
+		alert("关键字不能为空");
+		return;
+	}
+	jQuery.ajax({
+	   url: 'getData/seachUser.jsp', // 这里为 人员查询请求页面
+	   data: {"keyWord":$("#keyWord")[0].value}, // 关键字
+	   type: 'POST', // 设置请求类型为 ‘POST’，默认为 ‘GET’
+	   dataType:'json',
+	   complete: function(data) {
+	       $("#seachUser").html(data.responseText);
+	   }
+	});
+}
+
+function sendSms(){
+	var smsUsers = $("#smsUsers")[0].value;
+	var smsContent = $("#smsContent")[0].value;
+	if(smsUsers==""){
+		alert("短信接收人不能为空");
+		return;
+	}
+	if(smsContent==""){
+		alert("短信内容不能为空");
+		return;
+	}
+	jQuery.ajax({
+		url: 'getData/sendSms.jsp', // 这里为 人员查询请求页面
+		data: {"smsUsers":$("#smsUsers")[0].value,"smsContent":$("#smsContent")[0].value}, // 关键字
+		type: 'POST', // 设置请求类型为 ‘POST’，默认为 ‘GET’
+		dataType:'json',
+		success: function(data) {
+		    alert(data.data.msg);
+		},
+		error:function (XMLHttpRequest, textStatus, errorThrown) {
+			alert("错误："+XMLHttpRequest.responseText);
+		}
+	});
+}
+
+function openUrl(url,menu){
+	location.href="web/index.jsp?url="+url+"&menu="+menu;
+}
+
+function getWorkPlan(){
+	var y = $("#select_year")[0].value;
+	var m = $("#select_month")[0].value;
+	var d = $("#select_day")[0].value;
+	var date = y+"-"+m+"-"+d;
+	jQuery.ajax({
+		url: 'getData/getWorkPlan.jsp', // 这里为 人员查询请求页面
+		data: {"userId":'3401',"date":date}, // 关键字
+		type: 'POST', // 设置请求类型为 ‘POST’，默认为 ‘GET’
+		dataType:'json',
+		complete: function(data) {
+		    $("#workPlanData").html(data.responseText);
+		}
+	});
+}
+
+</SCRIPT>
+		<!--[if lt IE 7]>
+<style type="text/css"> 
+	img, div, a, input { behavior: url(/portal/style/iepngfix/iepngfix.htc) }
+</style>
+<![endif]-->
+		<META name=GENERATOR content="MSHTML 9.00.8112.16421">
+	</HEAD>
+	<BODY>
+		<!--出发弹出层  layout-->
+		<DIV style="DISPLAY: none" class=cover_divBig></DIV>
+		<DIV style="DISPLAY: none" class=cover_divSmall>
+			<!-- Widget XHTML Starts Here -->
+			<DIV id=posts-container>
+				<!-- Posts go inside this DIV -->
+				<DIV id=posts></DIV>
+				<!-- Load More "Link" -->
+				<DIV id=load-more class=btn1>
+					加载更多未读消息
+				</DIV>
+				<DIV id=close_message_win class=btn1>
+					关闭
+				</DIV>
+			</DIV>
+			<!-- Widget XHTML Ends Here -->
+		</DIV>
+		<!--出发弹出层  end-->
+		<!--line1  layout-->
+		<DIV class=index_line1>
+			<DIV class=index_line1Con>
+				<DIV class=index_line1Rit>
+					<DIV class=index_line1Rit1>
+						<SPAN class=index_line1Span6 title=系统消息></SPAN><SPAN
+							id=index_line1Span7 class=index_line1Span7>您有未读消息<SPAN
+							style="COLOR: red" id=messageCount></SPAN>条</SPAN>
+						<SPAN class=index_line1Span1>3401</SPAN>
+						<SPAN class=index_line1Span2>注销</SPAN>
+					</DIV>
+					<BR class=clearfloat>
+				</DIV>
+				<BR class=clearfloat>
+			</DIV>
+		</DIV>
+		<!--line1  end-->
+		<!--head  layout-->
+		<!--index_nav  layout-->
+		<UL class=index_nav>
+			<LI id=li5 class=nav_liOn onmouseover=action1(5)>
+				<A class=index_nav1 href="http://192.168.11.25/portal/#">综合运营门户</A>
+			</LI>
+			<LI id=li6 onmouseover=action1(6)>
+				<A class=index_nav2 href="http://192.168.11.25/portal/#">监控管理中心</A>
+			</LI>
+			<LI id=li7 onmouseover=action1(7)>
+				<A class=index_nav3 href="http://192.168.11.25/portal/#">业务管理中心</A>
+			</LI>
+			<LI id=li8 onmouseover=action1(8)>
+				<A class=index_nav4 href="http://192.168.11.25/portal/#">运维管理中心</A>
+			</LI>
+			<LI id=li9 onmouseover=action1(9)>
+				<A class=index_nav5 href="http://192.168.11.25/portal/#">运营分析中心</A>
+				<BR class=clearfloat>
+			</LI>
+		</UL>
+		<DIV class=index_line2>
+			<UL style="DISPLAY: block" id=ul_block5 class="index_SubNav Sub1">
+				<LI>
+					<A title=工作计划，个人文档，视图配置等操作
+						onclick="openUrl('/portal/manager/','5')"
+						href="http://192.168.11.25/portal/#">系统设置</A>
+				</LI>
+				<LI>
+					<A title=第一个视图
+						onclick="openUrl('/portal/manager/view/view.jsp?oid=1060','5')"
+						href="http://192.168.11.25/portal/#">第一个视图</A>
+				</LI>
+				<LI>
+					<A title=第二个视图
+						onclick="openUrl('/portal/manager/view/view.jsp?oid=1062','5')"
+						href="http://192.168.11.25/portal/#">第二个视图</A>
+				</LI>
+				<LI>
+					<A title=第三个视图
+						onclick="openUrl('/portal/manager/view/view.jsp?oid=1066','5')"
+						href="http://192.168.11.25/portal/#">第三个视图</A>
+					<BR class=clearfloat>
+				</LI>
+			</UL>
+			<UL style="DISPLAY: none" id=ul_block6 class="index_SubNav Sub2">
+				<LI>
+					<A title=告警管理 onclick="openUrl('/sysmgr/','6')"
+						href="http://192.168.11.25/portal/#">告警管理</A>
+				</LI>
+				<LI>
+					<A title=预警管理 onclick="openUrl('/','6')"
+						href="http://192.168.11.25/portal/#">预警管理</A>
+				</LI>
+				<LI>
+					<A title=诊断管理 onclick="openUrl('/dm/','6')"
+						href="http://192.168.11.25/portal/#">诊断管理</A>
+				</LI>
+				<LI>
+					<A title=操作控制 onclick="openUrl('/action/','6')"
+						href="http://192.168.11.25/portal/#">操作控制</A>
+				</LI>
+				<LI>
+					<A title=采集管理 onclick="openUrl('/dacp/','6')"
+						href="http://192.168.11.25/portal/#">采集管理</A>
+				</LI>
+				<LI>
+					<A title=资源管理
+						onclick="openUrl('/resm/resm-debug/ResourceManagement.html','6')"
+						href="http://192.168.11.25/portal/#">资源管理</A>
+				</LI>
+				<LI>
+					<A title=指标管理 onclick="openUrl('/im/','6')"
+						href="http://192.168.11.25/portal/#">指标管理</A>
+					<BR class=clearfloat>
+				</LI>
+			</UL>
+			<UL style="DISPLAY: none" id=ul_block7 class="index_SubNav Sub3">
+				<LI>
+					<A title=业务专题 onclick="openUrl('/bsm/','7')"
+						href="http://192.168.11.25/portal/#">业务专题</A>
+				</LI>
+				<LI>
+					<A title=业务探测 onclick="openUrl('/bes/','7')"
+						href="http://192.168.11.25/portal/#">业务探测</A>
+					<BR class=clearfloat>
+				</LI>
+			</UL>
+			<UL style="DISPLAY: none" id=ul_block8 class="index_SubNav Sub4">
+				<LI>
+					<A title=服务管理 onclick="openUrl('/itsm/','8')"
+						href="http://192.168.11.25/portal/#">服务管理</A>
+				</LI>
+				<LI>
+					<A title=日常运维 onclick="openUrl('/','8')"
+						href="http://192.168.11.25/portal/#">日常运维</A>
+				</LI>
+				<LI>
+					<A title=知识库 onclick="openUrl('/kbm/','8')"
+						href="http://192.168.11.25/portal/#">知识库</A>
+				</LI>
+				<LI>
+					<A title=资源管理
+						onclick="openUrl('/resm/resm-debug/ResourceManagement.html','8')"
+						href="http://192.168.11.25/portal/#">资源管理</A>
+					<BR class=clearfloat>
+				</LI>
+			</UL>
+			<UL style="DISPLAY: none" id=ul_block9 class="index_SubNav Sub5">
+				<LI>
+					<A title=统一分析 onclick="openUrl('/uam/','9')"
+						href="http://192.168.11.25/portal/#">统一分析</A>
+				</LI>
+				<LI>
+					<A title=综合报表 onclick="openUrl('/rert/reportManager/','9')"
+						href="http://192.168.11.25/portal/#">综合报表</A>
+				</LI>
+				<LI>
+					<A title=容量管理 onclick="openUrl('/','9')"
+						href="http://192.168.11.25/portal/#">容量管理</A>
+					<BR class=clearfloat>
+				</LI>
+			</UL>
+		</DIV>
+		<!--index_nav  end-->
+		<!--head  end-->
+		<DIV class=wrap>
+			<!--line3  layout-->
+			<DIV class=index_line3>
+				<DIV class=index_line3Lef>
+					<!-- <img src="style/img/temp_flash.jpg" style="display:block;"/> -->
+					<OBJECT
+						codeBase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,22,0"
+						classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000 width=652
+						height=285>
+						<PARAM NAME="bgcolor" VALUE="#ffffff">
+						<PARAM NAME="play" VALUE="true">
+						<PARAM NAME="loop" VALUE="true">
+						<PARAM NAME="wmode" VALUE="transparent">
+						<PARAM NAME="quality" VALUE="high">
+						<PARAM NAME="scale" VALUE="showall">
+						<PARAM NAME="menu" VALUE="true">
+						<PARAM NAME="devicefont" VALUE="false">
+						<PARAM NAME="salign" VALUE="">
+						<PARAM NAME="allowScriptAccess" VALUE="sameDomain">
+						<PARAM NAME="movie" VALUE="index.swf">
+						<embed wmode="transparent" src="index.swf" quality="high"
+							pluginspage="http://www.macromedia.com/go/getflashplayer"
+							type="application/x-shockwave-flash" width="652" height="285">
+						</embed>
+					</OBJECT>
+				</DIV>
+				<DIV class=index_line3Rit>
+					<DIV class=coner_top1>
+						<SPAN class=coner_topLef1></SPAN><SPAN class=coner_topMid1></SPAN><SPAN
+							class=coner_topRit1></SPAN>
+						<BR class=clearfloat>
+					</DIV>
+					<DIV class=index_conerCon1>
+						<H2>
+							公告
+						</H2>
+						<DIV class=index_con1>
+							<SPAN title=重要！办理非常假期没有设置优惠地的用户明细，请分公司尽快协调处理，谢谢！>重要！办理非常假期没有设置优惠地的用户明细，请分公司尽快协调处理，谢谢！</SPAN>
+
+							<P
+								title="目前发现系统中有一些用户通过网厅办理非常假期没有设置优惠区域，导致办理后不能享受优惠的，提取具体用户见附件，需要外呼联系用户咨询需要设置的城市，为设置优惠城市或者省（在产品变更模块--修改中设置优惠区域即可，设置后立即生效），为避免引起客户不好感知，建议采用“非常假期”业务调查的方式，请各分公司协调处理，在外呼时，若用户对之前没有优惠的话单产生疑问，考虑用户满意度，建议地市记录为用户调账处理。&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;                      ---------业务负责人：吕涛&#13;&#10; ">
+								目前发现系统中有一些用户通过网厅办理非常假期没有设置优惠区域，导致办理后不能享受优惠的，提取具体用户见附件，需要外呼联系用户咨询需要设置的城市，为设置优惠城市或者省（在产品变更模块--修改中设置优惠区域即可，设置后立即生效），为避免引起客户不好感知，建议采用“非常假期”业务调查的方式，请各分公司协调处理，在外呼时，若用户对之前没有优惠的话单产生疑问，考虑用户满意度，建议地市记录为用户调账处理。
+								---------业务负责人：吕涛
+							</P>
+							<DIV>
+								dwxtb033
+							</DIV>
+						</DIV>
+						<UL>
+							<LI>
+								<SPAN>01-12</SPAN><A title=复制卡开机操作手册,具体见附件，请相关同事查阅，转相关营业厅同事，谢谢。
+									href="http://192.168.11.25/portal/#">复制卡开机操作手册,具体见附件，请相关同事查阅，转相关营业厅同事，谢谢。</A>
+							</LI>
+							<LI>
+								<SPAN>01-04</SPAN><A title=由于2号公告下发节点有问题，现补发公告
+									href="http://192.168.11.25/portal/#">由于2号公告下发节点有问题，现补发公告</A>
+							</LI>
+							<LI>
+								<SPAN>12-31</SPAN><A
+									title="目前批量开户已做紧急限制，执行时间只允许预约 除 月末5天月初3天外的19:00-24:00 ，请各分公司知晓，谢谢。"
+									href="http://192.168.11.25/portal/#">目前批量开户已做紧急限制，执行时间只允许预约
+									除 月末5天月初3天外的19:00-24:00 ，请各分公司知晓，谢谢。</A>
+							</LI>
+							<LI>
+								<SPAN>11-19</SPAN><A title=信息系统部2010年11月18日上线结果
+									href="http://192.168.11.25/portal/#">信息系统部2010年11月18日上线结果</A>
+							</LI>
+						</UL>
+						<BR class=clearfloat>
+					</DIV>
+					<DIV class=more_wrap>
+						<A class=more href="http://192.168.11.25/portal/#">更多</A>
+					</DIV>
+					<DIV class=coner_bottom1>
+						<SPAN class=coner_btmLef1></SPAN><SPAN class=coner_btmMid1></SPAN><SPAN
+							class=coner_btmRit1></SPAN>
+						<BR class=clearfloat>
+					</DIV>
+				</DIV>
+				<BR class=clearfloat>
+			</DIV>
+			<!--line3  end-->
+			<!--line4  layout-->
+			<DIV class=index_line4>
+				<DIV class=index_line4Lef>
+					<DIV class=line4_lef>
+						<H2>
+							待办工单
+						</H2>
+						<DIV class=coner_top2>
+							<SPAN class=coner_topLef2></SPAN><SPAN class=coner_topMid2></SPAN><SPAN
+								class=coner_topRit2></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+						<DIV class=index_conerCon2>
+							<TABLE cellSpacing=0 cellPadding=0>
+								<TBODY>
+									<TR>
+										<TH>
+											状态
+										</TH>
+										<TH>
+											标题
+										</TH>
+										<TH>
+											时间
+										</TH>
+									</TR>
+									<TR bgColor=#e7ebe6>
+										<TD style="TEXT-ALIGN: center" width=50>
+											<IMG src="业务支撑网运营管理系统_files/icon5.jpg">
+										</TD>
+										<TD width=215>
+											<A title=国内400订购“在途”、办公助理订购不成功
+												href="http://192.168.11.25/portal/#">国内400订购“在途”、办公助理订购不成功</A>
+										</TD>
+										<TD width=23>
+											2010/12/26
+										</TD>
+									</TR>
+									<TR>
+										<TD style="TEXT-ALIGN: center" width=50>
+											<IMG src="业务支撑网运营管理系统_files/icon5.jpg">
+										</TD>
+										<TD width=215>
+											<A href="http://192.168.11.25/portal/#">11月份单位托收何时能托收成功</A>
+										</TD>
+										<TD width=23>
+											2010/12/26
+										</TD>
+									</TR>
+									<TR bgColor=#e7ebe6>
+										<TD style="TEXT-ALIGN: center" width=50>
+											<IMG src="业务支撑网运营管理系统_files/icon6.jpg">
+										</TD>
+										<TD width=215>
+											<A href="http://192.168.11.25/portal/#">用户不欠费但是高额停机状态</A>
+										</TD>
+										<TD width=23>
+											2010/12/26
+										</TD>
+									</TR>
+									<TR>
+										<TD style="TEXT-ALIGN: center" width=50>
+											<IMG src="业务支撑网运营管理系统_files/icon6.jpg">
+										</TD>
+										<TD width=215>
+											<A href="http://192.168.11.25/portal/#">新配NGBOSS系统工能使用不全</A>
+										</TD>
+										<TD width=23>
+											2010/12/26
+										</TD>
+									</TR>
+									<TR bgColor=#e7ebe6>
+										<TD style="TEXT-ALIGN: center" width=50>
+											<IMG src="业务支撑网运营管理系统_files/icon5.jpg">
+										</TD>
+										<TD width=215>
+											<A href="http://192.168.11.25/portal/#">自助缴费机刷卡缴费失败</A>
+										</TD>
+										<TD width=23>
+											2010/12/26
+										</TD>
+									</TR>
+									<TR>
+										<TD style="TEXT-ALIGN: center" width=50>
+											<IMG src="业务支撑网运营管理系统_files/icon6.jpg">
+										</TD>
+										<TD width=215>
+											<A href="http://192.168.11.25/portal/#">新增111111111111</A>
+										</TD>
+										<TD width=23>
+											2010/12/26
+										</TD>
+									</TR>
+								</TBODY>
+							</TABLE>
+							<BR class=clearfloat>
+						</DIV>
+						<DIV class=more_wrap>
+							<A class=more href="http://192.168.11.25/portal/#">更多</A>
+						</DIV>
+						<DIV class=coner_bottom2>
+							<SPAN class=coner_btmLef2></SPAN><SPAN class=coner_btmMid2></SPAN><SPAN
+								class=coner_btmRit2></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+					</DIV>
+					<DIV class=line4_rit>
+						<H2>
+							个人计划任务
+						</H2>
+						<DIV class=coner_top2>
+							<SPAN class=coner_topLef2></SPAN><SPAN class=coner_topMid2></SPAN><SPAN
+								class=coner_topRit2></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+						<DIV class=index_conerCon2>
+							<!--这里应该是你们的组件生成的，我临时放一张图片-->
+							<DIV class=date>
+								<SELECT id=select_year
+									onchange='change(this, $("#select_month")[0], $("#select_day")[0])'></SELECT>
+								年
+								<SELECT id=select_month
+									onchange='change(this,$("#select_day")[0])'></SELECT>
+								月
+								<SELECT id=select_day></SELECT>
+								日
+								<INPUT style="CURSOR: pointer" onclick=getWorkPlan() value=查询
+									type=button>
+							</DIV>
+							<DIV id=workPlanData class=date_downCon>
+								<BR class=clearfloat>
+								<BR class=clearfloat>
+							</DIV>
+						</DIV>
+						<DIV class=more_wrap>
+							<A class=more href="http://192.168.11.25/portal/#">更多</A>
+						</DIV>
+						<DIV class=coner_bottom2>
+							<SPAN class=coner_btmLef2></SPAN><SPAN class=coner_btmMid2></SPAN><SPAN
+								class=coner_btmRit2></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+					</DIV>
+					<BR class=clearfloat>
+				</DIV>
+				<DIV class=index_line4Rit>
+					<H2
+						style="MARGIN-TOP: 3px; BACKGROUND: url(style/img/icon4.jpg) no-repeat left center">
+						我的链接
+					</H2>
+					<DIV style="HEIGHT: 80px">
+						<TABLE cellSpacing=0 cellPadding=0 width="100%">
+							<TBODY>
+								<TR>
+									<TD width=99>
+										<A title=预警管理 href="http://192.168.11.25/">预警管理</A>
+									</TD>
+									<TD width=99>
+										<A title=诊断管理 href="http://192.168.11.25/dm/">诊断管理</A>
+									</TD>
+									<TD width=99>
+										<A title=指标管理 href="http://192.168.11.25/im/">指标管理</A>
+									</TD>
+								</TR>
+								<TR>
+									<TD width=99>
+										<A title=告警管理 href="http://192.168.11.25/sysmgr/">告警管理</A>
+									</TD>
+									<TD width=99>
+										<A title=采集管理 href="http://192.168.11.25/dacp/">采集管理</A>
+									</TD>
+									<TD width=99>
+										<A title=业务专题 href="http://192.168.11.25/bsm/">业务专题</A>
+									</TD>
+								</TR>
+								<TR>
+									<TD width=99>
+										<A title=知识库 href="http://192.168.11.25/kbm/">知识库</A>
+									</TD>
+									<TD width=99>
+										<A title=资源管理
+											href="http://192.168.11.25/resm/resm-debug/ResourceManagement.html">资源管理</A>
+									</TD>
+									<TD width=99>
+										<A title=资源管理
+											href="http://192.168.11.25/resm/resm-debug/ResourceManagement.html">资源管理</A>
+									</TD>
+								</TR>
+							</TBODY>
+						</TABLE>
+					</DIV>
+					<BR class=clearfloat>
+					<H2>
+						相关告警
+					</H2>
+					<DIV class=coner_top3>
+						<SPAN class=coner_topLef3></SPAN><SPAN class=coner_topMid3></SPAN><SPAN
+							class=coner_topRit3></SPAN>
+						<BR class=clearfloat>
+					</DIV>
+					<DIV class=index_conerCon3>
+						<DIV class=con3_block1>
+							<IMG src="业务支撑网运营管理系统_files/icon7.jpg">
+							<DIV class=img_blockRit>
+								<P>
+									<SPAN>我管理的告警</SPAN><A href="http://192.168.11.25/portal/#">49条</A>
+								</P>
+								<DIV>
+									<SPAN>严重警告</SPAN><A href="http://192.168.11.25/portal/#">9条</A><SPAN>重要警告</SPAN><A
+										href="http://192.168.11.25/portal/#">12条</A>
+								</DIV>
+							</DIV>
+							<BR class=clearfloat>
+						</DIV>
+						<DIV class=con3_block2>
+							<IMG src="业务支撑网运营管理系统_files/icon8.jpg">
+							<DIV class=img_blockRit>
+								<P>
+									<SPAN>我关注的告警</SPAN><A href="http://192.168.11.25/portal/#">49条</A>
+								</P>
+								<DIV>
+									<SPAN>严重警告</SPAN><A href="http://192.168.11.25/portal/#">9条</A><SPAN>重要警告</SPAN><A
+										href="http://192.168.11.25/portal/#">12条</A>
+								</DIV>
+							</DIV>
+							<BR class=clearfloat>
+						</DIV>
+					</DIV>
+					<DIV class=coner_bottom3>
+						<SPAN class=coner_btmLef3></SPAN><SPAN class=coner_btmMid3></SPAN><SPAN
+							class=coner_btmRit3></SPAN>
+						<BR class=clearfloat>
+					</DIV>
+					<BR class=clearfloat>
+				</DIV>
+			</DIV>
+			<!--line4  end-->
+			<!--line5  layout-->
+			<DIV class=index_line5>
+				<DIV class=index_line5Lef>
+					<DIV class=line5_lef>
+						<DIV class=coner_top2>
+							<SPAN class="coner_topLef2 top_lef5"></SPAN><SPAN
+								class=coner_topMid2></SPAN><SPAN class="coner_topRit2 top_rit5"></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+						<DIV class=h2_wrap>
+							<H2 class=h2_absolute>
+								个人文档
+							</H2>
+						</DIV>
+						<DIV class="index_conerCon2 index_conerCon22">
+							<TABLE cellSpacing=0 cellPadding=0>
+								<TBODY>
+									<TR bgColor=#e7ebe6>
+										<TD style="TEXT-ALIGN: center" width=50>
+											txt
+										</TD>
+										<TD width=215>
+											<A title=capes.sql.txt href="http://192.168.11.25/portal/#">capes.sql.txt</A>
+										</TD>
+										<TD width=23>
+											2011/03/17
+										</TD>
+									</TR>
+									<TR bgColor=#ffffff>
+										<TD style="TEXT-ALIGN: center" width=50>
+											png
+										</TD>
+										<TD width=215>
+											<A title=网络topn报表-实时数据.png
+												href="http://192.168.11.25/portal/#">网络topn报表-实时数据.png</A>
+										</TD>
+										<TD width=23>
+											2011/03/12
+										</TD>
+									</TR>
+									<TR bgColor=#e7ebe6>
+										<TD style="TEXT-ALIGN: center" width=50>
+											png
+										</TD>
+										<TD width=215>
+											<A title=网络topn报表-历史.png href="http://192.168.11.25/portal/#">网络topn报表-历史.png</A>
+										</TD>
+										<TD width=23>
+											2011/03/12
+										</TD>
+									</TR>
+									<TR bgColor=#ffffff>
+										<TD style="TEXT-ALIGN: center" width=50>
+											png
+										</TD>
+										<TD width=215>
+											<A title=网络topn报表-实时图形.png
+												href="http://192.168.11.25/portal/#">网络topn报表-实时图形.png</A>
+										</TD>
+										<TD width=23>
+											2011/03/12
+										</TD>
+									</TR>
+									<TR bgColor=#e7ebe6>
+										<TD style="TEXT-ALIGN: center" width=50>
+											png
+										</TD>
+										<TD width=215>
+											<A title=机房-设备背板图.png href="http://192.168.11.25/portal/#">机房-设备背板图.png</A>
+										</TD>
+										<TD width=23>
+											2011/03/12
+										</TD>
+									</TR>
+									<TR bgColor=#ffffff>
+										<TD style="TEXT-ALIGN: center" width=50>
+											png
+										</TD>
+										<TD width=215>
+											<A title=机房-平面图.png href="http://192.168.11.25/portal/#">机房-平面图.png</A>
+										</TD>
+										<TD width=23>
+											2011/03/12
+										</TD>
+									</TR>
+								</TBODY>
+							</TABLE>
+							<BR class=clearfloat>
+						</DIV>
+						<DIV class=more_wrap>
+							<A class=more href="http://192.168.11.25/portal/#">更多</A>
+						</DIV>
+						<DIV class=coner_bottom2>
+							<SPAN class="coner_btmLef2 btm_lef5"></SPAN><SPAN
+								class=coner_btmMid2></SPAN><SPAN class="coner_btmRit2 btm_rit5"></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+					</DIV>
+					<DIV class=line5_rit>
+						<DIV class="coner_top2 top6">
+							<SPAN class="coner_topLef2 top_lef6"></SPAN><SPAN
+								class="coner_topMid2 top_mid6">
+								<UL class=title6>
+									<LI id=li1_title>
+										知识库
+									</LI>
+									<LI id=li1 class=li_on1 onmouseover=action2(1)>
+										热点知识
+									</LI>
+									<LI id=li2 onmouseover=action2(2)>
+										知识问答
+										<BR class=clearfloat>
+									</LI>
+								</UL>
+							</SPAN><SPAN class="coner_topRit2 top_rit6"></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+						 <div class="index_conerCon2 con6">
+					 						<ul class="content6" id="con_block1" style="display:none;">
+                        	<li><a href="#">111111111111111111111111111111111111111111111111111111111111111</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                        </ul>
+                        <ul class="content6" id="con_block2">
+                        	<li><a href="#">222222222222222222222222222222222222222222222222222222222222222222</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                        </ul>
+                        <ul class="content6" id="con_block3" style="display:none;">
+                        	<li><a href="#">333333333333333333333333333333333333333333333333333333333333333</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                            <li><a href="#">范德萨将倒萨吉萨快递费就发了多少是发就离开倒萨解放路肯定撒就附加费的流口水</a></li>
+                        </ul>
+                        
+                    	<br class="clearfloat"/>
+                     </div>
+						<DIV class=more_wrap>
+							<A class=more href="http://192.168.11.25/portal/#">更多</A>
+						</DIV>
+						<DIV class=coner_bottom2>
+							<SPAN class="coner_btmLef2 btm_lef5"></SPAN><SPAN
+								class=coner_btmMid2></SPAN><SPAN class="coner_btmRit2 btm_rit5"></SPAN>
+							<BR class=clearfloat>
+						</DIV>
+					</DIV>
+					<BR class=clearfloat>
+				</DIV>
+				<DIV class=index_line5Rit>
+					<FORM>
+						<SPAN class=input_wd>发送短信</SPAN>
+						<SPAN class=input_message><INPUT id=smsUsers>
+						</SPAN>
+						<SPAN><INPUT class=button_search
+								onclick="window.open('getData/user.jsp')" type=button>
+						</SPAN>
+						<BR class=clearfloat>
+						<SPAN><TEXTAREA id=smsContent cols=45 rows=5></TEXTAREA> </SPAN><SPAN><INPUT
+								class=button_search2 onclick=sendSms() type=button>
+						</SPAN>
+						<BR class=clearfloat>
+					</FORM>
+					<FORM class=form2>
+						<SPAN class=input_wd>人员查询</SPAN>
+						<SPAN class="input_message message2"><INPUT id=keyWord>
+						</SPAN>
+						<SPAN><INPUT class=button_search onclick=searchUser()
+								type=button>
+						</SPAN>
+						<BR class=clearfloat>
+					</FORM>
+					<DIV id=seachUser class=line5_formBtm></DIV>
+					<BR class=clearfloat>
+				</DIV>
+				<!--line5  end-->
+				<!--footer  layout-->
+				<DIV class=footer>
+					<DIV class=footer_left>
+						<DIV>
+							<P>
+								当前用户：2010
+							</P>
+							<P>
+								今日登录数：13888
+							</P>
+						</DIV>
+					</DIV>
+					<DIV class=footer_right>
+						<DIV>
+							<P>
+								负责人：管理员13888888888
+							</P>
+							<P>
+								热线：0551-88888888
+							</P>
+						</DIV>
+					</DIV>
+					<BR class=clearfloat>
+				</DIV>
+				<!--footer  layout-->
+			</DIV>
+		</DIV>
+	</BODY>
+</HTML>

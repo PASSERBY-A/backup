@@ -1,0 +1,8 @@
+#Wed Apr 17 04:36:49 CST 2013
+eclipse.preferences.version=1
+encoding//resources/conf/itsm.properties=GBK
+encoding//resources/conf/resm.properties=GBK
+encoding//resources/config.xml=GBK
+encoding//resources/system.properties=GBK
+encoding//src/com/hp/idc/itsm/security/LocalgroupManager.java=UTF-8
+encoding/<project>=GBK

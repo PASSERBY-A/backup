@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:components="com.hp.idc.components.*"
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 width="100%" height="100%">
+
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:RemoteObject id="resourceService" destination="resourceService">
+			<s:method name="getRackDetail" result="resultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)" />
+		</s:RemoteObject>
+		<fx:XML id="rackDetail">			
+		</fx:XML>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.ui.FaultHandler;
+			import com.hp.idc.util.UserTool;
+			import com.hp.idc.resm.model.RackDetail;
+			
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var resourceObject:ResourceObject;
+			
+			private function resultHandler(event:ResultEvent):void {
+				rackDetail = XML(event.result);
+			}
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				resourceService.getRackDetail(resourceObject.id, UserTool.userId);
+				setStyle("fontWeight", 'bold');
+			}
+			
+			protected function linkbutton1_clickHandler(event:MouseEvent):void
+			{
+				var obj:RackDetail = RackDetail(PopUpManager.createPopUp(this, RackDetail, true));
+				obj.rackId = int(resourceObject.id);
+				obj.title = resourceObject.name+" 分布图";
+				PopUpManager.centerPopUp(obj);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%" paddingLeft="20">
+		<s:Label text="◆ 所属机房 [{resourceObject.getAttribute('ref_room')}], 所在位置 [{resourceObject.getAttribute('rack_point')}]"/>
+		<s:Label text="◆ 规格 [{resourceObject.getAttribute('rack_standard')}], 类型 [{resourceObject.getAttribute('rack_type')}], 走线方式 [{resourceObject.getAttribute('line_way')}]"/>
+		<components:HSplitLine width="100%"/>
+		<s:HGroup width="700">
+			<s:Label text="机位:" fontWeight="bold" fontSize="14"/>
+			<s:Spacer width="100%" />
+			<s:Button label="分布图" click="linkbutton1_clickHandler(event)" color="0xb22222" />
+		</s:HGroup>
+		<mx:DataGrid rowCount="6" dataProvider="{rackDetail.children()}">
+			<mx:columns>
+				<mx:DataGridColumn dataField="order" headerText="序号" width="100" />
+				<mx:DataGridColumn dataField="status" headerText="状态" width="150"/>
+				<mx:DataGridColumn dataField="rack" headerText="所属机架" width="150"/>
+				<mx:DataGridColumn dataField="detail" headerText="详细" width="300" />
+			</mx:columns>
+		</mx:DataGrid>		
+	</s:VGroup>
+</s:Group>

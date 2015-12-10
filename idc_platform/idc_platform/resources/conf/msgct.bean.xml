@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	
+	<!-- 
+		activeMQ 消息服务功能去除  
+		messageCenter bean 单独在resm中定义
+	-->
+<!-- 
+	<bean id="connectionFactory" class="com.hp.idc.msgct.activemq.IDCConnectionFactory">
+		<property name="brokerURL" value="tcp://127.0.0.1:61616" />
+		<property name="watchTopicAdvisories" value="false" />
+		<property name="copyMessageOnSend" value="false" />
+	</bean>
+
+	<bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="pooledConnectionFactory" />
+		<property name="explicitQosEnabled" value="true" />
+	</bean>
+
+	
+	<bean id="messageCenter" class="com.hp.idc.msgct.activemq.AMQMessageCenter"
+		init-method="init" destroy-method="destroy">
+		<property name="jmsTemplate" ref="jmsTemplate" />
+	</bean>
+-->
+</beans>

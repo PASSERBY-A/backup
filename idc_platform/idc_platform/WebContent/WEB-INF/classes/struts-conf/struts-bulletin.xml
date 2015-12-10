@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="bulletin" extends="default" namespace="/bulletin">
+	
+		<action name="addBulletinInfo" class="com.hp.idc.bulletin.view.BulletinInfoAction" method="addBulletinInfo">
+			<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="updateBulletinInfo" class="com.hp.idc.bulletin.view.BulletinInfoAction" method="updateBulletinInfo">
+			<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="getBulletinInfo" class="com.hp.idc.bulletin.view.BulletinInfoAction" method="getBulletinInfoDetail">
+			<result name="success">show_bulletin_info.jsp</result>
+		</action>
+		
+		<action name="queryBulletinInfo" class="com.hp.idc.bulletin.view.BulletinInfoAction" method="queryBulletinInfo">
+			<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="deleteBulletinInfo" class="com.hp.idc.bulletin.view.BulletinInfoAction" method="deleteBulletinInfo">
+		 	<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+	</package>	
+	
+</struts>

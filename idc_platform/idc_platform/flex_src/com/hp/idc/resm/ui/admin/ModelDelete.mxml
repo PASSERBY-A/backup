@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:components="com.hp.idc.components.*" 
+					 xmlns:admin="com.hp.idc.resm.ui.admin.*" 
+					 xmlns:widget="com.hp.idc.components.widgets.*"
+					 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="init(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.SelectModelWindow;
+			import com.hp.idc.resm.event.ModelEvent;
+			import com.hp.idc.resm.model.Model;
+			import com.hp.idc.resm.ui.actions.SwitchWindowAction;
+			import com.hp.idc.util.UserTool;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			
+			
+			private function init(event:FlexEvent):void{
+				this.addEventListener(FlexEvent.SHOW,selectModel);
+			}
+			
+			protected function selectModel(event:FlexEvent):void
+			{
+				//先弹出窗口，选择需要修改的模型
+				var selectModelWindow:SelectModelWindow = new SelectModelWindow();
+				selectModelWindow.title = "请选择要删除的资源模型";
+				selectModelWindow.addEventListener(ModelEvent.MODELSELECT,deleteModel);
+				selectModelWindow.addEventListener(CloseEvent.CLOSE,switchToList)
+				
+				
+				PopUpManager.addPopUp(selectModelWindow,this,true);
+				PopUpManager.centerPopUp(selectModelWindow);
+			}
+			
+			private function switchToList(event:CloseEvent):void{
+				var sw:SwitchWindowAction = new SwitchWindowAction();
+				sw.setTarget(parent, null);
+				sw.doAction("com.hp.idc.resm.ui.admin.ModelList");
+			}
+			
+			private function deleteModel(event:ModelEvent):void{
+				
+				var model:Model = event.model;
+				
+				PetAlert.show("确认删除"+model.name+" !?", "确认", PetAlert.YES|PetAlert.NO,null, function(e:CloseEvent):void{
+					if(e.detail==PetAlert.YES){
+						modelUpdateService.removeModel(model.id,UserTool.userId);
+					}else{
+						switchToList(new CloseEvent(CloseEvent.CLOSE));
+						return;
+					}
+				},PetAlert.ICON_ALARM);
+			}
+			
+			private function removeModelHandle(event:ResultEvent):void{
+				PetAlert.show("删除成功！","操作结果",4,null,null,PetAlert.ICON_INFO);
+				var sw:SwitchWindowAction = new SwitchWindowAction();
+				sw.setTarget(parent, null);
+				sw.doAction("com.hp.idc.resm.ui.admin.ModelList");
+			}
+		]]>
+		
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="modelUpdateService" destination="modelUpdateService">
+			<mx:method  name="removeModel" result="removeModelHandle(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+</s:NavigatorContent >

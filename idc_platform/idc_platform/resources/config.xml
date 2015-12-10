@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="GBK"?>
+<!-- edited with XML Spy v3.0.7 NT (http://www.xmlspy.com) by Mahui (huawei) -->
+<config>
+    <!--与InfoX建立连接所需参数-->
+    <CMPPConnect>
+       <!-- InfoX主机地址 -->
+       <host>211.139.84.1</host>
+       <!-- InfoX主机端口号 -->
+       <port>7890</port>
+       <!--(登录帐号SP…ID)-->
+       <source-addr>927173</source-addr>
+       <!--登录密码-->
+       <shared-secret>gsidc1234</shared-secret>
+       <!-- 心跳信息发送间隔时间(单位：秒) -->
+       <heartbeat-interval>30</heartbeat-interval>
+       <!-- 连接中断时重连间隔时间(单位：秒)-->
+       <reconnect-interval>30</reconnect-interval>
+       <!-- 需要重连时，连续发出心跳而没有接收到响应的个数（单位：个)-->
+       <heartbeat-noresponseout>5</heartbeat-noresponseout>
+       <!-- 操作超时时间(单位：秒) -->
+       <transaction-timeout>30</transaction-timeout>
+       <!--双方协商的版本号(大于0，小于256)-->
+       <version>33</version>
+       <!--是否属于调试状态,true表示属于调试状态，所有的消息被打印输出到屏幕，false表示不属于调试状态，所有的消息不被输出-->
+       <debug>true</debug>
+    </CMPPConnect>
+  
+    <!--Submit消息配置参数-->
+    <CMPPSubmitMessage>
+       <!--相同Msg_id消息的总条数，目前只能为1-->
+       <pk_Total>1</pk_Total>
+       <!--相同Msg_id的消息序号，目前只能为1-->
+       <pk_Number>1</pk_Number>
+       <!--是否需要状态报告，0:不需要，1:需要，2:产生SMS话单-->
+       <registered_Delivery>1</registered_Delivery>
+       <!--信息类别-->
+       <msg_Level>0</msg_Level>
+       <!-- 信息格式 -->
+       <msg_Fmt>8</msg_Fmt>
+       <!--业务类型，应与Infox对应-->
+       <service_Id>10658576</service_Id>
+       <!--计费用户类型，0:对目的终端MSISDN计费，1:对源终端MSISDN计费，2:对SP计费，3:本字段无效-->
+       <fee_UserType>02</fee_UserType>
+       <!--GSM协议类型-->
+       <tp_Pid>0</tp_Pid>
+       <!--GSM协议类型-->
+       <tp_Udhi>0</tp_Udhi>
+       <!--信息内容来源，对应于登录Infox的帐号-->
+       <msg_Src>gsidc</msg_Src>
+       <!--资费类别，“短消息类型”为“发送”，对“计费用户号码”不计信息费，此类话单仅用于核减SP对称的信道费-->
+       <fee_Type>01</fee_Type>
+       <!--资费代码，以分为单位-->
+       <fee_Code>0000</fee_Code>
+       <!--存活有效期(单位:分钟)-->
+       <valid_Time/>
+       <!--定时发送时间-->
+       <at_Time/>
+       <!--源终端MSISDN号码(为SP的服务代码或前缀, 为服务代码的长号码, 网关将该号码完整的填到SMPP协议相应的destination_address字段，该号码最终在用户手机上显示为短消息的主叫号码) (没有可以为空)-->
+       <src_Terminal_Id>10658576</src_Terminal_Id>
+       <!--接收消息的用户数量(小于100个用户)-->
+       <destUsr_tl>1</destUsr_tl>
+       <!--接收业务的MSISDN号码，即被叫号码-->
+       <dest_Terminal_Id>13</dest_Terminal_Id>
+       <LinkID/>
+       <fee_Terminal_Id>999999</fee_Terminal_Id>
+    </CMPPSubmitMessage>
+</config>

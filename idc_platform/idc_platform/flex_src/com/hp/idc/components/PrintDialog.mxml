@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ========================================================================
+ ==
+ == This file is part of yFiles FLEX 1.4.2.
+ ==
+ == yWorks proprietary/confidential. Use is subject to license terms.
+ ==
+ == Unauthorized redistribution of this file or of a byte-code version
+ == of this file is strictly forbidden.
+ ==
+ == Copyright (c) 2006-2010 by yWorks GmbH, Vor dem Kreuzberg 28,
+ == 72070 Tuebingen, Germany. All rights reserved.
+ ==
+ ========================================================================== -->
+<mx:TitleWindow title="yFiles FLEX Print Settings" xmlns:fx="http://ns.adobe.com/mxml/2009"  xmlns:mx="library://ns.adobe.com/flex/mx"  xmlns:s="library://ns.adobe.com/flex/spark" width="400" height="400" horizontalAlign="center" verticalAlign="middle">
+	
+	<fx:Metadata>
+        [Event(name="submit", type="flash.events.Event")]
+    </fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.effects.easing.Back;
+			import com.yworks.canvas.CanvasPrinter;
+			import com.yworks.canvas.geom.YRectangle;
+			import mx.collections.ArrayCollection;
+			import mx.controls.RadioButton;
+			import mx.events.ItemClickEvent;
+			import com.yworks.io.ExportOptions;
+			import mx.managers.PopUpManager;
+			
+			public static const SUBMIT:String = "submit";
+		
+			private function onConfirm( evt:Event=null ):void {
+				PopUpManager.removePopUp( this );		
+				dispatchEvent( new Event( SUBMIT ) );
+			}
+			
+			private function onCancel( evt:Event=null ):void {
+				PopUpManager.removePopUp( this );
+			}
+			
+			public function get clip():Boolean {
+				return clipBtn.selected;
+			}
+
+			
+			public function configurePrinter( printer:CanvasPrinter ):void {
+				
+				printer.centerContent = centerBtn.selected;
+				printer.scaleUpToFit = scaleUpBtn.selected;
+				printer.scaleDownToFit = scaleDownBtn.selected;
+				if( hasBgBox.selected ) {
+					printer.backgroundColor = colorPicker.selectedColor;
+				} else {
+					printer.backgroundColor = null;
+				}
+				printer.hPages = uint( hPages.selectedItem );
+				printer.vPages = uint( vPages.selectedItem );
+				printer.printAsBitmap = bitmapBtn.selected;
+				
+				var marginLVal:Number = Number( marginL.selectedItem );
+				var marginRVal:Number = Number( marginR.selectedItem );
+				var marginTVal:Number = Number( marginT.selectedItem );
+				var marginBVal:Number = Number( marginB.selectedItem );
+				
+				printer.margin = new Rectangle( marginLVal, marginTVal, 
+										marginRVal - marginLVal, marginBVal - marginTVal );
+				
+			}
+			
+			private var pagesDP:Array = [1,2,3,4,5,6,7,8,9,10];
+			private var marginDP:Array = [0,5,10,15,25,50,100];
+			
+		]]>
+	</fx:Script>
+
+	<mx:Grid verticalGap="10" top="20">
+		
+		<mx:GridRow>
+			<mx:GridItem>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:CheckBox id="bitmapBtn" label="Print as Bitmap" selected="true" toolTip="Print as bitmap."/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:CheckBox id="scaleDownBtn" label="Scale Down To Fit" selected="true" toolTip="Scale down if the graph is larger than the printable area"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem />
+			<mx:GridItem>
+				<mx:CheckBox id="scaleUpBtn" label="Scale Up To Fit" toolTip="Scale up if the graph is smaller than the printable area"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:CheckBox id="centerBtn" label="Center" selected="true" toolTip="Center the graph"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:CheckBox id="clipBtn" label="Clip" selected="false" toolTip="Print only the currently visible region"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="Background:" />			
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:ColorPicker id="colorPicker" selectedColor="0xFFFFFF" change="{ hasBgBox.selected = true; }"/>
+				<mx:CheckBox id="hasBgBox" selected="true" />
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="Poster Printing" />			
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:ComboBox dataProvider="{ pagesDP }" id="hPages" />
+				<mx:Label text="x" />
+				<mx:ComboBox dataProvider="{ pagesDP }" id="vPages" /> <mx:Label text=" Pages" />
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+				<mx:Label text="Margin" />			
+			</mx:GridItem>
+			<mx:GridItem horizontalAlign="left">
+				<mx:Label text="Left" />
+				<mx:ComboBox dataProvider="{ marginDP }" id="marginL" />
+				<mx:Label text="Right" />
+				<mx:ComboBox dataProvider="{ marginDP }" id="marginR" />
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+			<mx:GridItem>
+			</mx:GridItem>
+			<mx:GridItem horizontalAlign="left">
+				<mx:Label text="Top" />
+				<mx:ComboBox dataProvider="{ marginDP }" id="marginT" />
+				<mx:Label text="Bottom" />
+				<mx:ComboBox dataProvider="{ marginDP }" id="marginB" />
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow height="50">
+			<mx:GridItem horizontalAlign="left" verticalAlign="bottom">
+				<mx:Button label="cancel" id="cancelBtn" click="onCancel( event )"/>
+			</mx:GridItem>
+			<mx:GridItem horizontalAlign="right" verticalAlign="bottom">
+				<mx:Button label="ok" id="okBtn" click="onConfirm( event )" />
+			</mx:GridItem>
+		</mx:GridRow>
+		
+	</mx:Grid>
+		
+</mx:TitleWindow>

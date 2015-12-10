@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:components="com.hp.idc.components.*" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		 creationComplete="init()">
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HSplitLine;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.resm.security.AuthInfo;
+			import com.hp.idc.resm.security.BasicPermission;
+			import com.hp.idc.resm.security.RolePermission;
+			import com.hp.idc.resm.security.UserRole;
+			import com.hp.idc.resm.ui.Menu;
+			import com.hp.idc.resm.ui.actions.IUiAction;
+			import com.hp.idc.resm.ui.find.SinglePersonSelector;
+			import com.hp.idc.skins.LinkButtonSkin;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import flash.utils.getDefinitionByName;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.events.EffectEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.Button;
+			import spark.components.HGroup;
+			import spark.components.Image;
+			import spark.components.Label;
+			import spark.components.RichText;
+			import spark.effects.Fade;
+			import spark.effects.Move;
+			import spark.effects.Resize;
+			import spark.effects.Scale;
+			import spark.utils.TextFlowUtil;
+	
+			
+			[Embed(source='images/icon11.png')]
+			private var iconClass:Class; 
+			
+			public var userId: int;
+			
+			private function onRoleDeleted(event:ResultEvent):void
+			{
+				init();	
+			}
+			
+			private function onDataLoaded(event:ResultEvent):void
+			{
+				var userRole :UserRole = event.result as UserRole;
+				content.removeAllElements();
+				titleLabel.text = "“" + userRole.user.getAttribute("name") + "”的权限列表";
+				if (userRole.authInfos.length == 0)
+				{
+					var lbl:Label = new Label;
+					lbl.text = "没有配置任何相关的权限！";
+					content.addElement(lbl);
+					var hs :HSplitLine = new HSplitLine;
+
+					content.addElement(hs);				
+				}
+				for each (var p :AuthInfo in userRole.authInfos)
+				{
+					var img:Image = new Image();
+					img.source = iconClass;
+					
+					var h:HGroup = new HGroup();
+					h.verticalAlign = "middle";
+					h.gap = 6;
+					h.addElement(img);
+					
+					var str:String;
+					str = "<p lineHeight=\"200%\">";
+					str += "<span fontSize=\"14\">" + p.role.name + "</span>&nbsp;"
+					str += "<span fontFamily=\"Courier New\" fontSize=\"12\" fontStyle=\"italic\">(" + p.role.id + ")</span>";
+					str += "<span color=\"#666666\" fontStyle=\"italic\" fontSize=\"12\">";
+					if (p.authType == 1)
+						str += "　　通过用户授权　　";
+					else
+						str += "　　通过组织授权";
+					str += "</span></p>";
+					var r:RichText = new RichText();
+					r.textFlow = TextFlowUtil.importFromString(str);
+					
+					h.addElement(r);
+					if (p.authType == 1)
+					{
+						var btnRemove:Button = new Button();
+						btnRemove.label = "删除授权";
+						btnRemove.setStyle("skinClass", LinkButtonSkin);
+						btnRemove.setStyle("roleId", p.role.id);
+						btnRemove.setStyle("icon", "images/delete.gif");
+						btnRemove.addEventListener(MouseEvent.CLICK, deleteClick);
+						h.addElement(btnRemove);
+					}
+					
+					content.addElement(h);
+					
+					for (var i :int = p.startIndex; i <= p.endIndex; i++)
+					{
+						var perm:RolePermission = userRole.permissions[i] as RolePermission;
+						str = "<p lineHeight=\"140%\">";
+						str += "<span fontSize=\"12\">　" + perm.permisson.name + "</span>";
+						if (perm.paramDesc != null && perm.paramDesc.length > 0)
+						{
+							str += "<span color=\"#666666\" fontStyle=\"italic\" fontSize=\"12\">　　";
+							str += perm.paramDesc;
+							str += "</span>";
+						}
+						str += "</p>";
+						r = new RichText();
+						r.textFlow = TextFlowUtil.importFromString(str);
+						
+						content.addElement(r);
+					}
+					
+					content.addElement(new HSplitLine);
+				}
+				
+				var btnGroup :HGroup = new HGroup();
+				
+				var btnAdd:Button = new Button();
+				btnAdd.label = "重新选择用户";
+				btnAdd.setStyle("skinClass", LinkButtonSkin);
+				btnAdd.setStyle("icon", "images/addRole.gif");
+				btnAdd.addEventListener(MouseEvent.CLICK, selectClick);
+				btnGroup.addElement(btnAdd);
+				
+				content.addElement(btnGroup);
+	
+			}
+			
+			protected function viewUserRoleCb(res:ResourceObject):void
+			{
+				userId = res.id;
+				init();
+			}
+	
+			private function deleteClick(event:MouseEvent) :void {
+				var btn :Button = event.target as Button;
+				var roleId:String = btn.getStyle("roleId") as String;
+				
+				// TODO: 操作用户
+				roleService.removeUserRole(userId, roleId, 0);
+			}
+			
+			private function selectClick(event:MouseEvent) :void {
+				var view:SinglePersonSelector = new SinglePersonSelector();
+				view.callback = viewUserRoleCb;
+				PopUpManager.addPopUp(view, this, true);
+				PopUpManager.centerPopUp(view);
+			}
+			
+			private function init() : void
+			{
+				roleService.getUserRole(userId);
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="roleService" destination="roleService">
+			<mx:method  name="getUserRole" result="onDataLoaded(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method  name="removeUserRole" result="onRoleDeleted(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout paddingLeft="15"/>
+	</s:layout>
+
+	<s:Label text="" fontSize="24" color="#336699" id="titleLabel"/>
+	<s:Spacer height="20" />
+	<s:Scroller  width="100%" height="100%">
+		<s:Group  width="100%" height="100%" clipAndEnableScrolling="true" id="content">
+			<s:layout  >
+				<s:VerticalLayout gap="8"/>
+			</s:layout>
+		</s:Group>
+	</s:Scroller>
+
+</s:NavigatorContent>

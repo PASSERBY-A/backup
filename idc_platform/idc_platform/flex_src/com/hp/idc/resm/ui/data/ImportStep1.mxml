@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="446" height="276" title="导入"
+			   close="PopUpManager.removePopUp(this);"
+			   creationComplete="init();"
+			   >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			
+			import mx.controls.Alert;
+			import mx.managers.CursorManager;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			private function init() : void
+			{
+				modelService.getModelTree();
+			}
+			
+			private function modelQueryComplete(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				modelTree.dataProvider = TreeItem.createDataProvider(returnString);
+			}
+			
+			private function faultHandler(event:FaultEvent):void{
+				PetAlert.show(event.fault.getStackTrace(),"错误");
+			}
+			
+			protected function modelTree_changeHandler(event:IndexChangeEvent):void
+			{
+				modelService.getModelAttributesByModelId(modelTree.selectedItem.id);
+			}
+
+			
+			public function doCenter() :void 
+			{
+				PopUpManager.centerPopUp(this);
+			}
+
+			protected function nextBtn_clickHandler(event:MouseEvent):void
+			{
+				var s2 :ImportStep2 = new ImportStep2();
+				PopUpManager.addPopUp(s2, this.parent, true);
+				PopUpManager.removePopUp(this);
+				PopUpManager.centerPopUp(s2);
+			}
+
+			protected function cancelBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function ioShow(evt: IOErrorEvent):void{   
+				PetAlert.show(evt.toString(),"IO错误");   
+			}   
+			
+			protected var file:FileReference;
+			protected function doSelect():void{   
+				Security.allowDomain("*");   
+				file = new FileReference();     
+				file.addEventListener(Event.SELECT, onSelect);     
+				file.addEventListener(ProgressEvent.PROGRESS, processHandler);     
+				file.addEventListener(IOErrorEvent.IO_ERROR,ioShow); 
+				
+				var excelTypes:FileFilter = new FileFilter("Documents", "*.xls;*.xlsx");     
+				var allTypes:Array = new Array(excelTypes);     
+				
+				file.browse(allTypes);
+			}   
+			protected function onSelect(evt:Event):void{  
+				import_txt.text = file.name;   
+			}   
+			protected function doUpload():void{   
+				if(import_txt.text.length < 1){
+					PetAlert.show("请选择Excel文件");
+					return;
+				}
+				//指向struts的一个action,或servlte,注意一写要写完整路径   
+				var request:URLRequest = new URLRequest("/idc_platform/upload?modelId="+modelTree.selectedItem.id);   
+				file.upload(request);   
+				cursorManager.setBusyCursor();
+			}   
+			//上传完成更新源   
+			protected function processHandler(evt:ProgressEvent):void{   
+				if(evt.bytesLoaded == evt.bytesTotal){   
+					CursorManager.removeBusyCursor();
+					Alert.show("文件导入成功");
+				}   
+			}    
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<s:RadioButtonGroup id="radiogroup1"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject  id="modelService" destination="modelService">
+			<mx:method  name="getModelTree" result="modelQueryComplete(event)" fault="faultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	<s:DropDownList id="modelTree"  itemRenderer="com.hp.idc.components.TreeItemRenderer" x="101" y="88" width="208"
+					labelField="label" change="modelTree_changeHandler(event)">
+	</s:DropDownList>
+	<s:Label x="32" y="98" text="资源模型"/>
+	<s:Label x="34" y="142" text="导入文件"/>
+	<s:TextInput x="101" y="132" width="208" click="doSelect()" id="import_txt" />
+	<mx:LinkButton x="310" y="132" click="doUpload()" label="上传" color="blue" />
+	<!--s:Button x="239" y="186" label="下一步" id="nextBtn" click="nextBtn_clickHandler(event)"/-->
+	<s:Button x="339" y="186" label="取消" id="cancelBtn" click="cancelBtn_clickHandler(event)"/>
+	<s:Label x="96" y="29" text="通过数据导入，可以将Excel文件中的数据导入资源管理系统，&#13;使用本功能导入数据时，文件导入的文件必须是在系统提供的&#13;模板文件的基础上编辑生成的。" height="41"/>
+	<mx:LinkButton x="256" y="52" label="点此下载模板文件" color="#3683DA"/>
+	<mx:Image x="20" y="19" source="@Embed(source='images/Alert_11.png')" width="64" height="64"/>
+	<mx:Image x="342" y="89" alpha="0.1" source="@Embed(source='images/Package_02.png')" width="64" height="64"/>
+</s:TitleWindow>

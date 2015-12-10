@@ -1,0 +1,170 @@
+.maintitle
+{
+	 FONT-SIZE: 13px;
+	 COLOR: #000000; 
+}
+
+.maintxt
+{
+	 FONT-SIZE: 12px;
+}
+.maintxt A:visited
+{
+    FONT-SIZE: 12px;
+    COLOR: #000000;
+	text-decoration: none;
+}
+.maintxt A:hover
+{
+   FONT-SIZE: 12px;
+    COLOR: #ff0000;
+	text-decoration: none;
+}
+.maintxt A:link
+{
+    COLOR: #000000;
+	text-decoration: none;
+}
+.maintxt A:active
+{
+    COLOR: #000000;
+	text-decoration: none;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+.btn {
+	BACKGROUND-COLOR: #638EEF; 
+	BORDER-BOTTOM:#3366ff 1px solid; 
+	BORDER-LEFT: #0066CC 1px solid; 
+	BORDER-RIGHT: #0066CC 1px solid; 
+	BORDER-TOP: #3366ff 1px solid; 
+	FONT-SIZE: 12px; color:#ffffff;HEIGHT: 24px; padding-top: 3px; padding-bottom: 3px;
+	font:"宋体";
+	font-style:normal;
+	width:128px;
+	margin:1px 0 2px 3px;
+}
+
+.style2 {FONT-SIZE: 12px; FONT-FAMILY: "穝灿砰", Arial, sans-serif; color: #FF0000; }
+.style3 {FONT-SIZE: 12px; FONT-FAMILY: "穝灿砰", Arial, sans-serif }
+.redLink {color: #FF0000}
+
+
+.topSide {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-top-color: #3366CC;
+	border-right-color: #3366CC;
+	border-bottom-color: #3366CC;
+	border-left-color: #3366CC;
+}
+.leftBorder {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-left-style: dashed;
+	border-left-color: #0066FF;
+}
+.downSide {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #0066FF;
+}
+.menuItem {
+	background-color:#e5ecf9;
+	color: #000066;
+	cursor:pointer;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-color:#0000CC;
+	margin:1px 0 0 0;
+	padding:1px 0 0 12px;
+	height:18px;
+}
+
+/*  block型表格样式  */
+.TableBlock{
+   border:1px #a55257 solid;
+   line-height:20px;
+   font-size:9pt;
+   border-collapse:collapse;
+}
+.TableBlock td{
+   padding:3px;
+   color:#000000;
+}
+.TableBlock .TableHeader td,
+.TableBlock td.TableHeader{
+   background:#e5ecf9;
+   border:1px #a55257 solid;
+   font-weight:bold;
+   color:#000;
+   line-height:23px;
+   padding:0px;
+}
+.TableBlock .TableLine1 td,
+.TableBlock td.TableLine1{
+   background:#F8F8F8;
+   border-top:1px #a55257 solid;
+   border-right:1px #a55257 solid;
+}
+.TableBlock .TableLine2 td,
+.TableBlock td.TableLine2{
+   background:#FFFFFF;
+   border-top:1px #a55257 solid;
+   border-right:1px #a55257 solid;
+}
+.TableBlock .TableData td,
+.TableBlock td.TableData{
+   background:#FFFFFF;
+   border-top:1px #a55257 solid;
+   border-right:1px #a55257 solid;
+}
+.TableBlock td.leftTableData{
+   background:#6699FF;
+   border-top:1px #a55257 solid;
+   border-right:1px #a55257 solid;
+}
+
+.TableBlock .TableContent td,
+.TableBlock td.TableContent{
+   background:#F0F0F0;
+   border-top:1px #a55257 solid;
+   border-right:1px #a55257 solid;
+}
+.TableBlock .TableFooter td,
+.TableBlock .TableControl td,
+.TableBlock td.TableFooter,
+.TableBlock td.TableControl{
+   background: #fff;
+   border:1px #CFDDEA solid;
+}
+.TableBlock .TableRed td,
+.TableBlock td.TableRed
+{
+   background:#FFEBEB;
+}
+
+body {
+	font-family: arial, 宋体, serif;
+	font-size:12px;
+}

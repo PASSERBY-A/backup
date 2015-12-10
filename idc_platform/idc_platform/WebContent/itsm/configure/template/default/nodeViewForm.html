@@ -1,0 +1,125 @@
+
+<table border=0 width='99.5%' align='center'>
+	<tr><td><font color='green'><b>
+$taskData.getNodeDesc()($taskData.getDataId())
+	</b></font></tr>
+</table>
+<table class='embed2' border=0 cellspacing=1 width='99.5%' align='center'>
+	<tr>
+		<th width='150'>任务名称</th>
+		<td width='25%'>$taskData.getNodeDesc()</td>
+		<th width='150'>分配至</th>
+		<td>
+		#set($personInfo=$PersonManager.getPersonById($taskInfo.getOrigin(),$taskData.getAssignTo()))
+		#if(!$personInfo)
+			$taskData.getAssignTo()
+		#else
+			$personInfo.getName()
+		#end
+		</td>
+	</tr>
+	<tr>
+		<th>操作者</th>
+		<td>
+		#set($dealByName = $taskData.getDealedBy())
+		#set($pi_ = $PersonManager.getPersonById($taskData.getOwner().getOrigin(),$dealByName))
+		#if ($pi_)
+			#set($dealByName = $pi_.getName())
+		#end
+		#if($dealByName)
+			$dealByName
+		#end
+		</td>
+		<th>分配时间</th>
+		<td>$DateTimeUtil.formatDate($taskData.getCreateTime(), "yyyy-MM-dd HH:mm:ss")</td>
+	</tr>
+		#set($childs = $taskData.getChilds())
+		#foreach($td_ in $childs)
+	<tr><td colspan='6' style='height:1;background: #99bbe8;'></td></tr>
+			#set($actId = $td_.getActId())
+			#set($actionInfo = $workflowData.getAction($actId))
+			#set($actformId = $actionInfo.getFormId())
+			#set($formOid = 0)
+			#if ($actformId)
+				#set($formOid = $Integer.parseInt($actformId))
+			#end
+			#set($actformInfo = $FormManager.getFormByOid($formOid))
+			#set($actfieldList=[])
+			#if ($actformInfo)
+				#set($actfieldList = $actformInfo.getFields())
+			#else
+				#set($fieldEl = $td_.getXmlNode().selectNodes("./fields/field"))
+				#foreach ($field_ in $fieldEl)
+					#set($fi=$FieldManager.getFieldById($field_.attributeValue("id")))
+					#if($fi)
+						#set($temp=$actfieldList.add($fi))
+					#end
+				#end
+			#end
+
+			<tr>
+				<th>操作时间</th>
+				<td>$DateTimeUtil.formatDate($td_.getCreateTime(), "yyyy-MM-dd HH:mm:ss")</td>
+
+				<th>目标数据节点</th>
+				<td>$td_.getNodeDesc()($td_.getDataId())</td></tr>
+				
+			#if($taskData.isOvertime())
+				<tr><th><font color=red>超时原因</font></th>
+				<td colspan='3'><font color=red>$td_.getAttribute('req_delay_reason')</font></td>
+				</tr>
+			#end
+
+			#foreach ($fieldInfo in $actfieldList)
+				#set($fName = $fieldInfo.getName())
+				#set($fValue = $fieldInfo.getHtmlCode($td_.getAttribute($fieldInfo.getId())))
+				#if($fValue && !$fValue.equals(""))
+				<tr><th>$fName</th>
+				<td colspan='3'>$fValue</td>
+				</tr>
+				#end
+			#end
+		#end
+		#if ($taskData.getMessages().size() > 0)
+		<tr><td colspan='6' style='height:1;background: #99bbe8;'></td></tr>
+			<tr><th>意见</th><td colspan='3'>
+			#set($listMsgs = $taskData.getMessages())
+			#foreach ($msgInfo in $listMsgs)
+				<b>$PersonManager.getPersonNameById($msgInfo.getOperName()) 
+				#if ($msgInfo.getDate() && !$msgInfo.getDate().equals(""))
+					[$DateTimeUtil.formatDateTime($msgInfo.getDate())]
+				#end
+				:</b><br>
+				$StringUtil.escapeHtml($msgInfo.getContent()).replaceAll("\n", "<br/>"))
+				<br>
+			#end
+			</td></tr>
+		#end
+		#set($listMsgs = $taskData.getReadMessages())
+		#if ($listMsgs.size() > 0)
+		<tr><td colspan='6' style='height:1;background: #99bbe8;'></td></tr>
+			<tr><th>已阅信息</th><td colspan='3'>
+			#foreach ($msgInfo in $listMsgs)
+				<b>$PersonManager.getPersonNameById($msgInfo.getOperName()) [$DateTimeUtil.formatDateTime($msgInfo.getDate())]:</b><br>
+				$StringUtil.escapeHtml($msgInfo.getContent()).replaceAll("\n", "<br/>")
+				<br>
+			#end
+			</td></tr>
+		#end
+
+		#if ($taskData.isRollback())
+			#set($perTaskData = $taskData.getParent())
+			#set($rollbacks = $perTaskData.getRollbacks())
+			#foreach ($info in $rollbacks)
+				#if ($info.getActureDataId()==$taskData.getDataId())
+					<tr><td colspan='4' style='height:1'></td></tr>
+					<tr><th>操作时间</th><td>$DateTimeUtil.formatDateTime($info.getDate())</td>
+
+					<th>目标数据节点</th><td>$perTaskData.getNodeDesc()($perTaskData.getDataId())</td></tr>
+
+					<tr><th>回退理由</th><td colspan='3'><font color='red'>$StringUtil.escapeHtml($info.getReason())</font></td></tr>
+				#end
+			#end
+		#end
+</table>
+<br>

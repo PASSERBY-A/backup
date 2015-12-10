@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ========================================================================
+ ==
+ == This file is part of yFiles FLEX 1.4.2.
+ ==
+ == yWorks proprietary/confidential. Use is subject to license terms.
+ ==
+ == Unauthorized redistribution of this file or of a byte-code version
+ == of this file is strictly forbidden.
+ ==
+ == Copyright (c) 2006-2010 by yWorks GmbH, Vor dem Kreuzberg 28,
+ == 72070 Tuebingen, Germany. All rights reserved.
+ ==
+ ========================================================================== -->
+<mx:TitleWindow title="Server Configuration" xmlns:fx="http://ns.adobe.com/mxml/2009"  xmlns:mx="library://ns.adobe.com/flex/mx"  xmlns:s="library://ns.adobe.com/flex/spark"
+	width="600" 
+	horizontalAlign="center" verticalAlign="top" 
+	paddingTop="20" paddingLeft="20" 
+	paddingRight="20" paddingBottom="20"
+	horizontalScrollPolicy="off">
+	
+	<fx:Metadata>
+		[Event(name="retry",type="flash.events.Event")]
+		[Event(name="ignore",type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			
+		   public static const RETRY:String = "retry";
+			
+		   private static const MESSAGE_HEADER:String = "This yFiles FLEX "+
+                "demo application requires client-server communication. " + 
+                "However, connecting to the yFiles FLEX server component did not succeed.";
+                      
+            private static const MAIN_MESSAGE:String = "Connecting to the server URL specified in the " + 
+                "configuration file (config.xml) was not successful. Please adapt the config.xml file to " + 
+                "reflect your server configuration and recompile your application. If the correct servlet URL is " +
+                "already specified in the configuration file, please make sure that the server is running and that the " + 
+                "yFiles FLEX server component has been correctly installed."; 
+			
+			private static const MESSAGE_ENTER_SERVER_DATA:String = "If you do " + 
+					"not want to use the configuration file to specifiy the server URL, " + 
+					"the server can also be entered directly into the mask below. " + 
+					"If the application succeeds to connect to the specified URL, the configuration " + 
+					"is stored in the Flash Player cache."; 
+					
+            private static const MESSAGE_SANDBOX_LOCAL_WITH_NETWORK:String = "This application " +
+                "currently runs in the \"local-with-network\" sandbox. This means that " + 
+                "it may not access relative URLs and it may only connect to URLs if a " +
+                "crossdomain.xml file is found on the server that allows connections from SWFs. " +
+                "An easier alternative is to set the application as trusted using the Flash Player " + 
+                "configuration dialog.";
+					 		
+			
+			public static const SUBMIT:String = "submit";
+			public static const IGNORE:String = "ignore";
+			
+			
+			private var _configLoaded:Boolean = false;
+			private var _defaultContextRoot:String = "http://localhost:8080/yfiles-flex/";
+			private var _defaultServiceExtension:String = "";
+			private var _autoCorrect:Boolean = true;
+			private var _errorMessage:String = null;
+			
+			private function onConfirm( evt:Event=null ):void {
+				dispatchEvent( new Event( SUBMIT ) );
+			}
+			
+			override protected function initializationComplete():void {
+				setExampleURL();
+			}
+			
+			
+			public function get message():String {
+			    var msg:String = "<font size='14'>"+MESSAGE_HEADER+"</font>" + "<br><br>";
+	            
+	            msg +="<font size='12'>";
+	            
+                msg += MAIN_MESSAGE;
+                
+                if( Security.sandboxType == Security.LOCAL_WITH_NETWORK ) {
+                	 msg += "<br><br>" + MESSAGE_SANDBOX_LOCAL_WITH_NETWORK;
+                }
+                
+                msg += "<br><br>" + MESSAGE_ENTER_SERVER_DATA;
+                msg += "</font>";
+                return msg;   
+			}
+			
+			private function setExampleURL():void {
+				var text:String = contextRootTxt.text + "exampleService" + serviceExtensionTxt.text;
+				exampleURL.text = text;
+			}
+			
+			[Bindable]
+			public function get defaultServiceExtension():String {
+				return this._defaultServiceExtension;
+			}
+			
+			public function set defaultServiceExtension( value:String ):void {
+				this._defaultServiceExtension = value;
+			}
+			
+			[Bindable]
+            public function get defaultContextRoot():String {
+                return this._defaultContextRoot;
+            }
+            
+            public function set defaultContextRoot( value:String ):void {
+                this._defaultContextRoot = value;
+            }
+            
+            public function get autoCorrect():Boolean {
+            	return this._autoCorrect;
+            }
+            
+            public function set autoCorrect( value:Boolean ):void {
+            	this._autoCorrect = value;
+            }
+            
+            [Bindable]
+            public function get errorMessage():String {
+            	if( null != this._errorMessage ) {
+            	   return "Connection failed: "+this._errorMessage;
+            	} else {
+            		return "";
+            	}
+            }
+            
+            public function set errorMessage( value:String ):void {
+            	this._errorMessage = value;
+            }
+            
+            private function onRetryHit( evt:Event=null ):void {
+            	
+            	if( this._autoCorrect ) {
+	            	var customContextRootText:String = this.contextRootTxt.text;
+	            	if( customContextRootText.length > 0 ) {
+	            		if( customContextRootText.charAt( customContextRootText.length - 1 ) != "/" ) {
+	            			contextRootTxt.text = customContextRootText + "/";
+	            		}
+	            	}
+	            	var customServiceExtensionText:String = this.serviceExtensionTxt.text;
+	                if( customServiceExtensionText.length > 0 ) {
+	                    if( customServiceExtensionText.charAt( 0 ) != "." ) {
+	                        serviceExtensionTxt.text = "." + customServiceExtensionText;
+	                    }
+	                }
+	            }
+            	dispatchEvent( new Event( RETRY ) );
+            }
+            
+            private function onIgnoreHit( evt:Event=null ):void {
+            	dispatchEvent( new Event( IGNORE ) );
+            }
+            
+            public function get customContextRoot():String {
+            	return this.contextRootTxt.text;
+            }
+            
+            public function get customServiceExtension():String {
+            	return this.serviceExtensionTxt.text;
+            }
+			
+		]]>
+	</fx:Script>
+
+    <mx:Text width="100%" id="msgLabel" htmlText="{ message }"/>
+
+	<mx:Grid width="100%" verticalGap="10" 
+		paddingTop="20" paddingBottom="20" 
+		borderStyle="solid" 
+		horizontalAlign="center"
+		backgroundColor="0xEEEEEE">
+	
+		<mx:GridRow >
+			<mx:GridItem>
+				<mx:Label text="Context Root" />			
+			</mx:GridItem>
+			<mx:GridItem>
+				<mx:TextInput id="contextRootTxt" width="290" change="setExampleURL()" text="{ defaultContextRoot }" />
+			</mx:GridItem>
+		</mx:GridRow>
+		
+		<mx:GridRow>
+            <mx:GridItem>
+                <mx:Label text="Service Extension" />          
+            </mx:GridItem>
+            <mx:GridItem>
+                <mx:TextInput id="serviceExtensionTxt" change="setExampleURL()" text="{ defaultServiceExtension }" />
+            </mx:GridItem>
+        </mx:GridRow>
+        
+         <mx:GridRow />
+        
+        <mx:GridRow>
+            <mx:GridItem colSpan="2" horizontalAlign="center">
+                <mx:Label text="Example Service URL" />          
+            </mx:GridItem>
+        </mx:GridRow>
+		<mx:GridRow>
+            <mx:GridItem colSpan="2" horizontalAlign="center">
+                <mx:Label color="blue" id="exampleURL" text="" maxWidth="380" />
+            </mx:GridItem>
+         </mx:GridRow>    
+         
+         <mx:GridRow >
+            <mx:GridItem colSpan="2" horizontalAlign="center">
+                <mx:Button label="Retry" id="retryBtn" click="onRetryHit()"/>   
+                <mx:Button label="ignore" id="ignoreBtn" click="onIgnoreHit()" />
+            </mx:GridItem>
+         </mx:GridRow>    
+         
+         <mx:GridRow >
+            <mx:GridItem colSpan="2" horizontalAlign="center">
+                <mx:Text textAlign="center" id="errorMessageTxt" width="380" color="red" text="{ errorMessage }" /> 
+            </mx:GridItem>
+         </mx:GridRow>    
+	</mx:Grid>
+	
+		
+</mx:TitleWindow>

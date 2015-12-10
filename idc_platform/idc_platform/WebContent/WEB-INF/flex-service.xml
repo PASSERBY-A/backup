@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans  
+    xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:flex="http://www.springframework.org/schema/flex"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+       http://www.springframework.org/schema/flex   
+       http://www.springframework.org/schema/flex/spring-flex-1.0.xsd">  
+    <flex:message-broker>  
+        <flex:remoting-service default-channels="my-amf"/>  
+    </flex:message-broker>
+    
+    <!-- below just for resm -->
+    <flex:remoting-destination ref="uiService" />
+
+    <flex:remoting-destination ref="roleService" />
+    
+    <flex:remoting-destination ref="attributeService" />
+    <flex:remoting-destination ref="attributeUpdateService" />
+    
+    <flex:remoting-destination ref="modelService" />
+    <flex:remoting-destination ref="modelUpdateService" />
+    
+    <flex:remoting-destination ref="resourceService" />
+    <flex:remoting-destination ref="resourceUpdateService" />
+    
+    <flex:remoting-destination ref="relationService" />
+    <flex:remoting-destination ref="relationUpdateService" />
+    
+    <!-- below for the business management -->
+    <flex:remoting-destination ref="productCatalogService" />
+    <flex:remoting-destination ref="productService" />
+    <flex:remoting-destination ref="serviceService" />
+    
+</beans>  

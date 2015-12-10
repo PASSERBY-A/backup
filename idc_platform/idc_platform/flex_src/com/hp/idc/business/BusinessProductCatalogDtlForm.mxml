@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="500" height="420"
+			   close="PopUpManager.removePopUp(this);"
+			   >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject  id="productCatalogService" destination="productCatalogService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+		<mx:RemoteObject  id="productService" destination="productService"
+						  result="productResultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.business.mapping.ProductCatalog;
+			import com.hp.idc.business.mapping.ProductCatalogDtl;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			public var cataId:int;
+			
+			public var pm:BusinessProductCatalog;
+			
+			[Bindable]
+			public var productList:ArrayCollection;
+			
+			public function show(title:String,_dtlPorductId:int,_effectType:int,
+								 _selectFlag:int,_minQuanity:int,_maxQuanity:int,_defaultQuanity:int,
+								 _note:String):void{
+				this.title = title;
+//				dtlPorductId.selectedItem.id = String(_dtlPorductId);
+				effectType.selectedIndex = _effectType;
+				selectFlag.selectedIndex = _selectFlag;
+				minQuanity.text = String(_minQuanity);
+				maxQuanity.text = String(_maxQuanity);
+				defaultQuanity.text = String(_defaultQuanity);
+				note.text = _note;
+			}
+			
+			public function updateCatalogDtl():void{
+				var dtl:ProductCatalogDtl = new ProductCatalogDtl();
+				dtl.catalogId = cataId;
+				dtl.effectType = effectType.selectedIndex;
+				dtl.selectFlag = selectFlag.selectedIndex;
+				dtl.maxQuanity = int(maxQuanity.text);
+				dtl.minQuanity = int(minQuanity.text);
+				dtl.defaultQuanity = int(defaultQuanity.text);
+				dtl.productId = int(dtlPorductId.selectedItem.id);
+				dtl.note = note.text;
+				
+				productCatalogService.updateProductCatalogDtl(dtl);
+			}
+			
+			private function resultHander(event:ResultEvent):void {
+				var form:BusinessProductCatalogDtlForm = this;
+				Alert.show("添加目录产品成功","提示",Alert.OK,null,function(event:CloseEvent):void{
+					PopUpManager.removePopUp(form);
+					form.pm.getAllDtl();
+				})
+			}
+			
+			private function productResultHander(event:ResultEvent):void {
+				this.productList = ArrayCollection(event.result);
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.toString(),"错误");
+			}
+			
+			private function getAllProduct():void {
+				productService.queryResultList(new Object());
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Form>
+		<mx:FormItem label="产品编号:">
+			<s:ComboBox id="dtlPorductId" width="200" dataProvider="{productList}" click="getAllProduct()" 
+						labelField="name" /> 
+		</mx:FormItem>
+		<mx:FormItem label="生效类型:">
+			<s:DropDownList selectedIndex="0" fontFamily="宋体" id="effectType">
+				<s:dataProvider>
+					<s:ArrayList>
+						<fx:String>保留</fx:String>
+						<fx:String>可立即生效</fx:String>
+						<fx:String>下周期生效</fx:String>
+					</s:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+		</mx:FormItem>
+		<mx:FormItem label="选中标志:">
+			<s:DropDownList selectedIndex="0" fontFamily="宋体" id="selectFlag">
+				<s:dataProvider>
+					<s:ArrayList>
+						<fx:String>必选产品</fx:String>
+						<fx:String>预选产品</fx:String>
+						<fx:String>可选产品</fx:String>
+						<fx:String>不可修改</fx:String>
+					</s:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+		</mx:FormItem>
+		<mx:FormItem label="最小定购:">
+			<s:TextInput id="minQuanity" height="50" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="最大定购:">
+			<s:TextInput id="maxQuanity" height="50" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="默认数量:">
+			<s:TextInput id="defaultQuanity" height="50" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="选中提示:">
+			<s:TextInput id="note" height="50" width="200" />
+		</mx:FormItem>
+		<mx:FormItem >
+			<s:HGroup>
+				<s:Button label="确定" fontFamily="宋体" click="updateCatalogDtl()" />
+				<s:Button label="取消" fontFamily="宋体" click="PopUpManager.removePopUp(this)" />
+			</s:HGroup>
+		</mx:FormItem>
+	</s:Form>
+	
+	
+</s:TitleWindow>

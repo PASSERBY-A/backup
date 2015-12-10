@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+垂直分割线
+
+-->
+
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="3" height="100%">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF">
+			</s:SolidColor>
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="1" right="1" top="0" bottom="0">
+		<s:fill>
+			<!--- @private -->
+			<mx:LinearGradient rotation="90">
+				<mx:entries>
+					<mx:GradientEntry color="0xFFFFFF" ratio="0.00" alpha="1"/>
+					<mx:GradientEntry color="0xEDEEF0" ratio="0.2" alpha="1"/>
+					<mx:GradientEntry color="0xEDEEF0" ratio="0.8" alpha="1"/>
+					<mx:GradientEntry color="0xFFFFFF" ratio="1" alpha="1"/>
+				</mx:entries>
+			</mx:LinearGradient>
+		</s:fill>
+	</s:Rect>
+</s:Group>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		   xmlns:s="library://ns.adobe.com/flex/spark" 
+		   xmlns:components="com.hp.idc.components.*" 
+		   xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		   creationComplete="navigatorcontent1_creationCompleteHandler(event)" xmlns:skins="com.hp.idc.skins.*"
+		   >
+	<fx:Script>
+		<![CDATA[
+			import com.events.FCEvent;
+			import com.flx.events.FlashInterfaceEvent;
+			import com.flx.external.FlashInterface;
+			import com.hp.idc.components.EditResourceObjectWindow;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.rmList;
+			import com.hp.idc.resm.ui.actions.PopupWindowAction;
+			import com.hp.idc.resm.ui.actions.SwitchWindowAction;
+			import com.hp.idc.resm.ui.data.DataNavigate;
+			import com.hp.idc.resm.ui.find.ModelSelector;
+			import com.hp.idc.ui.FaultHandler;
+			import com.hp.idc.ui.IShowModule;
+			import com.hp.idc.ui.ModuleUtil;
+			import com.hp.idc.util.UiUtil;
+			import com.hp.idc.util.UserTool;
+			
+			import fusioncharts.FusionCharts;
+			
+			import mx.collections.ArrayCollection;
+			import mx.containers.ViewStack;
+			import mx.controls.Alert;
+			import mx.core.IVisualElement;
+			import mx.core.IVisualElementContainer;
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			private var _temp:Array = [ SwitchWindowAction, PopupWindowAction, DataNavigate ];
+			
+			protected function viewList_clickHandler(event:MouseEvent):void
+			{
+				UiUtil.changUi("rmlist");
+			}
+			
+			
+			protected function imagelink1_clickHandler(event:MouseEvent):void
+			{
+				UiUtil.changUi("baseinfo");
+			}
+			
+			protected function datainfo_clickHandler(event:MouseEvent):void
+			{
+				UiUtil.changUi("datainfo");
+			}
+			
+			protected function addResource(obj:Object):void
+			{
+				obj.showModelList(null);
+			}
+			
+			protected function addResourceObject_clickHandler(event:MouseEvent):void
+			{
+				var params:ArrayCollection = new ArrayCollection();
+				params.addItem(false);
+				UiUtil.changUiParam("resourceObjectUpdate",params);
+			}
+
+			[Bindable]
+			private var processWin:ProcessWin;
+			protected function navigatorcontent1_creationCompleteHandler(event:FlexEvent):void
+			{
+				processWin = ProcessWin(PopUpManager.createPopUp(this,ProcessWin,true));
+				PopUpManager.centerPopUp(processWin);
+				
+				showChart("space");
+				resourceService.getCountStr();
+				try{
+					UserTool.init();
+				} finally {
+				}
+			}
+			
+			[Bindable]
+			private var selectModel:String;
+			private function showChart(modelId:String):void{
+				if(modelId.length>0)
+					this.selectModel = modelId;
+				var parameters:Object = new Object();
+				parameters.modelId = this.selectModel;
+				var status:String="";
+				if(free.selected)
+					status = status + "1,";
+				if(pre.selected)
+					status = status + "2,";
+				if(act.selected)
+					status = status + "3,";
+				if(using.selected)
+					status = status + "4,";
+				parameters.status = status;
+				fusionChartsService.send(parameters);
+			}
+			
+			private function fusioncharData(event:ResultEvent):void{
+				var ret:String = event.result.toString();
+				ret = ret.replace(/^\s*|\s*$/g,"");
+				try
+				{
+					mainPanel.removeElementAt(2);
+				} 
+				catch(error:Error) 
+				{
+					// todo: handle exception
+					//noting to do
+				}
+					
+				var chart:FusionCharts = new FusionCharts();
+				chart.width = mainPanel.width-40;
+				chart.height = mainPanel.height - 50;
+				chart.FCDataXML = ret;
+				mainPanel.addElementAt(chart,2);
+			}
+			
+			private function FailedHandler(event:FaultEvent):void{
+				Alert.show(event.fault.toString());
+			}
+			
+			/**
+			 *
+			 * 图表所需参数
+			 * */
+			private function initial_param():XML
+			{
+				var temp:String="<param><data formatNumberScale='0' animation='1' /></param>";
+				return XML(temp);
+			}
+			
+			[Bindable]
+			public var allResCount:int = 0; 
+			[Bindable]
+			public var effectResCount:int = 0;
+			[Bindable]
+			public var periodResCount:int = 0;
+			
+			private function getCount(event:ResultEvent):void
+			{
+				var str:String = event.result as String;
+				var _count:Array = str.split(".");
+				this.allResCount = int(_count[0]);
+				this.effectResCount = int(_count[1]);
+				this.periodResCount = int(_count[2]);
+				
+				PopUpManager.removePopUp(processWin);
+				processWin = null;
+			}
+
+			protected function linkbutton1_clickHandler(event:MouseEvent):void
+			{
+				processWin = ProcessWin(PopUpManager.createPopUp(this,ProcessWin,true));
+				PopUpManager.centerPopUp(processWin);
+				
+				showChart(this.selectModel);
+				
+				resourceService.getCountStr();
+				try{
+					UserTool.init();
+				} finally {
+					
+				}
+			}
+
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<s:VerticalLayout id="vlayout1" gap="3" paddingLeft="2" paddingRight="2" paddingTop="5" />
+		<s:VerticalLayout id="vlayout2" gap="0" paddingLeft="2" paddingRight="2" paddingTop="2" />
+		<s:VerticalLayout id="vlayout3" gap="3" paddingLeft="2" paddingRight="2" paddingTop="5" />
+		<s:VerticalLayout id="vlayout4" gap="0" paddingLeft="2" paddingRight="2" paddingTop="2" />
+		<s:VerticalLayout id="vlayout5" gap="0" paddingLeft="2" paddingRight="2" paddingTop="2" />
+		<s:RadioButtonGroup id="radiogroup1"/>
+		
+		<mx:RemoteObject  id="resourceService" destination="resourceService">
+			<mx:method  name="getCountStr" result="getCount(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:HTTPService id="fusionChartsService" url="/idc_platform/resm/interface/fusionchartData.jsp" 
+						result="fusioncharData(event)" fault="FailedHandler(event)"  method="POST" resultFormat="text" 
+						>     
+		</mx:HTTPService>  
+		
+	</fx:Declarations>
+
+	<!-- 背景 -->
+	<s:Rect left="0" right="0" top="0" height="100" radiusX="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry 
+					color="0xD4EDE9" 
+					alpha="1" />
+				<s:GradientEntry 
+					color="0xFFFFFF" 
+					alpha="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" right="0" top="100" bottom="0" radiusX="0">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" />
+		</s:fill>
+	</s:Rect>
+	<s:Scroller width="100%" height="100%">
+		<s:VGroup paddingTop="15" paddingBottom="10" width="100%" gap="0" clipAndEnableScrolling="true">
+			<s:HGroup gap="15" height="100%" width="100%" paddingLeft="15" paddingRight="15" >
+				<components:RoundCornerPanel width="200" height="100%" layout="{vlayout1}" id="links">
+					<mx:Spacer height="5" />
+					<s:HGroup>
+						<mx:Spacer width="15" />
+						<mx:Image source="@Embed(source='images/icon11.png')" />
+						<s:Label text="常用功能" fontSize="14" />
+					</s:HGroup>
+					<mx:Spacer height="5" />
+					<components:HSplitLine/> 
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="新增一个资源对象" click="addResourceObject_clickHandler(event)" />
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="浏览资源信息" click="viewList_clickHandler(event)" />
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="资源数据维护" click="datainfo_clickHandler(event)" />
+					<components:HSplitLine/>
+					
+					<mx:Spacer height="100%" />
+					<s:HGroup>
+						<mx:Spacer width="15" />
+						<mx:Image source="@Embed(source='images/icon12.png')" />
+						<s:Label text="资源信息" fontSize="14" />
+						<s:Spacer width="20" />
+						<s:Button label="刷新" fontSize="8" click="linkbutton1_clickHandler(event)" width="38" height="15" />
+					</s:HGroup>
+					<mx:Spacer height="5" />
+					<components:HSplitLine/> 
+					<components:ImageLink leftSpaceWidth="10" centerSpaceWidth="4" image="@Embed(source='images/icon6.jpg')" label="资源总数：{allResCount}" />
+					<components:HSplitLine/> 
+					<components:ImageLink leftSpaceWidth="10" centerSpaceWidth="4" image="@Embed(source='images/icon6.jpg')" label="有效资源数：{effectResCount}" />
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" centerSpaceWidth="4" image="@Embed(source='images/icon6.jpg')" label="30天内变更数：{periodResCount}" />
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" centerSpaceWidth="4" image="@Embed(source='images/icon6.jpg')" label="自动发现资源：0" />
+					<components:HSplitLine/>
+					<mx:Spacer height="15" />
+				</components:RoundCornerPanel>
+				<components:RoundCornerPanel height="100%" width="100%" layout="{vlayout2}" styleName="tab" id="mainPanel">
+					<s:HGroup paddingLeft="20" height="30">
+						<components:TabButton label="设备资源" groupName="radiogroup1" click="showChart('device')" />
+						<components:TabButton label="空间资源" groupName="radiogroup1" click="showChart('space')" selected="true"/>
+						<components:TabButton label="网络资源" groupName="radiogroup1" click="showChart('net')" />
+					</s:HGroup>
+					<s:HGroup width="100%" paddingRight="60" paddingTop="10">
+						<s:Spacer width="100%" />
+						<s:CheckBox id="free" label="空闲" toolTip="显示空闲资源" selected="true" click="showChart('')"/>
+						<s:CheckBox id="pre" label="预占" toolTip="显示预占资源" selected="true" click="showChart('')"/>
+						<s:CheckBox id="act" label="实占" toolTip="显示实占资源" selected="true" click="showChart('')"/>
+						<s:CheckBox id="using" label="使用中" toolTip="显示使用中资源" selected="true" click="showChart('')"/>
+					</s:HGroup>
+					<mx:Spacer height="10"/>
+				</components:RoundCornerPanel>
+			</s:HGroup>
+		</s:VGroup>
+	</s:Scroller>	
+</s:NavigatorContent>

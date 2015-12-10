@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" title="查找人员" creationComplete="panel1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:VerticalLayout paddingBottom="20" paddingLeft="20" paddingRight="20" paddingTop="10" gap="10"/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.components.TreeItemRenderer;
+			import com.hp.idc.resm.resource.AttributeBase;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.resm.ui.PageInfo;
+			import com.hp.idc.resm.ui.PageQueryInfo;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import flash.utils.getQualifiedClassName;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.GridSelectionEvent;
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			public var callback:Function = null;
+			
+			[Bindable]
+			public var defaultValue:String = "";
+			
+			protected function okBtn_clickHandler(event:MouseEvent):void
+			{
+				if (callback != null)
+					callback.call(null, personGrid.selectedItem);
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function cancelBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+			private function onResourceLoaded(event:ResultEvent):void
+			{
+				var pi:PageInfo = event.result as PageInfo;
+				trace("ret = " + pi.data.length);
+				personGrid.dataProvider = pi.data;
+			}
+			
+			private function onOrganizationLoaded(event:ResultEvent):void
+			{
+				trace(event.result as String);
+				orgList.dataProvider = TreeItem.createDataProvider(event.result as String);
+			}
+
+			private var pq:PageQueryInfo = null;
+			
+			protected function searchBtn_clickHandler(event:MouseEvent):void
+			{
+				if (pq == null)
+				{
+					pq = new PageQueryInfo;
+					pq.pageCount = 999999;
+					pq.sortBy = "name";
+					pq.startPage = 1;
+				}
+				okBtn.enabled = false;
+				resourceService.listResource("person", searchContent.text, pq);
+			}
+
+
+			protected function panel1_creationCompleteHandler(event:FlexEvent):void
+			{
+				resourceService.getResourceTree("organization", "parent_org");
+				
+				for each (var c :GridColumn in personGrid.columns)
+				{
+					c.labelFunction = ResourceObject.getLabelFunction(c.dataField);
+				}
+				searchBtn_clickHandler(null);
+			}
+
+
+			protected function personGrid_selectionChangeHandler(event:GridSelectionEvent):void
+			{
+				okBtn.enabled = ((event.target as DataGrid).selectedItem != null);
+			}
+
+
+			protected function orgList_changeHandler(event:IndexChangeEvent):void
+			{
+				searchContent.text = (event.target as List).selectedItem.label;
+				searchBtn_clickHandler(null);
+			}
+
+
+			protected function searchContent_changeHandler(event:TextOperationEvent):void
+			{
+				var x:TreeItem = orgList.selectedItem;
+				if (x != null && x.label != searchContent.text)
+					orgList.selectedIndex = -1;
+			}
+
+
+			protected function searchContent_keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == 13)
+					searchBtn_clickHandler(null);
+			}
+
+
+			protected function personGrid_doubleClickHandler(event:MouseEvent):void
+			{
+				if (personGrid.selectedItem != null)
+					okBtn_clickHandler(null);
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject id="resourceService" destination="resourceService">
+			<mx:method name="listResource" result="onResourceLoaded(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method name="getResourceTree" result="onOrganizationLoaded(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<s:HGroup width="100%" verticalAlign="middle">
+		<s:Label text="模糊查找:"/>
+		<s:TextInput width="100%" text="{defaultValue}" id="searchContent" change="searchContent_changeHandler(event)" keyDown="searchContent_keyDownHandler(event)"/>
+		<s:Button label="查找" id="searchBtn" click="searchBtn_clickHandler(event)" />
+		<s:Image source="@Embed(source='images/help.gif')" toolTip="匹配方式：姓名模糊匹配，或者手机按结尾匹配（至少4位），或按邮箱@前方匹配。模糊匹配与按部门过滤不能同时生效。" />
+	</s:HGroup>
+	<s:HGroup height="200">
+		<s:VGroup width="160" height="100%">
+			<s:Label text="按部门过滤:" />
+			<s:List id="orgList" width="100%" height="100%" borderAlpha="0" itemRenderer="com.hp.idc.components.TreeItemRenderer" change="orgList_changeHandler(event)">
+			</s:List>
+		</s:VGroup>
+		<s:DataGrid width="450" height="100%" id="personGrid" selectionChange="personGrid_selectionChangeHandler(event)" doubleClickEnabled="true" doubleClick="personGrid_doubleClickHandler(event)">
+			<s:columns>
+				<s:ArrayCollection>						
+					<s:GridColumn headerText="姓名" dataField="name"/>
+					<s:GridColumn headerText="手机" dataField="mobile"/>
+					<s:GridColumn headerText="邮箱" dataField="email"/>
+					<s:GridColumn headerText="部门" dataField="organization"/>
+				</s:ArrayCollection>
+			</s:columns>
+		</s:DataGrid>
+	</s:HGroup>
+	<s:HGroup horizontalAlign="right" width="100%" gap="15">
+		<s:Button id="okBtn" label="确定" enabled="false" click="okBtn_clickHandler(event)" />
+		<s:Button id="cancelBtn" label="取消" click="cancelBtn_clickHandler(event)" />
+	</s:HGroup>
+</s:Panel>

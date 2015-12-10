@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true" implements="mx.core.IFactory">
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle"/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.skins.CheckBoxSkin;
+			import com.hp.idc.util.json.JSON;
+			
+			[Embed("assets/minus.gif")]
+			private var disclosureOpenIcon:Class;
+			
+			[Embed("assets/plus.gif")]
+			private var disclosureClosedIcon:Class;
+			
+			[Embed("assets/folder-open.gif")]
+			private var folderOpenIcon:Class;
+			
+			[Embed("assets/folder.gif")]
+			private var folderClosedIcon:Class;
+			
+			[Embed("assets/leaf.gif")]
+			private var defaultLeafIcon:Class;
+			
+			[Embed("assets/s.gif")]
+			private var nullIcon:Class;
+			
+			import flash.utils.getQualifiedClassName;
+			
+			import mx.collections.*;
+			import mx.controls.Alert;
+			
+			import spark.components.DataGroup;
+			
+			[Bindable]
+			private var treeItem :TreeItem;
+			
+			override public function set data(value:Object):void {
+				super.data = value;
+				if (value)
+				{
+					treeItem = value as TreeItem;
+					disclosureImage.source = getDisclosureIcon();
+					folderImage.source = getFolderIcon();
+					setStyle("lineThrough",treeItem.enable=="true"?false:true);
+				}
+			}
+			
+			public function newInstance() : *
+			{
+				return new TreeItemRenderer;
+			}
+			
+			public function expandChild(event:MouseEvent) : void {	
+				event.stopPropagation();
+				
+				if (treeItem.isOpened)
+				{
+					closeChild();
+					return;
+				}
+
+				var d : DataGroup = this.parent as DataGroup;
+				(d.dataProvider as TreeItemCollection).expand(treeItem);
+/*				
+				treeItem.isOpened = true;
+				var d : DataGroup = this.parent as DataGroup;
+				var index:int = d.dataProvider.getItemIndex(data);
+				for each (var ti :TreeItem in treeItem.childs)
+				d.dataProvider.addItemAt(ti, index + 1);*/
+				disclosureImage.source = getDisclosureIcon();
+				folderImage.source = getFolderIcon();
+				
+			}
+			
+			public function closeChild() : void {
+				var d : DataGroup = this.parent as DataGroup;
+				var index:int = d.dataProvider.getItemIndex(data);
+				if (data.isOpened)
+				{
+					var count:int = data.closeChild();
+					while (count > 0)
+					{
+						d.dataProvider.removeItemAt(index + 1);
+						count--;
+					}
+					disclosureImage.source = getDisclosureIcon();
+					folderImage.source = getFolderIcon();
+				}
+			}
+			
+			public function getDisclosureIcon() : Object {
+				if (data.isLeaf)
+					return nullIcon;
+				if (data.isOpened)
+					return disclosureOpenIcon;
+				return disclosureClosedIcon;
+			}
+			
+			public function getFolderIcon() : Object {
+				if (treeItem.isLeaf)
+					return defaultLeafIcon;
+				if (treeItem.isOpened)
+					return folderOpenIcon;
+				return folderClosedIcon;
+			}
+
+			protected function checkbox1_changeHandler(event:Event):void
+			{
+				treeItem.checked = checkbox1.selected;
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%" height="18" gap="2" verticalAlign="middle">
+		<s:Image alpha="0" height="1" width="{data.indent}" />
+		<s:Image id="disclosureImage" width="16" mouseDown="expandChild(event)" verticalCenter="0" />
+		<s:Image id="folderImage" mouseDown="expandChild(event)" verticalCenter="0"/>
+		<s:CheckBox id="checkbox1" skinClass="com.hp.idc.skins.CheckBoxSkin" selected="{treeItem.checked}" change="checkbox1_changeHandler(event)" visible="{treeItem.allowCheck}" width="{treeItem.allowCheck ? 18 : 0}"/>
+		<s:Label id="labelDisplay" text="{data.label}" verticalCenter="0" verticalAlign="middle" />
+	</s:HGroup>
+	
+</s:ItemRenderer>
+

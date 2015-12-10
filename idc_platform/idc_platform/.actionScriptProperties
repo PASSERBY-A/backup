@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="idc_platform.mxml" projectUUID="43e15f11-9506-401d-ad30-1b6e9087051c" version="7">
+  <compiler additionalCompilerArguments="-locale en_US -services &quot;/home/silence/idc.gs/idc_platform/WebContent/WEB-INF/flex/services-config.xml&quot;" autoRSLOrdering="true" copyDependentFiles="true" flex3CompatMode="false" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" rootURL="http://localhost:8080/idc_platform" sourceFolderPath="flex_src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="0">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="1" linkType="1" path="flex_libs"/>
+    </libraryPath>
+    <sourceAttachmentPath>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="/home/silence/idc.gs/idc_platform/flex_libs/libravis.swc" sourcepath="${DOCUMENTS}/libravis/src" useDefaultLinkType="false"/>
+    </sourceAttachmentPath>
+  </compiler>
+  <applications>
+    <application path="com/hp/idc/resm/ui/ResourceAdmin.mxml"/>
+    <application path="EditGrid.mxml"/>
+    <application path="test/DateTimeTest.mxml"/>
+    <application path="idc_platform.mxml"/>
+    <application path="test/SparkTree.mxml"/>
+    <application path="com/hp/idc/resm/ui/RoleAdmin.mxml"/>
+    <application path="TreeTest.mxml"/>
+    <application path="com/hp/idc/login/login.mxml"/>
+    <application path="com/hp/idc/business/skins/CustomPanelSkin.mxml"/>
+    <application path="com/hp/idc/resm/ui/data/Condition.mxml"/>
+    <application path="SparkForm.mxml"/>
+    <application path="com/hp/idc/business/Business.mxml"/>
+    <application path="com/hp/idc/resm/ui/ResourceManagement.mxml"/>
+  </applications>
+  <modules/>
+  <buildCSSFiles/>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
+</actionScriptProperties>

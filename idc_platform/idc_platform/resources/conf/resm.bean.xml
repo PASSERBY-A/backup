@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!--配置文件读取-->
+	<bean id="resmPropertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:conf/resm.properties</value>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>true</value>
+		</property>
+	</bean>
+
+	<!--配置信息定义-->
+	<bean id="resmConfig" depends-on="resmPropertyConfigurer" class="com.hp.idc.resm.util.ResmConfig"
+		init-method="init">
+		<property name="id">
+			<value>${resm.id}</value>
+		</property>
+		<property name="server">
+			<value>${resm.server}</value>
+		</property>
+	</bean>
+
+	<!-- 单独在此定义messageCenter, 供resm使用 -->
+	<bean id="messageCenter" class="com.hp.idc.resm.msgct.MessageCenter" />
+
+	<!--中间件监听-->
+	<bean id="resmMessageListener" depends-on="messageCenter,resmConfig"
+		class="com.hp.idc.resm.msgct.ResmMessageListener" init-method="init"
+		destroy-method="close">
+		<property name="messageCenter">
+			<ref bean="messageCenter" />
+		</property>
+	</bean>
+
+	<!--数据库连接-->
+	<bean id="databaseBean" depends-on="resmPropertyConfigurer" class="com.hp.idc.resm.util.DbUtil">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+
+	<!--全局缓存服务-->
+	<bean id="globalCache" depends-on="databaseBean"
+		class="com.hp.idc.resm.cache.GlobalCache" init-method="init" />
+
+	<!--权限缓存服务-->
+	<bean id="roleService" depends-on="databaseBean"
+		class="com.hp.idc.resm.service.CachedRoleService" init-method="init" />
+
+	<!--资源属性服务-->
+	<bean id="attributeService" depends-on="databaseBean" class="${resm.attributeService}" />
+	<bean id="attributeUpdateService" depends-on="attributeService"
+		class="${resm.attributeUpdateService}" />
+
+	<!--资源模型服务-->
+	<bean id="modelService" depends-on="databaseBean,attributeService"
+		class="${resm.modelService}" />
+	<bean id="modelUpdateService" depends-on="modelService"
+		class="${resm.modelUpdateService}" />
+
+	<!--资源对象服务-->
+	<bean id="resourceService" depends-on="databaseBean,modelService"
+		class="${resm.resourceService}" />
+	<bean id="resourceUpdateService" depends-on="resourceService"
+		class="${resm.resourceUpdateService}" />
+
+	<!--资源关联服务-->
+	<bean id="relationService" depends-on="databaseBean" class="${resm.relationService}" />
+	<bean id="relationUpdateService" depends-on="relationService"
+		class="${resm.relationUpdateService}" />
+
+	<!--UI服务-->
+	<bean id="uiService" class="com.hp.idc.resm.ui.UiService" />
+
+	<!--
+		服务管理对象 <bean id="resmServiceManager"
+		class="com.hp.idc.resm.service.ServiceManager" init-method="init"
+		depends-on="attributeService,attributeUpdateService,modelService,modelUpdateService,resourceService,resourceUpdateService,relationService,relationUpdateService,resmMessageListener">
+		<property name="attributeService"><ref
+		bean="attributeService"/></property> <property
+		name="attributeUpdateService"><ref
+		bean="attributeUpdateService"/></property> <property
+		name="modelService"><ref bean="modelService"/></property> <property
+		name="modelUpdateService"><ref bean="modelUpdateService"/></property>
+		<property name="resourceService"><ref
+		bean="resourceService"/></property> <property
+		name="resourceUpdateService"><ref
+		bean="resourceUpdateService"/></property> <property
+		name="relationService"><ref bean="relationService"/></property>
+		<property name="relationUpdateService"><ref
+		bean="relationUpdateService"/></property> <property
+		name="roleService"><ref bean="roleService"/></property> <property
+		name="messageListener"><ref bean="resmMessageListener"/></property>
+		</bean>
+	-->
+	<bean id="resmServiceManager" class="com.hp.idc.resm.service.ServiceManager"
+		init-method="init"
+		depends-on="attributeService,attributeUpdateService,modelService,modelUpdateService,resourceService,resourceUpdateService,relationService,relationUpdateService">
+		<property name="attributeService">
+			<ref bean="attributeService" />
+		</property>
+		<property name="attributeUpdateService">
+			<ref bean="attributeUpdateService" />
+		</property>
+		<property name="modelService">
+			<ref bean="modelService" />
+		</property>
+		<property name="modelUpdateService">
+			<ref bean="modelUpdateService" />
+		</property>
+		<property name="resourceService">
+			<ref bean="resourceService" />
+		</property>
+		<property name="resourceUpdateService">
+			<ref bean="resourceUpdateService" />
+		</property>
+		<property name="relationService">
+			<ref bean="relationService" />
+		</property>
+		<property name="relationUpdateService">
+			<ref bean="relationUpdateService" />
+		</property>
+		<property name="roleService">
+			<ref bean="roleService" />
+		</property>
+		<property name="messageListener">
+			<ref bean="resmMessageListener" />
+		</property>
+	</bean>
+
+	<bean id="localService-portal-auc" parent="schedulerManager"
+		init-method="init">
+		<!--配置触发器-->
+		<property name="trigger">
+			<!--
+				bean id="trigger-portal-auc"
+				class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+				<property name="startDelay"> <value>1000</value> </property>
+				<property name="repeatInterval"> <value>300000</value> </property>
+				</bean
+			-->
+			<bean id="trigger-resm-check-contract" class="org.springframework.scheduling.quartz.CronTriggerBean">
+				<property name="cronExpression">
+					<!-- 每天上午10:15触发,周一到周五-->
+					<value>0 15 10 ? * MON-FRI</value>
+				</property>
+			</bean>
+		</property>
+		<property name="jobDetail">
+			<!--采用另外一种方式，此时的SchedulerImpl类，不必继承QuartzJobBean-->
+			<bean name="定期同步加载用户"
+				class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="targetObject">
+					<bean class="com.hp.idc.resm.service.ResourceScan" />
+				</property>
+				<property name="targetMethod">
+					<value>checkContractResource</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+</beans>

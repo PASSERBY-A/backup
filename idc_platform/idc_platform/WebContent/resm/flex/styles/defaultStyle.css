@@ -1,0 +1,113 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace hp "com.hp.idc.components.*";
+
+/* 公共界面 */
+global
+{
+	font-family: "微软雅黑,新宋体,宋体";
+	font-size:12px;
+	modalTransparencyBlur: 0;   
+	modalTransparency: 0.8;   
+	modalTransparencyColor: #CCCCCC;   
+	modalTransparencyDuration: 300;
+}
+
+/* 表格 */
+s|DataGrid {
+	skinClass: ClassReference("com.hp.idc.skins.DataGridSkin");
+	borderColor: #B5B8C8;
+	focusSkin: null;
+	
+}
+
+hp|RoundCornerPanel {
+	skinClass: ClassReference("com.hp.idc.skins.RoundCornerPanelSkin");
+}
+
+
+/* 滚动条 */
+s|Scroller {
+	skinClass: ClassReference("com.hp.idc.skins.Scroller_skin");
+}
+
+s|VScrollBar {
+	skinClass: ClassReference("com.hp.idc.skins.ScrollBar_V_skin");
+}
+
+s|HScrollBar {
+	skinClass: ClassReference("com.hp.idc.skins.ScrollBar_H_skin");
+}
+
+
+/* 文本框 */
+s|TextInput {
+	skinClass: ClassReference("com.hp.idc.skins.TextInputSkin");
+	focusSkin:ClassReference("com.hp.idc.skins.FocusSkin");
+	borderColor: #B5B8C8;
+	focusColor: #7EADD9;
+}
+
+s|TextArea {
+	skinClass: ClassReference("com.hp.idc.skins.TextAreaSkin");
+	focusSkin:ClassReference("com.hp.idc.skins.FocusSkin");
+	borderColor: #B5B8C8;
+	focusColor: #7EADD9;
+}
+
+/* 下拉框 */
+s|ComboBox {
+	borderColor: #B5B8C8;
+	skinClass: ClassReference("com.hp.idc.skins.ComboBoxSkin");
+	focusSkin: ClassReference("com.hp.idc.skins.FocusSkin");
+	dropShadowVisible: true;
+}
+
+s|DropDownList {
+	borderColor: #B5B8C8;
+	skinClass: ClassReference("com.hp.idc.skins.DropDownListSkin");
+	focusSkin: ClassReference("com.hp.idc.skins.FocusSkin");
+	dropShadowVisible: true;
+}
+
+/* 按钮 */
+s|Button {
+	skinClass: ClassReference("com.hp.idc.skins.ButtonSkin");
+}
+s|Button.emphasized {
+	skinClass: ClassReference("com.hp.idc.skins.DefaultButtonSkin");
+}
+mx|Button
+{
+	skin: ClassReference("com.hp.idc.skins.ButtonSkin");
+	emphasizedSkin: ClassReference("com.hp.idc.skins.ButtonSkin");
+}
+
+hp|GlowButton {
+	skinClass: ClassReference("com.hp.idc.skins.GlowButtonSkin");
+}
+
+/* 树控件 */
+mx|Tree {
+	folderOpenIcon : Embed(source='../com/hp/idc/components/assets/folder-open.gif');		
+	folderClosedIcon : 	Embed(source='../com/hp/idc/components/assets/folder.gif');
+	defaultLeafIcon : Embed(source='../com/hp/idc/components/assets/leaf.gif');
+	disclosureOpenIcon : Embed(source='../com/hp/idc/components/assets/minus.gif');
+	disclosureClosedIcon : Embed(source='../com/hp/idc/components/assets/plus.gif');
+}
+
+
+/* 提示框 */
+.PetAlert {
+	borderSkin: ClassReference("com.hp.idc.skins.BalloonBorder");
+	background-color: #FFFFFF;
+	title-style-name: petAlertTitle;
+	color: #000000;
+}
+
+.petAlertTitle {
+	color: #000000;
+	font-weight: bold;
+}
+

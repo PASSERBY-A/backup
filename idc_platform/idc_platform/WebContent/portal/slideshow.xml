@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<main 
+    delay_time = "5"
+    menu_visible = "yes"
+    menu_axis = "x"
+    menu_x = "20"
+    menu_y = "280"
+    bannerBTN ="yes"
+    menu_spacer = "-16"
+    bgColor = "0xFFFFFF"
+    preloaderColor = "0xBBBBBB">
+    
+	<slideshow>
+		    <description_x>10</description_x>
+                <description_y>10</description_y>
+                <description_w>652</description_w>
+                <picture_path>flash-index/flash1/Column2D.swf</picture_path>
+                <description>
+                        <![CDATA[ ]]>
+                </description>
+                <web_address></web_address>
+        </slideshow>
+        
+        <slideshow>
+		    <description_x>10</description_x>
+                <description_y>10</description_y>
+                <description_w>652</description_w>
+                <picture_path>flash-index/flash2/Line.swf</picture_path>
+                <description>
+                        <![CDATA[ ]]>
+                </description>
+                <web_address></web_address>
+        </slideshow>
+        
+        <slideshow>
+		    <description_x>10</description_x>
+                <description_y>10</description_y>
+                <description_w>652</description_w>
+                <picture_path>flash-index/flash3/Map_JiangSu.swf</picture_path>
+                <description>
+                        <![CDATA[ ]]>
+                </description>
+                <web_address>index.jsp?url=/bes/bin-debug/ChartsMaps.html</web_address>
+        </slideshow>
+        
+	    <slideshow>
+		    <description_x>10</description_x>
+                <description_y>10</description_y>
+                <description_w>652</description_w>
+                <picture_path>flash-index/pictures/1.jpg</picture_path>
+                <description>
+                        <![CDATA[ ]]>
+                </description>
+                <web_address></web_address>
+        </slideshow>
+        
+</main>

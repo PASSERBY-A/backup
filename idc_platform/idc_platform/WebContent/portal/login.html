@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<title>IDC业务运营管理平台_登录</title>
+<base target="_top" />
+<script type="text/javascript" src="/extjs/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="/extjs/ext-all.js"></script>
+<script type="text/javascript" src="/extjs/extends/gridextend.js"></script>
+<script type="text/javascript"
+	src="/extjs/extends/gridextendsforremotesort.js"></script>
+<script type="text/javascript" src="/extjs/extends/datetimeextend.js"></script>
+<script type="text/javascript"
+	src="/extjs/source/locale/ext-lang-zh_CN.js" charset="utf-8"></script>
+<script type="text/javascript" src="/extjs/ext-ext.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="/extjs/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+<style type="text/css">
+HTML,BODY {
+	height: 100%
+}
+
+html {
+	overflow: hidden;
+}
+</style>
+<script type="text/javascript">
+	Ext.apply(Ext.form.VTypes,{
+	    password:function(val,field){//val指这里的文本框值，field指这个文本框组件，大家要明白这个意思
+	       if(field.confirmTo){//confirmTo是我们自定义的配置参数，一般用来保存另外的组件的id值
+	           var pwd=Ext.get(field.confirmTo);//取得confirmTo的那个id的值
+	           return (val==pwd.getValue());
+	       }
+	       return true;
+	    }
+	});
+
+	if (window != top) 
+		top.location.href = location.href; 
+
+
+	function formFocus() {
+	    document.loginForm.username.focus();
+	}
+	
+	function goKeydown(e, value) {
+	   if(window.event) // IE
+	   {
+	      keynum = e.keyCode;
+	   } else if(e.which) // Netscape/Firefox/Opera
+	      {
+	      keynum = e.which;
+	   }
+	   if (keynum == 13 && value != ''){
+		   submitForm();
+	   }
+	}
+
+	function trim(str) {
+  		return str.replace(/(^\s+)|(\s+$)/g, "");
+	}
+	
+	function submitForm(){
+		var userName = document.getElementById("username").value;
+		var userPwd = document.getElementById("password").value;
+		var resultlogin = document.getElementById("resultlogin");
+		if(trim(userName)=="" || userName==null){
+			resultlogin.innerHTML = "请输入用户名";
+			return;
+		}
+		if(trim(userPwd)=="" || userPwd==null){
+			resultlogin.innerHTML = "请输入密码";
+			return;
+		}
+		resultlogin.innerHTML = "<img src='images/progress.gif' />";
+		
+		//Ext.Msg.wait("登录中......","登录");
+		Ext.Ajax.request({
+		    url:'login.action',
+		    params: {
+		    	userId:userName,
+		    	password:userPwd
+		    },
+			method: 'post',
+			success:function(response){
+				var responseArray = Ext.util.JSON.decode(response.responseText)
+				if(responseArray.success==true){
+					window.location.href = '/idc_platform'+Ext.decode(response.responseText).message;
+				}else{
+					var mes = Ext.decode(response.responseText).message;
+					if(mes != '6'){
+						resultlogin.innerHTML = mes;
+					} else {		
+						resultlogin.innerHTML = "不能以默认密码登录系统，请修改";		
+						if(passWin)
+							passWin = null;
+						var modifyPassword = new Ext.form.FormPanel({
+							method: 'POST',
+							autoScroll: true,
+							margins:'20 0 0 70',
+							frame:true,
+					    	defaultType: 'textfield',
+					    	baseParams:{'postType':'user','subType':'changePassword','id':userName,'oldPassword':userPwd},
+							errorReader: new Ext.form.XmlErrorReader(),
+							labelWidth: 75, // label settings here cascade unless overridden
+							url:'/idc_platform/cas/casAucPost.jsp',
+							items:[{
+						        fieldLabel: '新密码',
+						        id:'newPassword',
+						        name: 'newPassword',
+						        inputType:'password',
+						        allowBlank:false
+						    },{
+						        fieldLabel: '重复新密码',
+						        inputType:'password',
+						        name: 'newPassword_confirm',
+						        vtype:'password',
+						        vtypeText:"两次密码不一致！",
+						        confirmTo:'newPassword',
+						        allowBlank:false
+						    },{
+								xtype:'panel',
+								id:'errorDetail'
+						    }]
+						});
+						var passWin = new Ext.Window({
+								title:'修改默认密码',
+								width:300,		
+								x:850,
+								y:440,	
+								//modal:true,		
+								items:[modifyPassword],
+								buttons: [{
+								      text: '确定',
+								      handler: function() {
+												var form = modifyPassword.form;
+												if (!form.isValid()) {
+													Ext.MessageBox.alert("提示", "信息请填写完整正确");
+													return;
+												}
+												form.submit({
+													waitMsg: '正在处理....',
+													success: function(form, action)
+													{
+														//Ext.MessageBox.alert("处理成功", form.errorReader.xmlData.documentElement.text);
+														resultlogin.innerHTML = "默认密码修改成功，请以新密码登录";
+														passWin.close();
+													},
+													failure: function(form, action)
+													{
+														//Ext.MessageBox.alert("处理失败", form.errorReader.xmlData.documentElement.text);
+														Ext.DomHelper.overwrite(document.getElementById('errorDetail'),'<div id="happenedError" style="color: red;">'+form.errorReader.xmlData.documentElement.text+'</div>');
+													}
+												});
+								      }
+								  },{
+								      text: '取消',
+								      handler: function() {
+									  	passWin.close();
+								      }
+								  }]
+							});
+						passWin.show('login_but');
+					}
+				}
+	        },
+			failure:function(action){
+				Ext.MessageBox.alert(lblFailure,lblDao+lblFailure);
+			}
+		});
+	}
+
+	window.onload = function() {
+		formFocus();
+	}
+</script>
+</head>
+
+<body>
+
+<table width="100%" height="100%" border="0" cellspacing="0"
+	cellpadding="0">
+	<tr>
+		<td align="right" class="login_logo">
+		<table width="300" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td align="right">
+				<table width="300" border="0" cellspacing="0" cellpadding="0"
+					class="ctitle">
+					<tr>
+						<td align="center" class="cloudtitle_cn">IDC业务运营管理平台</td>
+					</tr>
+					<tr>
+						<td align="center" class="cloudtitle_en">IDC Business
+						Operation Management</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		</table>
+		</td>
+		<td width="5" bgcolor="#FFFFFF">&nbsp;</td>
+		<td class="login_bg3">&nbsp;</td>
+	</tr>
+	<tr>
+		<td height="5" colspan="3" bgcolor="#FFFFFF"></td>
+	</tr>
+	<tr class="login_bg2">
+		<td colspan="2" align="right" valign="top">
+		<form action="#" method="post" name="loginForm">
+		<table border="0" cellpadding="0" cellspacing="8" width="380">
+			<tr>
+				<td align="right" class="color4b4948 font_wei">&nbsp;</td>
+				<td colspan="2" align="left">&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="right" class="color4b4948 font_wei">语言选择：</td>
+				<td colspan="2" align="left"><select name="select" id="select">
+					<option>中文简体</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td width="26%" align="right" class="color4b4948 font_wei">用户名：</td>
+				<td colspan="2" align="left"><input type="text"
+					class="input_text200" id="username" /></td>
+			</tr>
+			<tr>
+				<td width="26%" align="right" class="color4b4948 font_wei">密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+				<td colspan="2" align="left"><input type="password"
+					class="input_text200" id="password"
+					onkeydown="goKeydown(event, this.value)" /></td>
+			</tr>
+			<tr>
+				<td width="26%" align="right" class="color007ba7 font_wei">&nbsp;</td>
+				<td colspan="1" align="left"><input type="button"
+					id="login_but" class="login_but" value="登录" onclick="submitForm();" /><input
+					type="reset" id="reset_but" class="reset_but" value="重置" /></td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center" id="resultlogin"
+					style="color: red; font-size: 15"></td>
+			</tr>
+		</table>
+		</form>
+		</td>
+		<td></td>
+	</tr>
+</table>
+</body>
+</html>

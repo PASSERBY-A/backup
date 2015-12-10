@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="GBK"?>
+<chart palette="1" caption='2010年五项指标考核江苏成绩' yAxisName='得分' 
+baseFont='微软雅黑' baseFontSize='12' outCnvBaseFont='微软雅黑' outCnvBaseFontSize='12' lineColor='#ffbf13' 
+showValues="1" decimals="2" formatNumberScale="0" useRoundEdges="1" yAxisMaxValue="100" yAxisMinValue="98" 
+bgColor='FFFFFF,ff0000' bgAngle='270' bgAlpha='10,10' chartBottomMargin="30">
+    <set label='01月' value='99.46' />
+    <set label='02月' value='99.85' />
+    <set label='03月' value='99.77' />
+    <set label='04月' value='99.82' />
+    <set label='05月' value='99.68' />
+    <set label='06月' value='99.65' />
+    <set label='07月' value='99.85' />
+    <set label='08月' value='99.84' />
+    <set label='09月' value='99.85' />
+    <set label='10月' value='99.68' />
+</chart>

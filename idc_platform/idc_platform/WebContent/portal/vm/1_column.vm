@@ -1,0 +1,7 @@
+#set($nodeIdList = $nodeDataMap.get("1"))
+#foreach ($nodeId in $nodeIdList)
+	#set($mgr = $contextUtil.getBean("viewNodeMgr"))
+	#set($node = $mgr.getBeanById($nodeId))
+	#parse($node.getPath())
+	<br/>
+#end

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+		 creationComplete="init()" title="请选择模型">
+	<s:layout>
+		<s:VerticalLayout paddingLeft="20" paddingTop="20" paddingRight="20" paddingBottom="20" />
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.components.TreeItemRenderer;
+			
+			import mx.collections.IList;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+
+			private var callback:Function = null;
+			
+			
+			public function setCallback(func:Function) : void
+			{
+				callback = func;
+			}
+			
+			protected function init():void
+			{
+				modelService.getModelTree();
+			}
+
+			private function onModelLoaded(event:ResultEvent):void
+			{
+				modelList.dataProvider = TreeItem.createDataProvider(event.result as String);
+			}
+			
+			protected function cancelBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function okBtn_clickHandler(event:MouseEvent):void
+			{
+				if (callback == null)
+				{
+					PopUpManager.removePopUp(this);
+					return;
+				}
+				callback(modelList.selectedItem.id, this);
+			}
+
+			protected function modelList_changeHandler(event:IndexChangeEvent):void
+			{
+				okBtn.enabled =  (modelList.selectedItem != null);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:RemoteObject id="modelService" destination="modelService">
+			<mx:method name="getModelTree" result="onModelLoaded(event)"/>
+		</mx:RemoteObject>
+	</fx:Declarations>	
+	<s:List height="100%" change="modelList_changeHandler(event)" width="100%" id="modelList" itemRenderer="com.hp.idc.components.TreeItemRenderer" borderVisible="false"/>
+	<s:HGroup gap="10" horizontalAlign="right" width="100%">
+		<s:Button id="okBtn" label="确定" click="okBtn_clickHandler(event)" enabled="false" />
+		<s:Button id="cancelBtn" label="取消" click="cancelBtn_clickHandler(event)"/>
+	</s:HGroup>
+</s:Panel>

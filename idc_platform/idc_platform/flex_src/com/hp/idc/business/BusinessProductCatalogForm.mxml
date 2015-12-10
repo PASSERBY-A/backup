@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="500" height="300"
+			   close="PopUpManager.removePopUp(this);" >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject  id="productCatalogService" destination="productCatalogService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.business.mapping.ProductCatalog;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			public function show(title:String,_id:int,_name:String,_status:int,_desc:String):void{
+				this.title = title;
+				cataId.text = String(_id);
+				cataName.text = _name;
+				cataStatus.selectedIndex = _status;
+				cataDesc.text = _desc;
+			}
+			
+			public function updateCatalog():void{
+				var cata:ProductCatalog = new ProductCatalog();
+				cata.id = int(cataId.text);
+				cata.name = cataName.text;
+				cata.status = cataStatus.selectedIndex;
+				cata.description = cataDesc.text;
+				
+				productCatalogService.updateProductCatalog(cata);
+			}
+			
+			private function resultHander(event:ResultEvent):void {
+				var form:BusinessProductCatalogForm = this;
+				Alert.show(this.title+"成功","提示",Alert.OK,null,function(event:CloseEvent):void{
+					PopUpManager.removePopUp(form);
+					(form.parentApplication.myView.getElementAt(0) as BusinessProductCatalog).init();
+				})
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.toString(),"错误");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<mx:Form>
+		<mx:FormItem label="编号:">
+			<s:TextInput id="cataId" editable="false" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="名称:">
+			<s:TextInput id="cataName" width="200" />
+		</mx:FormItem>
+		<mx:FormItem label="状态:">
+			<s:DropDownList selectedIndex="0" fontFamily="宋体" id="cataStatus">
+				<s:dataProvider>
+					<s:ArrayList>
+						<fx:String>启用</fx:String>
+						<fx:String>禁用</fx:String>
+					</s:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+		</mx:FormItem>
+		<mx:FormItem label="描述:">
+			<s:TextArea id="cataDesc" height="50" width="200" />
+		</mx:FormItem>
+		<mx:FormItem >
+			<s:HGroup>
+				<s:Button label="确定" fontFamily="宋体" click="updateCatalog()" />
+				<s:Button label="取消" fontFamily="宋体" click="PopUpManager.removePopUp(this)" />
+			</s:HGroup>
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+</s:TitleWindow>

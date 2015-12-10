@@ -1,0 +1,22 @@
+<table border=0 width='99.5%' align='center'>
+	<tr><td width="80">工单状态:</td><td>
+	#if ($taskInfo.getStatus() == 1)
+		已关闭
+	#elseif($taskInfo.getStatus() == 2)
+		强制关闭
+	#else
+		#set($taskData = $taskInfo.getTaskData($taskInfo.getLatestTaskDataId()))
+		$taskData.getNodeDesc()
+	#end
+	</td></tr>
+</table>
+<table class='embed2' border=0 cellspacing=1 width='99.5%' align='center'>
+	#set($td_ = $taskInfo.getTaskData($taskInfo.getLatestTaskDataId()))
+	#foreach ($fieldInfo in $fieldList)
+		#set($fName = $fieldInfo.getName())
+		#set($fValue = $fieldInfo.getHtmlCode($td_.getAttribute($fieldInfo.getId())))
+		<tr><th width="150">$fName</th>
+		<td colspan='3'>$fValue</td>
+		</tr>
+	#end
+</table>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd" >
+<struts>
+<package name="network" extends="default" namespace="/network">
+
+		<action name="IntNetworkLogShow" class="com.hp.idc.network.view.NetworkLogShowAction" 
+		method="IntNetworkLogShow">
+			<result name="success">/network/NetworkLogShow.jsp</result>
+		</action>
+		<action name="NetworkLogShowALL" class="com.hp.idc.network.view.NetworkLogShowAction" 
+		method="search">
+			<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<!-- 未确认告警展示 -->
+		<action name="IntNetworkAlertShow" class="com.hp.idc.network.view.NetworkAlertShowAction" 
+		method="IntNetworkAlertShow">
+			<result name="success">/network/NetworkAlertShow.jsp</result>
+		</action>
+		<action name="NetworkAlertShowALL" class="com.hp.idc.network.view.NetworkAlertShowAction" 
+		method="search">
+			<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<!-- 确认告警展示  -->
+		<action name="IntNetworkCloseAlertShow" class="com.hp.idc.network.view.NetworkAlertShowAction" 
+		method="IntNetworkAlertShow">
+			<result name="success">/network/NetworkCloseAlertShow.jsp</result>
+		</action>
+		<!-- 确认告警 -->
+		<action name="updateAlert" class="com.hp.idc.network.view.NetworkAlertShowAction" 
+		method="update">
+			<result name="success" type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+</package>
+</struts>

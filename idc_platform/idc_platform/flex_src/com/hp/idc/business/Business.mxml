@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="400"
+			   creationComplete="init();" xmlns:components="com.hp.idc.components.*"
+			   >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject  id="productService" destination="productService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+		<mx:RemoteObject  id="productCatalogService" destination="productCatalogService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+		<mx:RemoteObject  id="serviceService" destination="serviceService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+		<fx:XMLList id="treeData">
+			<node label="业务管理">
+				<node label="产品目录" data='0' />
+				<node label="基础产品" data='1' />
+				<node label="基础服务" data='2' />
+			</node>	
+		</fx:XMLList>
+		
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.controls.DataGrid;
+			import mx.events.CloseEvent;
+			import mx.events.ListEvent;
+			import mx.events.TreeEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.NavigatorContent;
+			import spark.components.TitleWindow;
+			
+			[Bindable]
+			public var type:String;
+			
+			[Bindable]
+			private var grid:DataGrid;
+			
+			private function resultHander(event:ResultEvent):void {
+				Alert.show("删除成功","信息")	;
+				
+				myTree.dispatchEvent(new ListEvent("change"));
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.toString(),"错误");
+			}
+			
+			private function init():void {
+				TreeExpandAll(true);
+				
+				myTree.selectedIndex = 1;
+				myTree.dispatchEvent(new ListEvent("change"));
+			}
+			
+			public function treeChanged(event:Event):void {
+				var selectedNode:XML=Tree(event.target).selectedItem as XML;
+				type = selectedNode.@data;
+				try{
+					myView.removeElementAt(0);
+				}catch(e:Error){
+				}
+				myView.title = selectedNode.@label;
+				if(type == "0"){
+					var el1:BusinessProductCatalog = new BusinessProductCatalog();
+					myView.addElementAt(el1,0);
+				} else if(type == "1") {
+					var el2:BusinessProduct = new BusinessProduct();
+					myView.addElementAt(el2,0);
+				} else if(type == "2") {
+					var el3:BusinessService = new BusinessService();
+					myView.addElementAt(el3,0);
+				}
+			}
+			
+			private function check(sel:Object):Boolean {
+				if(sel == null){
+					Alert.show("请通过左键选择一行","提示");
+					return false;
+				}
+				return true;
+			}
+			
+			private function update(flag:int):void {
+				if(type == "0"){
+					updateCatalog(flag);
+				} else if(type == "1"){
+					updateProduct(flag);
+				} else if(type == "2"){
+					updateService(flag);
+				}
+			}						
+			
+			private function updateCatalog(flag:int):void {
+				if(flag == 1){
+					var aForm:BusinessProductCatalogForm = BusinessProductCatalogForm(PopUpManager.createPopUp(this, BusinessProductCatalogForm, true));
+					PopUpManager.centerPopUp(aForm);
+					aForm.show("新增产品目录",-1,"",0,"");
+				}
+				else {
+					var sel:Object = (myView.getElementAt(0) as BusinessProductCatalog).productCatalogGrid.selectedItem;
+					if(!check(sel))
+						return;
+					if(flag == 2){
+						var mForm:BusinessProductCatalogForm = BusinessProductCatalogForm(PopUpManager.createPopUp(this, BusinessProductCatalogForm, true));
+						PopUpManager.centerPopUp(mForm);
+						mForm.show("编辑产品目录",sel.id,sel.name,sel.status,sel.description);
+					} else {
+						Alert.show("确认删除产品目录?","删除确认",Alert.OK|Alert.CANCEL,null,function(event:CloseEvent):void{
+							if(event.detail == Alert.OK){
+								productCatalogService.removeProductCatalog(int(sel.id));
+							}
+						})		
+					}
+				}
+			}
+			
+			private function updateProduct(flag:int):void {
+				if(flag == 1){
+					var aForm:BusinessProductForm = BusinessProductForm(PopUpManager.createPopUp(this, BusinessProductForm, true));
+					PopUpManager.centerPopUp(aForm);
+					aForm.show("新增基础产品",-1,"","","");
+				}
+				else {
+					var sel:Object = (myView.getElementAt(0) as BusinessProduct).productGrid.selectedItem;
+					if(!check(sel))
+						return;
+					if(flag == 2){
+						var mForm:BusinessProductForm = BusinessProductForm(PopUpManager.createPopUp(this, BusinessProductForm, true));
+						PopUpManager.centerPopUp(mForm);
+						mForm.show("编辑基础产品",sel.id,sel.name,sel.subParam,sel.desc);
+					} else {
+						Alert.show("确认删除产品目录?","删除确认",Alert.OK|Alert.CANCEL,null,function(event:CloseEvent):void{
+							if(event.detail == Alert.OK){
+								productService.removeProduct(int(sel.id));
+							}
+						})		
+					}
+				}
+			}
+			
+			private function updateService(flag:int):void {
+				if(flag == 1){
+					var aForm:BusinessServiceForm = BusinessServiceForm(PopUpManager.createPopUp(this, BusinessServiceForm, true));
+					PopUpManager.centerPopUp(aForm);
+					aForm.show("新增基础服务",-1,"",0,"");
+				}
+				else {
+					var sel:Object = (myView.getElementAt(0) as BusinessService).serviceGrid.selectedItem;
+					if(!check(sel))
+						return;
+					if(flag == 2){
+						var mForm:BusinessServiceForm = BusinessServiceForm(PopUpManager.createPopUp(this, BusinessServiceForm, true));
+						PopUpManager.centerPopUp(mForm);
+						mForm.show("编辑基础服务",sel.id,sel.name,sel.type,sel.description);
+					} else {
+						Alert.show("确认删除基础服务?","删除确认",Alert.OK|Alert.CANCEL,null,function(event:CloseEvent):void{
+							if(event.detail == Alert.OK){
+								serviceService.removeService(int(sel.id));
+							}
+						})		
+					}
+				}
+			}
+			
+			public function TreeExpandAll(expand:Boolean):void
+			{
+				for each(var item:Object in myTree.dataProvider)
+				myTree.expandChildrenOf(item, expand);
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<mx:HDividedBox width="100%" height="100%" backgroundColor="#F6F6F6">
+		<mx:Tree id="myTree" width="180" height="100%" labelField="@label" paddingLeft="10" 
+				 borderVisible="true" showRoot="true" dataProvider="{treeData}" change="treeChanged(event)" />
+		<s:VGroup width="100%" height="100%">
+			<s:Panel id="myView" width="100%" height="100%" skinClass="com.hp.idc.business.skins.CustomPanelSkin" >
+				<s:layout>
+					<s:VerticalLayout paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5" />
+				</s:layout>
+				<s:controlBarContent>
+					<fx:Array>
+						<s:Button label="新增" click="update(1)" />
+						<s:Button label="编辑" click="update(2)" />
+						<s:Button label="删除" click="update(3)" />
+					</fx:Array>
+				</s:controlBarContent>
+			</s:Panel>
+			
+		</s:VGroup>	
+	</mx:HDividedBox>
+	
+</s:Application>
+

@@ -1,0 +1,40 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"> 
+<beans> 
+        <bean id="defaultHandlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/> 
+
+        <bean name="/ModelService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="modelService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IModelService"/> 
+        </bean> 
+        <bean name="/ModelUpdateService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="modelUpdateService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IModelUpdateService"/> 
+        </bean> 
+
+        <bean name="/AttributeService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="attributeService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IAttributeService"/> 
+        </bean> 
+        <bean name="/AttributeUpdateService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="attributeUpdateService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IAttributeUpdateService"/> 
+        </bean> 
+
+        <bean name="/RelationService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="relationService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IRelationService"/> 
+        </bean> 
+        <bean name="/RelationUpdateService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="relationUpdateService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IRelationUpdateService"/> 
+        </bean> 
+
+        <bean name="/ResourceService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="resourceService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IResourceService"/> 
+        </bean> 
+        <bean name="/ResourceUpdateService" class="org.springframework.remoting.caucho.HessianServiceExporter"> 
+                <property name="service" ref="resourceUpdateService"/> 
+                <property name="serviceInterface" value="com.hp.idc.resm.service.IResourceUpdateService"/> 
+        </bean> 
+</beans>

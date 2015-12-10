@@ -1,0 +1,21 @@
+<div>
+	#set($dmgr = $contextUtil.getBean("documentMgr"))
+	#set($documentList =  $dmgr.getBeanByUserId($userId))
+	<table width="$node.getWidth()" height="$node.getHeight()">
+		#foreach($document in $documentList)
+			#if($velocityCount>6) 
+				#break
+			#end
+			#if($velocityCount%2==0) 
+				#set($bgcolor = '#e7ebe6')
+			#else 
+				#set($bgcolor = '#FFFFFF')
+			#end
+		<tr bgcolor="$bgcolor">
+			<td width="150" style="text-align: center;"><a href="#">$document.getFiletype()</a></td>
+			<td width="215"><a href="#" title="$document.getName()">$document.getName()</a></td>
+			<td width="113">$sdf.format($document.getCreateTime())</td>
+		</tr>
+		#end
+	</table>
+</div>

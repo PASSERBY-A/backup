@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+		creationComplete="init();"
+		>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:RemoteObject  id="productService" destination="productService"
+						  result="resultHander(event)" fault="defaultFaultHandler(event)" >
+		</mx:RemoteObject>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			private var productList:ArrayCollection;
+			
+			public function init():void {
+				productService.queryResultList(new Object());
+			}
+			
+			private function resultHander(event:ResultEvent):void {
+				
+				productList = ArrayCollection(event.result);
+			}
+			
+			private function defaultFaultHandler(event:FaultEvent):void
+			{
+				Alert.show(event.toString(),"错误");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<mx:DataGrid id="productGrid" width="100%" height="100%" dataProvider="{productList}" horizontalScrollPolicy="auto"				 
+				 editable="false" >
+		<mx:columns>
+			<mx:DataGridColumn headerText="编号" dataField="id" width="70" editable="false" />
+			<mx:DataGridColumn headerText="名称" dataField="name" width="100" editable="false"/>
+			<mx:DataGridColumn headerText="定购参数" dataField="subParam" width="90" editable="false" />
+			<mx:DataGridColumn headerText="组织代码" dataField="orgId" width="90" editable="false" />
+			<mx:DataGridColumn headerText="创建日期" dataField="createDate" width="140" editable="false" />
+			<mx:DataGridColumn headerText="受理编号" dataField="doneCode" width="90" editable="false" />
+			<mx:DataGridColumn headerText="受理日期" dataField="doneDate" width="140" editable="false" />
+			<mx:DataGridColumn headerText="关联服务" width="200" editable="false">
+			</mx:DataGridColumn>
+		</mx:columns>
+	</mx:DataGrid>
+	
+</s:NavigatorContent>

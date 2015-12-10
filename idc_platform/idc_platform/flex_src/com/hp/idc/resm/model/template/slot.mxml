@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:components="com.hp.idc.components.*"
+		 creationComplete="group1_creationCompleteHandler(event)"
+		 width="100%" height="100%">
+
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:RemoteObject id="resourceService" destination="resourceService">
+			<s:method name="getSlotDetail" result="resultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)" />
+			<s:method name="getResourceById" result="resultHandler1(event)" fault="FaultHandler.defaultFaultHandler(event)" />
+		</s:RemoteObject>
+		<fx:XML id="slotDetail">			
+		</fx:XML>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.model.RackDetail;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.ui.FaultHandler;
+			import com.hp.idc.util.UiUtil;
+			import com.hp.idc.util.UserTool;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var resourceObject:ResourceObject;
+			
+			private function resultHandler(event:ResultEvent):void {
+				slotDetail = XML(event.result);
+			}
+			
+			protected function rackListData_doubleClickHandler(event:MouseEvent):void
+			{
+				var sel:Object = rackListData.selectedItem;
+				resourceService.getResourceById(int(sel.id));
+			}
+			
+			private function resultHandler1(event:ResultEvent):void {
+				var res:ResourceObject = event.result as ResourceObject;
+				UiUtil.changUiObject("baseinfo1", res);
+			}
+
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				resourceService.getSlotDetail(resourceObject.id, UserTool.userId);
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%" paddingLeft="20">
+		<s:Label text="所属机架:" fontWeight="bold" fontSize="14"/>
+		<mx:DataGrid rowCount="1" dataProvider="{slotDetail.children()}" id="rackListData" doubleClick="rackListData_doubleClickHandler(event)" doubleClickEnabled="true">
+			<mx:columns>
+				<mx:DataGridColumn dataField="name" headerText="名称" width="100"/>
+				<mx:DataGridColumn dataField="status" headerText="状态" width="80"/>
+				<mx:DataGridColumn dataField="address" headerText="位置" width="150" />
+				<mx:DataGridColumn dataField="total" headerText="机位总数" width="75" />
+				<mx:DataGridColumn dataField="valiable" headerText="可用机位数" width="75" />
+				<mx:DataGridColumn dataField="detail" headerText="详细" width="250" />
+				<mx:DataGridColumn dataField="view" headerText="分布图" width="60">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:LinkButton label="查看" click="linkbutton1_clickHandler(data)" toolTip="显示详细" >
+								<fx:Script>
+									<![CDATA[
+										import com.hp.idc.resm.model.RackDetail;
+										
+										import mx.managers.PopUpManager;
+										protected function linkbutton1_clickHandler(data:Object):void
+										{
+											//var record:Object = outerDocument.rackListData.selectedItem;
+											var obj:RackDetail = RackDetail(PopUpManager.createPopUp(outerDocument.parent.parent, RackDetail, true));
+											obj.rackId = int(data.id);
+											obj.title = data.name+" 分布图";
+											PopUpManager.centerPopUp(obj);
+										}
+									]]>
+								</fx:Script>
+							</mx:LinkButton>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+			</mx:columns>
+		</mx:DataGrid>
+	</s:VGroup>
+</s:Group>

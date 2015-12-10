@@ -1,0 +1,13 @@
+#set ($c1 = 0)
+#set ($c2 = 0)
+#foreach ($foo in $r)
+	#if ($foo.getAttributeValue("last_update_by") == "1")
+		#set ($c1 = $c1 + 1)
+	#else
+		#set ($c2 = $c2 + 1)
+	#end
+	
+#end 
+
+$c1<br>
+$c2<br>

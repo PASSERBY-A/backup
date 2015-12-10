@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd" >
+<struts>
+	<package name="customer" extends="default" namespace="/customer">
+		<action name="toCustomerManage" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="toCustomerManage">
+			<result name="success">/customer/jsp/index.jsp</result>
+		</action>
+		<action name="queryCustomerInfo" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="queryCustomerInfo">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		
+		<action name="detailCustomer" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="detailCustomer">
+			<result name="success">/customer/jsp/customerDetail.jsp</result>
+		</action>
+		<action name="queryContact" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="queryContact">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="queryAccount" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="queryAccount">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="queryServant" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="queryServant">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="queryService" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="queryService">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="queryBussiness" class="com.hp.idc.customer.view.CustomerManageAction"
+			method="queryBussiness">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+	</package>
+</struts>

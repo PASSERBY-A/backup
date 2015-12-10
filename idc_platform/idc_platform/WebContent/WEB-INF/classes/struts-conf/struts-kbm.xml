@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd" >
+<struts>
+	<package name="kbm" extends="default" namespace="/kbm">
+		<action name="toKnowledgeManage" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="toKnowledgeManage">
+			<result name="success">/kbm/knowledgeManage.jsp</result>
+		</action>
+		<action name="queryKnowledge" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="queryKnowledge">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="loadCateTree" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="loadCateTree">
+			<result type="json">
+				<param name="root">jsonArray</param>
+			</result>
+		</action>
+		<action name="saveCategory" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="saveCategory">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="deleteCategory" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="deleteCategory">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="saveKnowledge" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="saveKnowledge">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="loadKnowledge" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="loadKnowledge">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+		<action name="deleteKnowledge" class="com.hp.idc.kbm.view.KnowledgeAction"
+			method="deleteKnowledge">
+			<result type="json">
+				<param name="root">jsonObject</param>
+			</result>
+		</action>
+	</package>
+</struts>

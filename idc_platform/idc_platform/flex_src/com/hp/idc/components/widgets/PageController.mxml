@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx" verticalAlign="middle" gap="5" width="100%"
+		  creationComplete="init(event)" enabled="false" >
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.HtRemoteObject;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.resm.event.PageEvent;
+			import com.hp.idc.resm.ui.PageInfo;
+			import com.hp.idc.resm.ui.PageQueryInfo;
+			
+			import mx.collections.IList;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			import spark.components.DataGrid;
+			import spark.events.GridSortEvent;
+			
+			
+			/**
+			 * 要分页的datagrid
+			 */
+			private var _targetDataGrid:DataGrid;
+			
+			
+			/**
+			 * 是否支持后台分页
+			 */
+			private var _sortOnServer:Boolean = false;
+			
+			/**
+			 * 每页条数
+			 */
+			private var _pageSize:int = 15;
+			
+			/**
+			 * 取分页信息
+			 */
+			private var _pageInfo:PageInfo;
+			
+			private var _query:PageQueryInfo;
+			
+			
+			[Bindable]
+			private var totalPage:Number = 1;
+			
+			[Bindable]
+			private var from:Number = 1;
+			
+			[Bindable]
+			private var to:Number = 1;
+			
+			[Bindable]
+			private var totalRecord:Number = 1;
+			
+			private var _orderInfo:Object;
+			
+			
+			public function set pageInfo(pageinfo:PageInfo):void{
+				this._pageInfo = pageinfo;
+				if(!isEnable()){
+					return;
+				}
+				
+				_targetDataGrid.dataProvider = pageinfo.data;
+				
+//				if(_targetDataGrid.dataProvider==null){
+//					_targetDataGrid.dataProvider = pageinfo.data;
+//				}else{
+//					_targetDataGrid.dataProvider.removeAll();
+//						
+//					for(var i:int=0;i<pageinfo.data.length;i++){
+//						_targetDataGrid.dataProvider.addItem(pageinfo.data.getItemAt(i));
+//					}
+//				}
+				
+				
+				this.dispatchEvent(new PageEvent(PageEvent.STATECHANGE));
+			}
+			
+			public function setFieldOrder(field:String,order:String="asc"):Boolean{
+				if(_orderInfo!=null){
+					if(_orderInfo[field]!=null){
+						var o:Object = new Object();
+						o[field] = _orderInfo[field];
+						_orderInfo = o;
+					}else{
+						_orderInfo = new Object();
+					}
+				}else{
+					_orderInfo = new Object();
+				}
+				
+				if(_orderInfo[field]==order){
+					return false;
+				}else{
+					_orderInfo[field] = order;
+					return true;
+				}
+			}
+			
+			public function get order():Object{
+				return _orderInfo;
+			}
+			
+			
+			public function set target(grid:DataGrid):void{
+				this._targetDataGrid = grid;
+			}
+			
+			public function set sortOnServer(sort:Boolean):void{
+				this._sortOnServer = sort;
+			}
+			
+			public function set pageSize(size:int):void{
+				this._pageSize = size;
+			}
+			
+			public function set pageQueryInfo(queryInfo:PageQueryInfo):void{
+				this._query = queryInfo;
+			}
+			
+			public function get pageQueryInfo():PageQueryInfo{
+				return _query;
+			}
+			
+			protected function init(event:FlexEvent):void
+			{
+				initSortInfo();
+				initStateChangeEvent();
+				if(_query == null){
+					_query = new PageQueryInfo();
+					_query.pageCount = this._pageSize;
+					_query.sortBy = "";
+				}
+			}
+			
+			/**
+			 * 设置分页排序，默认为前台分页
+			 * 监听Grid，如果点击了数据列，则切换不同的排序列，暂时只支持单个列排序
+			 */
+			private function initSortInfo():void{
+				if(_sortOnServer){
+					_targetDataGrid.addEventListener(GridSortEvent.SORT_CHANGING,changeOrder);
+				}
+			}
+			
+			/**
+			 * 分页组件状态改变事件
+			 */
+			private function initStateChangeEvent():void{
+				this.addEventListener(PageEvent.STATECHANGE,stateChangeHandel);
+			}
+
+			/**
+			 * 刷新按钮事件
+			 */
+			private function stateChangeHandel(event:PageEvent):void{
+				if(!isEnable()){
+					return;
+				}
+				
+				totalPage = _pageInfo.totalPage;
+				from = _pageInfo.index;
+				to = _pageInfo.index + _pageInfo.data.length - 1;
+				totalRecord = _pageInfo.totalCount;
+				gotarget.text = new String(_pageInfo.currentPage);
+				
+				
+				//上一页，如果当前页面大于1，则可以点击，并添加或移除监听事件
+				if(_pageInfo.currentPage>1){
+					goback.enabled = true;
+					gofirst.enabled = true;
+				}else{
+					goback.enabled = false;
+					gofirst.enabled = false;
+				}
+				//下一页，如果当前页面小于最大页面，则可以点击，并添加或移除监听事件
+				if(_pageInfo.currentPage<_pageInfo.totalPage){
+					gonext.enabled = true;
+					golast.enabled = true;
+				}else{
+					gonext.enabled = false;
+					golast.enabled = false;
+				}
+			}
+			
+			
+			/**
+			 * 服务端排序，向后台传递排序字段，并且返回当前页面的排序结果
+			 */
+			private function changeOrder(event:GridSortEvent):void{
+				if(!isEnable()){
+					return;
+				}
+				
+				var orderAble:Boolean = false;
+				
+				if(event.newSortFields[0].descending as Boolean){
+					orderAble = setFieldOrder(event.newSortFields[0].name,"desc");
+				}else{
+					orderAble = setFieldOrder(event.newSortFields[0].name,"asc");
+				}
+				
+				if(!orderAble){
+					return;
+				}
+				
+				var query:PageQueryInfo = new PageQueryInfo();
+				query.pageCount = this._pageSize;
+				//判断如果有排序参数，则添加，例如，需要对name排序，如果传递name则表示按此列升序，如果传递-name则表示按此列降序
+				if(order!=null){
+					//循环查找类型变量
+					var paramsInfo:Object = ObjectUtil.getClassInfo(order); 
+					var fieldNames:Array = paramsInfo["properties"] as Array; 
+					for each(var q:QName in fieldNames){
+						if(order[q.localName]=="asc"){
+							query.sortBy = q.localName;
+						}else{
+							query.sortBy = "-"+q.localName;
+						}
+					}
+				}else{
+					query.sortBy = _query.sortBy;
+				}
+				query.startPage = 1;
+				var pevent:PageEvent = new PageEvent(PageEvent.PAGECHANGE,query,null,true);
+				dispatchEvent(pevent);
+			}
+
+			/**
+			 * 分页数据触发事件，根据点击的按钮触发不同的分页参数，并向上级广播事件，
+			 * 上级容器需要监听事件并发送服务端查询数据的请求，
+			 * 成功返回数据后，需要发送，分页状态改变时间，通知分页组件更改状态
+			 */
+			protected function pageInfoChange(event:MouseEvent):void{
+				if(!isEnable()){
+					return;
+				}
+				var query:PageQueryInfo = new PageQueryInfo();
+				query.pageCount = this._pageSize;
+				//判断如果有排序参数，则添加，例如，需要对name排序，如果传递name则表示按此列升序，如果传递-name则表示按此列降序
+				if(order!=null){
+					//循环查找类型变量
+					var paramsInfo:Object = ObjectUtil.getClassInfo(order); 
+					var fieldNames:Array = paramsInfo["properties"] as Array; 
+					for each(var q:QName in fieldNames){
+						if(order[q.localName]=="asc"){
+							query.sortBy = q.localName;
+						}else{
+							query.sortBy = "-"+q.localName;
+						}
+					}
+				}else{
+					query.sortBy = _query.sortBy;
+				}
+				
+				if(event.target.id=="gofirst"){//第一页
+					query.startPage = 1;
+				}else if(event.target.id=="goback"){//上一页
+					query.startPage = this._pageInfo.currentPage-1;
+				}else if(event.target.id=="gonext"){//下一页
+					query.startPage = this._pageInfo.currentPage+1;
+				}else if(event.target.id=="golast"){//自后一页
+					query.startPage = this._pageInfo.totalPage;
+				}else if(event.target.id=="refresh"){//刷新当前页
+					query.startPage = this._pageInfo.currentPage;
+				}else{
+					return;
+				}
+				
+				var pevent:PageEvent = new PageEvent(PageEvent.PAGECHANGE,query,null,true);
+				dispatchEvent(pevent);
+			}
+
+
+			/**
+			 * 目标页面回车事件，键入回车后判断输入合法性，跳转到目标页面
+			 */
+			protected function textinput1_enterHandler(event:FlexEvent):void
+			{
+				if(!isEnable()){
+					return;
+				}
+				var query:PageQueryInfo = new PageQueryInfo();
+				query.pageCount = this._pageSize;
+				//判断如果有排序参数，则添加，例如，需要对name排序，如果传递name则表示按此列升序，如果传递-name则表示按此列降序
+				if(order!=null){
+					//循环查找类型变量
+					var paramsInfo:Object = ObjectUtil.getClassInfo(order); 
+					var fieldNames:Array = paramsInfo["properties"] as Array; 
+					for each(var q:QName in fieldNames){
+						if(order[q.localName]=="asc"){
+							query.sortBy = q.localName;
+						}else{
+							query.sortBy = "-"+q.localName;
+						}
+					}
+				}else{
+					query.sortBy = _query.sortBy;
+				}
+				
+				var targetPage:int = parseInt(gotarget.text);
+				if(targetPage<1||targetPage>_pageInfo.totalPage){
+					PetAlert.show("目标页不存在！！！","提示");
+					gotarget.text =  new String(_pageInfo.currentPage);
+					return;
+				}
+				query.startPage = targetPage;
+				
+				var pevent:PageEvent = new PageEvent(PageEvent.PAGECHANGE,query,null,true);
+				dispatchEvent(pevent);
+			}
+			
+			private function isEnable():Boolean{
+				if(!_pageInfo||_pageInfo.data==null){
+					//PetAlert.show("未找到相关的分页信息！！！","信息错误",4,null,null,PetAlert.ICON_ERROR);
+					this.enabled = false;
+					return false;
+				}else{
+					this.enabled = true;
+					return true
+				}
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:Group width="100%" height="100%"><!-- 控制背景 -->
+		<!-- 填充色 -->
+		<s:Rect left="0" right="0" top="0" bottom="0" radiusX="0" >
+			<s:fill>
+				<s:LinearGradient>
+					<s:GradientEntry 
+						color="0xD4E1F2" 
+						alpha="1" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		<s:Rect width="1" height="100%" left="0">
+			<s:fill>
+				<s:SolidColor color="0xB5B8C8" />
+			</s:fill>
+		</s:Rect>
+		<s:Rect width="1" height="100%" right="0">
+			<s:fill>
+				<s:SolidColor color="0xB5B8C8" />
+			</s:fill>
+		</s:Rect>
+		<s:Rect width="100%" height="1" bottom="0">
+			<s:fill>
+				<s:SolidColor color="0xB5B8C8" />
+			</s:fill>
+		</s:Rect>
+		
+		<s:HGroup verticalAlign="middle" width="100%" height="30" paddingLeft="10" paddingRight="10">
+			<s:Button id="gofirst" icon="images/page-first.gif" width="32" toolTip="第一页" skinClass="com.hp.idc.skins.LinkButtonSkin" useHandCursor="true" buttonMode="true" enabled="false" click="pageInfoChange(event)"/>
+			<s:Button id="goback" icon="images/page-prev.gif" width="32" toolTip="上一页" skinClass="com.hp.idc.skins.LinkButtonSkin" useHandCursor="true" buttonMode="true" enabled="false"  click="pageInfoChange(event)"/>
+			<s:Label text="第"/>
+			<s:TextInput width="32" id="gotarget" enter="textinput1_enterHandler(event)"/>
+			<s:Label text="页 共{totalPage}页"/>
+			<s:Button id="gonext" width="32" icon="images/page-next.gif" toolTip="下一页" skinClass="com.hp.idc.skins.LinkButtonSkin" useHandCursor="true" buttonMode="true" enabled="false" click="pageInfoChange(event)"/>
+			<s:Button id="golast" width="32" icon="images/page-last.gif" toolTip="最后一页" skinClass="com.hp.idc.skins.LinkButtonSkin"  useHandCursor="true" buttonMode="true" enabled="false" click="pageInfoChange(event)"/>
+			<s:Button id="refresh" width="32" icon="images/page-refresh.gif" toolTip="刷新" skinClass="com.hp.idc.skins.LinkButtonSkin" useHandCursor="true" buttonMode="true" enabled="true" click="pageInfoChange(event)"/>
+			<s:Spacer width="100%"/>
+			<s:Label id="totalNum" text="第 {from} - {to} 条，共 {totalRecord} 条记录"/>
+		</s:HGroup>
+	</s:Group>
+</s:HGroup>

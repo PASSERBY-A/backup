@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:components="com.hp.idc.components.*"
+					xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%"
+				 	show="navigatorcontent1_showHandler(event)"
+					creationComplete="init(event)" 
+					xmlns:widgets="com.hp.idc.components.widgets.*">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<s:VerticalLayout id="vlayout1" gap="3" paddingLeft="2" paddingRight="2" paddingTop="5" />
+		<s:VerticalLayout id="vlayout2" gap="3" paddingLeft="2" paddingRight="3" paddingTop="5" />
+		
+		<mx:RemoteObject  id="srv" destination="modelService">
+			<mx:method  name="getModelTree" result="resultHandler(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+	</fx:Declarations>
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace components "com.hp.idc.components.*";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace widgets "com.hp.idc.components.widgets.*";
+		.delRes{
+			line-through:true;
+		}
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.event.PageEvent;
+			import com.hp.idc.resm.model.AttributeDefine;
+			import com.hp.idc.resm.model.Model;
+			import com.hp.idc.resm.resource.AttributeBase;
+			import com.hp.idc.resm.resource.ResourceObject;
+			import com.hp.idc.resm.ui.PageInfo;
+			import com.hp.idc.resm.ui.PageQueryInfo;
+			import com.hp.idc.ui.FaultHandler;
+			import com.hp.idc.util.UiUtil;
+			import com.hp.idc.util.UserTool;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.rpc.AbstractOperation;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.GridSortEvent;
+			
+			private var keyword:String = null;
+			public var modelId:String = null;
+			
+			[Bindable]
+			public var query:PageQueryInfo = new PageQueryInfo();
+			
+			private function resultHandler(event:ResultEvent):void
+			{
+				var returnString :String = event.result as String;	
+				var treeDate : XML = new XML(returnString);   
+				
+				modelType.dataProvider = TreeItem.createDataProviderFromXML(treeDate);   
+			}
+			
+			protected function addResourceObject_clickHandler(event:MouseEvent):void
+			{
+				var params:ArrayCollection = new ArrayCollection();
+				params.addItem(false);
+				UiUtil.changUiParam("resourceObjectUpdate",params);
+			}
+			
+			
+			protected function imagelink1_clickHandler(event:MouseEvent):void
+			{
+				UiUtil.closeCurrent();
+			}
+			
+			protected function init(event:Event):void
+			{
+				srv.getModelTree();
+				//监听分页改变信息
+				this.addEventListener(PageEvent.PAGECHANGE,getPageInfo);
+				keyinput.addEventListener(FlexEvent.ENTER,keyInputEnter);
+
+				query.sortBy = "name";
+				query.pageCount = 15;
+			}
+			
+			private function getPageInfo(event:PageEvent):void{
+				query = event.pageQueryInfo;
+				var remoteService:HtRemoteObject = new HtRemoteObject("resourceService",null,false,true);
+				remoteService.onFault = FaultHandler.defaultFaultHandler;
+				remoteService.onResult = getPageInfoHandler;
+				remoteService.call("listResource",modelId,true,keyword,query,UserTool.userId);
+				
+			}
+
+			private function getPageInfoHandler(event:ResultEvent):void{
+				var pageinfo:PageInfo = event.result as PageInfo;
+				pagecontroller.pageInfo = pageinfo;
+			}
+			
+			/**
+			 * 搜索资源，按资源类型和关键字
+			 */
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				if(modelType.selectedItem==null){
+					PetAlert.show("请先选择模型类型！！！","提示信息",4,null,null,PetAlert.ICON_INFO);
+					return;
+				}
+				keyword = keyinput.text;
+				modelId = modelType.selectedItem.id;
+				
+				var remoteService:HtRemoteObject = new HtRemoteObject("modelService",null,false,true);
+				remoteService.onFault = FaultHandler.defaultFaultHandler;
+				remoteService.onResult = getHeaderHandler;
+				remoteService.call("getModelById",modelId);
+				
+			}
+			
+			protected function keyInputEnter(event:FlexEvent):void
+			{
+				if(modelType.selectedItem==null){
+					PetAlert.show("请先选择模型类型！！！","提示信息",4,null,null,PetAlert.ICON_INFO);
+					return;
+				}
+				keyword = keyinput.text;
+				modelId = modelType.selectedItem.id;
+				
+				var remoteService:HtRemoteObject = new HtRemoteObject("modelService",null,false,true);
+				remoteService.onFault = FaultHandler.defaultFaultHandler;
+				remoteService.onResult = getHeaderHandler;
+				remoteService.call("getModelById",modelId);
+			}
+			
+			//根据选择资源对象类型动态创建显示列，并获取第一页信息
+			private function getHeaderHandler(event:ResultEvent):void{
+				var headers:ArrayCollection = (event.result as Model).header;
+				
+				var cols:ArrayCollection = new ArrayCollection();
+				for(var i:int=0;headers!=null&&i<headers.length;i++){
+					var attributeDefine:AttributeDefine = headers.getItemAt(i) as AttributeDefine;
+					var gridColumn:GridColumn = new GridColumn();
+					gridColumn.headerText = attributeDefine.name;
+					gridColumn.dataField = attributeDefine.id;
+					gridColumn.labelFunction = ResourceObject.getLabelFunction(attributeDefine.id);
+					gridColumn.sortCompareFunction=function(obj1:Object, obj2:Object , col:GridColumn):int{
+						var data1:String,data2:String;
+						data1=col.labelFunction(obj1,col);
+						data2=col.labelFunction(obj2,col);
+						var regExp:RegExp=/^[\d\.]*$/;
+						if(regExp.test(data1)&&regExp.test(data2)) {
+							return ObjectUtil.numericCompare(Number(data1),Number(data2));
+						}else {
+							return ObjectUtil.stringCompare(data1,data2);
+						}
+						return 0;
+					}
+						
+					gridColumn.sortable = true;
+					if(attributeDefine.id == "id"){
+						
+					}
+					
+					cols.addItem(gridColumn);
+				}
+				resources.columns = cols;
+								
+				var pevent:PageEvent = new PageEvent(PageEvent.PAGECHANGE,query,null,true);
+				dispatchEvent(pevent);
+			}
+			
+			/**
+			 * 点击显示资源大致信息
+			 */
+			protected function resources_clickHandler(event:MouseEvent):void
+			{
+				var selectItem:ResourceObject = resources.selectedItem as ResourceObject;
+				if(selectItem==null){
+					return;
+				}
+				summary.text = selectItem.simpleDescription;
+				if(!selectItem.enabled){
+					summary.styleName = "delRes";
+				} else {
+					summary.styleName = "";
+				}
+			}
+
+
+			protected function viewResource_clickHandler(event:MouseEvent):void
+			{
+				var selectItem:ResourceObject = resources.selectedItem as ResourceObject;
+				if(selectItem==null){
+					PetAlert.show("未选择任何资源对象！","提示信息", 4, null, null, PetAlert.ICON_INFO);
+					return;
+				}
+				if(!selectItem.enabled){
+					PetAlert.show("此资源已被删除！","提示信息", 4, null, null, PetAlert.ICON_INFO);
+					return;
+				}
+				UiUtil.changUiObject("baseinfo", selectItem);
+			}
+
+			protected function updateResource_clickHandler(event:MouseEvent):void
+			{
+				var selectItem:ResourceObject = resources.selectedItem as ResourceObject;
+				if(selectItem==null){
+					PetAlert.show("未选择任何资源对象！","提示信息", 4, null, null, PetAlert.ICON_INFO);
+					return;
+				}
+				if(!selectItem.enabled){
+					var flag:Boolean = false;
+					PetAlert.show("此资源已被删除, 确定恢复此资源吗?","提示信息",Alert.OK|Alert.CANCEL,null,function(event:CloseEvent):void{
+						if(event.detail == Alert.OK){							
+							var params:ArrayCollection = new ArrayCollection();
+							params.addItem(true);
+							params.addItem(selectItem.id);
+							UiUtil.changUiParam("resourceObjectView",params);
+						}
+					}, PetAlert.ICON_WARNING);
+				} else {
+					var params:ArrayCollection = new ArrayCollection();
+					params.addItem(true);
+					params.addItem(selectItem.id);
+					UiUtil.changUiParam("resourceObjectView",params);
+				}
+			}
+			
+			protected function deleteResource_clickHandler(event:MouseEvent):void
+			{
+				var selectItem:ResourceObject = resources.selectedItem as ResourceObject;
+				if(selectItem==null){
+					PetAlert.show("未选择任何资源对象！","提示信息", 4, null, null, PetAlert.ICON_INFO);
+					return;
+				}
+				if(!selectItem.enabled){
+					PetAlert.show("彻底删除此资源对象?","提示",Alert.OK|Alert.CANCEL,null,function(event:CloseEvent):void{
+						if(event.detail == Alert.OK){
+							var remoteService:HtRemoteObject = new HtRemoteObject("resourceUpdateService",null,false,true);
+							remoteService.onFault = FaultHandler.defaultFaultHandler;
+							remoteService.onResult = function():void{
+								PetAlert.show("资源对象删除成功！", "操作结果", 4, null, function():void{
+								var pevent:PageEvent = new PageEvent(PageEvent.PAGECHANGE,query,null,true);
+								dispatchEvent(pevent);
+							}, PetAlert.ICON_INFO);};
+							remoteService.call("deleteResource",selectItem.id,UserTool.userId);	
+						}
+					}, PetAlert.ICON_WARNING);
+				} else {
+					PetAlert.show("确认删除此资源对象?","提示",Alert.OK|Alert.CANCEL,null,function(event:CloseEvent):void{
+						if(event.detail == Alert.OK){
+							
+							var remoteService:HtRemoteObject = new HtRemoteObject("resourceUpdateService",null,false,true);
+							remoteService.onFault = FaultHandler.defaultFaultHandler;
+							remoteService.onResult = function():void{
+								PetAlert.show("资源对象删除成功！", "操作结果", 4, null, function():void{
+								var pevent:PageEvent = new PageEvent(PageEvent.PAGECHANGE,query,null,true);
+								dispatchEvent(pevent);
+							}, PetAlert.ICON_INFO);};
+							remoteService.call("deleteResource",selectItem.id,UserTool.userId);													
+						}
+					}, PetAlert.ICON_WARNING);
+				}
+			}
+
+			protected function navigatorcontent1_showHandler(event:FlexEvent):void
+			{
+				var pevent:PageEvent = new PageEvent(PageEvent.PAGECHANGE,query,null,true);
+				dispatchEvent(pevent);
+			}
+
+		]]>
+	</fx:Script>
+	<!-- 背景 -->
+	<s:Rect left="0" right="0" top="0" height="100" radiusX="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry 
+					color="0xD4EDE9" 
+					alpha="1" />
+				<s:GradientEntry 
+					color="0xFFFFFF" 
+					alpha="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" right="0" top="100" bottom="0" radiusX="0">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" />
+		</s:fill>
+	</s:Rect>
+	<s:Scroller width="100%" height="100%">
+		<s:HGroup height="100%" width="100%" gap="15" paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15">
+			<s:VGroup width="200" height="100%">
+				<components:RoundCornerPanel width="200" height="200" layout="{vlayout1}" id="links">
+					<mx:Spacer height="5" />
+					<s:HGroup>
+						<mx:Spacer width="15" />
+						<mx:Image source="@Embed(source='images/icon11.png')" />
+						<s:Label text="常用功能" fontSize="14" fontWeight="bold" />
+					</s:HGroup>
+					<mx:Spacer height="5" />
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="关闭当前页面" click="imagelink1_clickHandler(event)"/>					
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="查看资源详细信息" click="viewResource_clickHandler(event)"/>
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="修改资源对象" click="updateResource_clickHandler(event)"/>
+					<components:HSplitLine/>
+					<components:ImageLink leftSpaceWidth="10" image="@Embed(source='images/right.gif')" label="删除资源对象" click="deleteResource_clickHandler(event)"/>
+					<components:HSplitLine/>
+				</components:RoundCornerPanel>
+				
+				<components:RoundCornerPanel width="200" height="100%" layout="{vlayout2}">
+					<mx:Spacer height="5" />
+					<s:HGroup>
+						<mx:Spacer width="15" />
+						<mx:Image source="@Embed(source='images/icon11.png')" />
+						<s:Label text="资源对象信息" fontSize="14" fontWeight="bold" />
+					</s:HGroup>
+					<mx:Spacer height="5" />
+					<s:RichText id="summary" paddingLeft="15" width="180"/>
+				</components:RoundCornerPanel>
+				
+			</s:VGroup>
+			<s:VGroup height="100%" width="100%" paddingTop="10" paddingBottom="10">
+				<s:HGroup width="100%">
+					<mx:Spacer width="15" />
+					<mx:Image source="@Embed(source='images/icon11.png')" />
+					<s:Label text="资源查询" fontSize="14" fontWeight="bold"/>
+				</s:HGroup>
+				<mx:Spacer height="5" />
+				<s:HGroup width="100%" verticalAlign="middle" horizontalAlign="center" >
+					<s:FormItem label="关 键 字">
+						<s:TextInput width="300" id="keyinput"/>
+					</s:FormItem>
+					<s:FormItem label="资源类型">
+						<s:DropDownList width="300" itemRenderer="com.hp.idc.components.TreeItemRenderer" id="modelType"/>
+					</s:FormItem>
+					<s:Button label="搜索资源" click="button1_clickHandler(event)"/>
+				</s:HGroup>
+				<mx:Spacer height="10" />
+				<s:VGroup width="100%" height="100%" gap="0">
+					<s:DataGrid width="100%" height="100%" id="resources" click="resources_clickHandler(event)" sortableColumns="true" focusEnabled="false">
+						<s:columns>
+							<s:ArrayCollection>
+								<s:GridColumn headerText="ID" dataField="id"/>
+								<s:GridColumn headerText="名称" dataField="name"/>
+							</s:ArrayCollection>
+						</s:columns>
+					</s:DataGrid>
+					<widgets:PageController id="pagecontroller" target="{resources}" sortOnServer="true" pageSize="15" pageQueryInfo="{query}" />
+				</s:VGroup>
+			</s:VGroup>
+		</s:HGroup>
+	</s:Scroller>
+</s:NavigatorContent>

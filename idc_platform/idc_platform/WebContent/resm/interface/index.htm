@@ -1,0 +1,108 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk">
+<title>接口示例代码</title>
+	<link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all.css" />
+ 	<script type="text/javascript" src="/extjs/adapter/ext/ext-base.js"></script>
+  <script type="text/javascript" src="/extjs/ext-all.js"></script>
+  <script type="text/javascript" src="/extjs/ext-ext.js"></script>
+  <script type="text/javascript" src="/idc_platform/resm/interface/resm.js"></script>
+</head>
+<body>
+	
+<script>
+Ext.onReady(function(){
+
+    Ext.QuickTips.init();
+
+    // turn on validation errors beside the field globally
+    Ext.form.Field.prototype.msgTarget = 'side';
+
+    /*
+     * ================  Simple form  =======================
+     */
+
+    var simple = new Ext.FormPanel({
+        labelWidth: 75, // label settings here cascade unless overridden
+        url:'test.htm',
+        frame:true,
+        title: 'extjs 接口，示例代码',
+        bodyStyle:'padding:5px 5px 0',
+        width: 350,
+        defaults: {width: 230},
+        defaultType: 'textfield',
+
+        items: [{
+	      	xtype: 'combo',
+					tpl: '<tpl for="."><div ext:qtip="<b>{text}</b><br/>{remark}" class="x-combo-list-item">{text}</div></tpl>',
+					store: new Ext.data.JsonStore({
+						proxy: new Ext.data.HttpProxy({
+							url: 'code.jsp'
+						}),
+						baseParams: { id: '厂商' },
+						fields: ['text', 'remark']
+					}),
+					valueField: 'text',
+					displayField:'text',
+					forceSelection: true,
+					typeAhead: true,
+					mode: 'remote',
+					triggerAction: 'all',
+					emptyText:'请选择...',
+					selectOnFocus:true,
+					editable:true,
+					style: 'margin:0',
+					lazyInit: false,
+					anchor: '-20',
+					fieldLabel: '列表型选择：厂商'
+        },{
+        	xtype:'treebox',
+					viewLoader: new Ext.tree.FilterTreeLoader({
+							baseParams: { id: '所属系统' },
+							dataUrl:'code.jsp'
+						}),
+					anchor: '-20',
+					fieldLabel: '树型选择：所属系统'
+        },{
+        	xtype:'treebox',
+					viewLoader: new Ext.tree.FilterTreeLoader({
+							baseParams: {  },
+							dataUrl:'model.jsp'
+						}),
+					anchor: '-20',
+					fieldLabel: '树型选择：模型'
+        },{
+        	xtype:'personfield',
+					anchor: '-20',
+					hiddenName: 'aaa',
+					name: 'bbb',
+					fieldLabel: '选择人员'
+        },{
+        	xtype:'personfield',
+					anchor: '-20',
+					mutiModel: true,
+					hiddenName: 'aaa1',
+					name: 'bbb1',
+					fieldLabel: '选择多个人员'
+        },{
+        	xtype:'resourcefield',
+        	modelId:'host',
+					anchor: '-20',
+					hiddenName: 'a1',
+					name: 'b1',
+					fieldLabel: '选择资源'
+        }],
+
+        buttons: [{
+            text: 'Save'
+        },{
+            text: 'Cancel'
+        }]
+    });
+
+    simple.render(document.body);
+});
+</script>
+
+</body>
+</html>

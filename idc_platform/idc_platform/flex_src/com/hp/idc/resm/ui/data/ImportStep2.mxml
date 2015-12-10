@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="888" height="514" title="导入预览"
+			   >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			public function doCenter() :void 
+			{
+				PopUpManager.centerPopUp(this);
+			}
+
+			protected function importBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+
+			protected function cancelBtn_clickHandler(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<s:RadioButtonGroup id="radiogroup1"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Button x="691" y="421" label="开始导入" id="importBtn" click="importBtn_clickHandler(event)"/>
+	<s:Button x="774" y="421" label="取消" id="cancelBtn" click="cancelBtn_clickHandler(event)"/>
+	<s:Label x="96" y="21" text="您正准备导入 * 条数据到 ** 中，请对下面的预览数据进行确认/选择，您可以直接在表格上修改数据。" height="41"/>
+	<mx:Image x="24" y="10" source="@Embed(source='images/Alert_11.png')" width="64" height="64"/>
+	<mx:Image x="24" y="392" alpha="0.1" source="@Embed(source='images/Package_02.png')" width="64" height="64"/>
+	<mx:DataGrid x="23" y="87" width="822" height="300">
+		<mx:columns>
+			<mx:DataGridColumn headerText="列 1" dataField="col1"/>
+			<mx:DataGridColumn headerText="列 2" dataField="col2"/>
+			<mx:DataGridColumn headerText="列 3" dataField="col3"/>
+		</mx:columns>
+	</mx:DataGrid>
+</s:TitleWindow>

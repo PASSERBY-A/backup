@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ComboBox xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:ConstraintLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			
+			[Bindable]  
+			private var _label:String;  
+			[Bindable]  
+			public var treeSelectedItem:Object;
+			
+			[Bindable]
+			private var _treewidth:Number;
+			[Bindable]
+			private var _treeheight:Number;
+			
+			
+			public function set treewidth(value:Number):void{
+				this._treewidth = value;
+			}
+			
+			public function set treeheight(value:Number):void{
+				this._treeheight = value;
+			}
+			[Bindable]
+			public function get treewidth():Number{
+				return this._treewidth;
+			}
+			[Bindable]
+			public function get treeheight():Number{
+				return this._treeheight;
+			}
+			
+			public function initComponent():void 
+			{ 
+			} 
+			
+			public function updateLabel(event:ListEvent):void{  
+				_label = event.currentTarget.selectedItem[this.labelField];      
+				treeSelectedItem = event.currentTarget.selectedItem;  
+			}  
+			
+			override protected function updateDisplayList(unscaledWidth:Number, 
+														  unscaledHeight:Number):void 
+			{ 
+				super.updateDisplayList(unscaledWidth, unscaledHeight);   
+				
+				if(dropDown && _label != null){    
+					textInput.text = _label
+				}  
+			} 
+			
+		]]>
+	</fx:Script>
+	<s:dropIndicator>
+		<fx:Component>
+			<mx:Tree>
+				<mx:Tree creationComplete="initTree()" change="outerDocument.updateLabel(event)" showRoot="false" labelField="@label" height="{outerDocument.treeheight}" width="{outerDocument.treewidth}"> 
+					<fx:Script> 
+						<![CDATA[ 
+							public function initTree():void {
+								//var len:int=super.dataProvider.length; 
+								super.selectedItem=outerDocument.treeSelectedItem; 
+							}
+						]]> 
+					</fx:Script>  
+				</mx:Tree> 
+			</mx:Tree>
+		</fx:Component>
+	</s:dropIndicator>
+</s:ComboBox>

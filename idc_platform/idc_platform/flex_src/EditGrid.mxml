@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" creationComplete="application1_creationCompleteHandler(event)" width="100%" height="100%">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.widgets.EditTable;
+			import com.hp.idc.resm.model.AttributeDefine;
+			import com.hp.idc.resm.model.BooleanAttributeDefine;
+			import com.hp.idc.resm.model.DateAttributeDefine;
+			import com.hp.idc.resm.model.DateTimeAttributeDefine;
+			import com.hp.idc.resm.model.ModelAttribute;
+			import com.hp.idc.resm.model.StringAttributeDefine;
+			import com.hp.idc.resm.model.TimeAttributeDefine;
+			import com.hp.idc.util.DateTimeUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				
+				var cols:ArrayCollection = new ArrayCollection();
+				
+				var col1:ModelAttribute = new ModelAttribute();
+				col1.attrId = "attrId1";
+				col1.name = "表头1";
+				
+				var ad1:StringAttributeDefine = new StringAttributeDefine();
+				ad1.type = "string";
+				ad1.name = "输入域";
+				ad1.codeType = StringAttributeDefine.TEXTAREA_TYPE;
+				col1.define = ad1;
+				
+				var col2:ModelAttribute = new ModelAttribute();
+				col2.attrId = "attrId2";
+				col2.name = "表头2";
+				
+				var ad2:BooleanAttributeDefine = new BooleanAttributeDefine();
+				ad2.type = "boolean";
+				ad2.name = "checkbox";
+				col2.define = ad2;
+				
+				var col3:ModelAttribute = new ModelAttribute();
+				col3.attrId = "attrId3";
+				col3.name = "表头3";
+				
+				var ad3:StringAttributeDefine = new StringAttributeDefine();
+				ad3.type = "string";
+				ad3.name = "输入域";
+				ad3.codeType = StringAttributeDefine.TEXTINPUT_TYPE;
+				col3.define = ad3;
+				
+				var col4:ModelAttribute = new ModelAttribute();
+				col4.attrId = "attrId4";
+				col4.name = "表头4";
+				
+				var ad4:DateAttributeDefine = new DateAttributeDefine();
+				ad4.type = "date";
+				ad4.name = "输入域";
+				col4.define = ad4;
+				
+				var col5:ModelAttribute = new ModelAttribute();
+				col5.attrId = "attrId5";
+				col5.name = "表头5";
+				
+				var ad5:DateTimeAttributeDefine = new DateTimeAttributeDefine();
+				ad5.type = "datetime";
+				ad5.name = "输入域";
+				col5.define = ad5;
+				
+				
+				var col6:ModelAttribute = new ModelAttribute();
+				col6.attrId = "attrId6";
+				col6.name = "表头6";
+				
+				var ad6:TimeAttributeDefine = new TimeAttributeDefine();
+				ad6.type = "time";
+				ad6.name = "输入域";
+				col6.define = ad6;
+				
+				
+				cols.addItem(col1);
+				cols.addItem(col2);
+				cols.addItem(col3);
+				cols.addItem(col4);
+				cols.addItem(col5);
+				cols.addItem(col6);
+				
+				
+				var editTable:EditTable = new EditTable(cols);
+				editTable.width = 800;
+				editTable.height = 200;
+				this.addElement(editTable);
+				
+//				editTable.columns = cols;
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<!--s:HGroup x="0" y="0" width="100%" height="200">
+		<s:DataGrid width="100%" height="100%">
+			<s:columns>
+				<s:ArrayCollection>
+					<s:GridColumn headerText="类型"/>
+					<s:GridColumn headerText="类型"/>
+					<s:GridColumn headerText="类型"/>
+					<s:GridColumn headerText="类型"/>
+					<s:GridColumn headerText="类型"/>
+					<s:GridColumn headerText="类型"/>
+					<s:GridColumn headerText="类型"/>
+				</s:ArrayCollection>
+			</s:columns>
+		</s:DataGrid>
+		<s:VGroup width="150" height="100%" horizontalAlign="center" gap="5" paddingTop="10">
+			<s:Button label="新建" width="100"/>
+			<s:Button label="修改" width="100"/>
+			<s:Button label="删除" width="100"/>
+			<s:Spacer height="10" width="100"/>
+			<s:Button label="上移" width="100"/>
+			<s:Button label="下移" width="100"/>
+		</s:VGroup>
+	</s:HGroup-->
+</s:Application>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:components="com.hp.idc.components.*"
+					xmlns:code="http://code.google.com/p/flex-iframe/"
+					xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<code:IFrame id="frm2" source="/im/indicator-view-host.jsp" height="100%" width="100%"/>
+</s:NavigatorContent>

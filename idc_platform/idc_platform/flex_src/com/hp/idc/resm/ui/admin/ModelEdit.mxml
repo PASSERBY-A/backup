@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:components="com.hp.idc.components.*" 
+					 xmlns:admin="com.hp.idc.resm.ui.admin.*" 
+					 xmlns:widget="com.hp.idc.components.widgets.*"
+					 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" creationComplete="init(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.components.EditModelAttribute;
+			import com.hp.idc.components.EditModelRelationWindow;
+			import com.hp.idc.components.PetAlert;
+			import com.hp.idc.components.SelectModelWindow;
+			import com.hp.idc.components.TreeItem;
+			import com.hp.idc.components.TreeItemCollection;
+			import com.hp.idc.components.TreeItemRenderer;
+			import com.hp.idc.resm.event.ModelAttributeEvent;
+			import com.hp.idc.resm.event.ModelEvent;
+			import com.hp.idc.resm.event.ModelRelationEvent;
+			import com.hp.idc.resm.model.Model;
+			import com.hp.idc.resm.model.ModelAttribute;
+			import com.hp.idc.resm.model.ModelRelation;
+			import com.hp.idc.resm.ui.actions.SwitchWindowAction;
+			import com.hp.idc.util.UserTool;
+			import com.hp.idc.ui.FaultHandler;
+			
+			import mx.collections.XMLListCollection;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var formLabelWidth : int = 75;
+			
+			private var data : Model;
+			
+			public function set model(model:Model):void{
+				if(model==null){
+					model_id.text = "";
+					model_name.text = "";
+					model_icon.text = "";
+					model_largeIcon.text = "";
+					model_parentId.selectedIndex = -1;
+					attributeGrid.dataProvider = null;
+					return;
+				}
+				this.data = model;
+				
+				model_id.text = data.id;
+				model_name.text = data.name;
+				model_icon.text = String(data.icon);
+				model_largeIcon.text = String(data.largeIcon);
+				
+//				var parent:XMLListCollection = model_parentId.dataProvider as XMLListCollection;
+//				//model_parentId.selectedItem = parent.getItemAt(2);
+//				for each(var xml:XML in parent){
+//					var o:Object = searchNode(xml,data.parentId);
+//					if(o!=null){
+//						model_parentId.selectedItem = o;
+//					}
+//				}
+				
+				var parent:ArrayCollection = model_parentId.dataProvider as ArrayCollection;
+				var index:int = (model_parentId.dataProvider as TreeItemCollection).expandItem(data.parentId);
+				model_parentId.selectedIndex = index;
+				var o:Object = searchItem(parent,data.parentId);
+				if(searchItem(parent,data.parentId)!=null){
+				}
+//				for(var i:int=0;i<parent.length;i++){
+//					if(parent.getItemAt(i).id==data.parentId){
+//						model_parentId.selectedItem = parent.getItemAt(i);
+//						break;
+//					}
+//				}
+				
+				
+				model_directoryOnly.selected = data.directoryOnly
+				model_dimModel.selected = data.dimModel;
+				model_enabled.selected = data.enabled;
+				
+				modelService.getModelAttributesByModelId(data.id);
+			}
+			
+			
+			
+			public function addModelAttributeHandle(e:ModelAttributeEvent):void{
+				var modelAttribute:ModelAttribute = e.modelAttribute;
+				var attributes:ArrayCollection = attributeGrid.dataProvider as ArrayCollection;
+				if(attributes==null){
+					attributes = new ArrayCollection();
+				}
+				attributes.addItem(modelAttribute);
+				attributeGrid.dataProvider = attributes;
+			}
+			
+			
+			private function updateModelAttributeHandle(e:ModelAttributeEvent):void{
+				var modelAttribute:ModelAttribute = e.modelAttribute;
+				var attributes:ArrayCollection = attributeGrid.dataProvider as ArrayCollection;
+				if(attributes==null){
+					attributes = new ArrayCollection();
+				}
+				if(attributeGrid.selectedItem!=null){
+					attributes.removeItemAt(attributes.getItemIndex(attributeGrid.selectedItem));
+				}
+				attributes.addItem(modelAttribute);
+				attributeGrid.dataProvider = attributes;
+			}
+			
+			
+			
+			protected function addModelAttribute_clickHandler(event:MouseEvent):void
+			{
+				
+				var window:EditModelAttribute = new EditModelAttribute();
+				window.modelParentId = model_parentId.selectedItem.id;
+				var modeAttribute:ModelAttribute = new ModelAttribute();
+				modeAttribute.modelId = "newtempid";
+				window.modelAttribute = modeAttribute;
+				window.addEventListener(ModelAttributeEvent.MODELATTRIBUTEADD,addModelAttributeHandle);
+				
+				PopUpManager.addPopUp(window,this,true);
+				PopUpManager.centerPopUp(window);
+			}
+			
+			protected function addModelHandler(event:MouseEvent):void
+			{
+				if(this.data==null){
+					PetAlert.show("未选择任何资源模型，如果要继续修改操作，请刷新页面！","错误提示", 4, null, null, PetAlert.ICON_STOP);
+					return;
+				}
+				
+				if(Validator.validateAll([model_id_validator,model_name_validator,model_icon_validator,model_largeIcon_validator]).length!=0){
+					PetAlert.show("请按正确格式填写数据！！！","错误提示", 4, null, null, PetAlert.ICON_STOP);
+					return;
+				}
+				
+				cursorManager.setBusyCursor();
+				
+				var model:Model = new Model();
+				var arrayModelAttribute:ArrayCollection = new ArrayCollection();
+				model.id = model_id.text;
+				model.name = model_name.text;
+				model.icon = Number(model_icon.text);
+				model.largeIcon = Number(model_largeIcon.text);
+				//若不选择父对象，则默认为根对象
+//				if(model_parentId.treeSelectedItem==null){
+//					model.parentId = "";
+//				}else{
+//					model.parentId = model_parentId.treeSelectedItem.@id;
+//				}
+				
+				
+				if(model_parentId.selectedItem==null){
+					model.parentId = "";
+				}else{
+					model.parentId = model_parentId.selectedItem.id;
+				}
+				
+				
+//				PetAlert.show(model.parentId);
+				model.directoryOnly = model_directoryOnly.selected;
+				model.dimModel = model_dimModel.selected;
+				model.enabled = model_enabled.selected;
+				
+				var addAttributes:ArrayCollection = attributeGrid.dataProvider as ArrayCollection;
+				for(var i:int;addAttributes!=null&&i<addAttributes.length;i++){
+					var modelAttribute:ModelAttribute = addAttributes.getItemAt(i) as ModelAttribute;
+					if(modelAttribute.modelId=="newtempid"){
+						modelAttribute.modelId = model.id;
+					}
+					arrayModelAttribute.addItem(modelAttribute);
+				}
+				
+				modelUpdateService.updateModel(model,arrayModelAttribute,UserTool.userId);
+			}
+			
+			private function updataModelHandler(event:ResultEvent):void
+			{
+				cursorManager.removeBusyCursor();
+				PetAlert.show("修改成功！","操作结果", 4,null,function():void{
+					
+				},PetAlert.ICON_INFO);
+				switchToList(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function getModelTreeHandle(event:ResultEvent):void{
+				
+				var returnString :String = event.result as String;	
+				var treeDate : XML = new XML(returnString);
+				
+//				model_parentId.dataProvider = treeDate.children();
+				model_parentId.dataProvider = TreeItem.createDataProviderFromXML(treeDate);
+			}
+			
+			private function getAttributesHandler(event:ResultEvent):void{
+				//attributeGrid.dataProvider = event.result as ArrayCollection;
+				
+				var dataProvider:ArrayCollection = new ArrayCollection();
+				var attributes:ArrayCollection = event.result as ArrayCollection;
+				for(var i:int=0;i<attributes.length;i++){
+					var modelAttribute:ModelAttribute = attributes.getItemAt(i) as ModelAttribute;
+					if(modelAttribute.modelId==this.data.id){
+						dataProvider.addItem(modelAttribute);
+					}
+				}
+				attributeGrid.dataProvider = dataProvider;
+			}
+			
+			protected function updateModelAttribute_clickHandler(event:MouseEvent):void
+			{
+				if(attributeGrid.selectedItem==null){
+					PetAlert.show("请选择一条记录！","提示", 4,null,null,PetAlert.ICON_INFO);
+					return;
+				}
+				var window:EditModelAttribute = new EditModelAttribute();
+				window.modelParentId = model_parentId.selectedItem.id;
+				window.isEdit = true;
+				
+				var data:ArrayCollection = attributeGrid.dataProvider as ArrayCollection;
+				var modeAttribute:ModelAttribute = attributeGrid.selectedItem as ModelAttribute;
+				window.modelAttribute = modeAttribute;
+				window.addEventListener(ModelAttributeEvent.MODELATTRIBUTEUPDATE,updateModelAttributeHandle);
+				PopUpManager.addPopUp(window,this,true);
+				PopUpManager.centerPopUp(window);
+				
+			}
+			
+			protected function deleteModelAttribute_clickHandler(event:MouseEvent):void{
+				if(attributeGrid.selectedItem==null){
+					PetAlert.show("请选择一条记录！","提示", 4,null,null,PetAlert.ICON_INFO);
+					return;
+				}
+				var data:ArrayCollection = attributeGrid.dataProvider as ArrayCollection;
+				var record:Object = attributeGrid.selectedItem;
+				data.removeItemAt(data.getItemIndex(record));
+				attributeGrid.dataProvider = data;
+			}
+			
+			protected function attributeGrid_changeHandler(event:ListEvent):void
+			{
+				var ma:ModelAttribute = attributeGrid.selectedItem as ModelAttribute;
+				if(ma.modelId==""){
+					edit_button.enabled = false;
+				}else{
+					edit_button.enabled = true;
+				}
+			}
+			
+			
+			protected function init(event:FlexEvent):void
+			{
+				modelService.getModelTree();
+				this.addEventListener(FlexEvent.SHOW,selectModel);
+			}
+			
+			protected function selectModel(event:FlexEvent):void
+			{
+				//先弹出窗口，选择需要修改的模型
+				var selectModelWindow:SelectModelWindow = new SelectModelWindow();
+				selectModelWindow.title = "请选择要编辑的资源模型";
+				selectModelWindow.addEventListener(ModelEvent.MODELSELECT,initUpdateData);
+				selectModelWindow.addEventListener(CloseEvent.CLOSE,switchToList);
+				
+				PopUpManager.addPopUp(selectModelWindow,this,true);
+				PopUpManager.centerPopUp(selectModelWindow);
+				
+			}
+			
+			private function switchToList(event:CloseEvent):void{
+				var sw:SwitchWindowAction = new SwitchWindowAction();
+				sw.setTarget(parent, null);
+				sw.doAction("com.hp.idc.resm.ui.admin.ModelList");
+			}
+			
+			private function initUpdateData(event:ModelEvent):void{
+				var model:Model = event.model;
+				this.model = model;
+			}
+//			
+//			private function searchNode(nodeList:XMLListCollection):Object{
+//				for each(var xml in nodeList){
+//					
+//				}
+//			}
+			
+			private function searchNode(node:XML,id:String):Object{
+				if(node.@id==id){
+					return node;
+				}
+				var xmllist:XMLList  = node.child("node");
+				for each(var subNode:XML in xmllist){
+					var o:Object = searchNode(subNode,id);
+					if(o!=null){
+						return o;
+					}
+				}
+				return null;
+			}
+			
+			private function labelFunction_Handle(item:Object, column:GridColumn):String{
+				if(item.inheritable as Boolean){
+					return "是";
+				}else{
+					return "否";
+				}
+			}
+			
+			/**
+			 * 搜索父类型
+			 */
+			private function searchItem(dataprivate:ArrayCollection,id:String):Object{
+				for(var i:int=0;i<dataprivate.length;i++){
+					if(dataprivate.getItemAt(i).id==id){
+						return dataprivate.getItemAt(i);
+					}
+					
+					if(dataprivate.getItemAt(i).childs!=null){
+						var childdataprivate:ArrayCollection = dataprivate.getItemAt(i).childs as ArrayCollection;
+						if(searchItem(childdataprivate,id)!=null){
+							return searchItem(childdataprivate,id);
+						}
+					}
+				}
+				return null;
+			}
+
+			protected function model_directoryOnly_changeHandler(event:Event):void
+			{
+				if(model_directoryOnly.selected)
+					model_enabled.selected = true;
+			}
+
+		]]>
+		
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		
+		<mx:RemoteObject  id="modelUpdateService" destination="modelUpdateService">
+			<mx:method name="updateModel" result="updataModelHandler(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:RemoteObject  id="modelService" destination="modelService">
+			<mx:method  name="getModelAttributesByModelId" result="getAttributesHandler(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+			<mx:method  name="getModelTree" result="getModelTreeHandle(event)" fault="FaultHandler.defaultFaultHandler(event)"/>
+		</mx:RemoteObject>
+		
+		<!-- 验证器 -->
+		<mx:Validator id="model_id_validator" source="{model_id}" property="text" requiredFieldError=" "/>
+		<mx:Validator id="model_name_validator" source="{model_name}" property="text" requiredFieldError=" "/>
+		<mx:NumberValidator id="model_icon_validator" source="{model_icon}" property="text" requiredFieldError=" "/>
+		<mx:NumberValidator id="model_largeIcon_validator" source="{model_largeIcon}" property="text" requiredFieldError=" "/>
+		<mx:Validator id="model_parentId_validator" source="{model_parentId}" property="text" requiredFieldError=" " />
+		
+	</fx:Declarations>
+	<s:VGroup  height="100%" width="100%" paddingLeft="20" paddingRight="20" paddingTop="20" paddingBottom="20">
+		<s:Label text="基本属性" width="100%" styleName="LabelTitle" height="30"/>
+		<s:HGroup width="100%">
+			<s:Form width="50%">
+				<s:FormItem label="ID:" required="true" height="22">
+					<s:TextInput id="model_id" restrict="0-9a-zA-Z_"/>
+				</s:FormItem>
+				<s:FormItem label="名称:" required="true" height="22">
+					<s:TextInput id="model_name" restrict="^\~\!\@\#\$\%\^\*\(\)\_\+\-\=\:\;\,\(\)\?\/\>\&#38;\&#60;\&#92;\`\|\&#91;\&#93;\&#123;\&#125;\&#34;\&#39;"/>
+				</s:FormItem>
+				<s:FormItem label="图标:" required="true" height="22">
+					<s:TextInput id="model_icon" restrict="0-9" />
+				</s:FormItem>
+				<s:FormItem label="大图标:" required="true" height="22">
+					<s:TextInput id="model_largeIcon" restrict="0-9"/>
+				</s:FormItem>
+			</s:Form>
+			<s:Form width="50%">
+				<mx:FormItem label="父模型:" labelWidth="85">
+					<!--widget:ComboBoxTree labelField="@label" id="model_parentId" width="150" enabled="false"/-->
+					<s:DropDownList id="model_parentId" itemRenderer="com.hp.idc.components.TreeItemRenderer" 
+									width="200" enabled="false"/>
+				</mx:FormItem>
+				<mx:FormItem  labelWidth="85" >
+					<s:CheckBox id="model_directoryOnly" label="这是一个目录" change="model_directoryOnly_changeHandler(event)"/>
+				</mx:FormItem>
+				<mx:FormItem  labelWidth="85" visible="false" includeInLayout="false" >
+					<s:CheckBox id="model_dimModel" label="这是一个维度"/>
+				</mx:FormItem>
+				<mx:FormItem  labelWidth="85">
+					<s:CheckBox id="model_enabled" label="启用此模型" enabled="{!(model_directoryOnly.selected)}" />
+				</mx:FormItem>
+			</s:Form>			
+		</s:HGroup>
+		<s:Label text="关联字段" width="100%" styleName="LabelTitle" height="30"/>
+		<s:DataGrid width="100%" height="100%" id="attributeGrid" focusEnabled="false">
+			<s:columns>
+				<s:ArrayCollection>
+					<s:GridColumn headerText="类型" dataField="modelId"/>
+					<s:GridColumn headerText="属性ID" dataField="attrId"/>
+					<s:GridColumn headerText="属性名称" dataField="name"/>
+					<s:GridColumn headerText="允许继承"  dataField="inheritable" labelFunction="labelFunction_Handle"/>
+					<s:GridColumn headerText="备注" dataField="remark"/>
+				</s:ArrayCollection>
+			</s:columns>
+		</s:DataGrid>
+		<s:HGroup width="100%" horizontalAlign="right">
+			<s:Button label="新增关联字段" click="addModelAttribute_clickHandler(event)"/>
+			<s:Button label="修改关联字段" click="updateModelAttribute_clickHandler(event)" id="edit_button"/>
+			<s:Button label="删除关联字段" click="deleteModelAttribute_clickHandler(event)" id="delete_button"/>
+			<s:Button label="修改" click="addModelHandler(event)"/>
+		</s:HGroup>
+	</s:VGroup>		
+</s:NavigatorContent >

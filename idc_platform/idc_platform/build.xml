@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="GBK"?>
+<!--=======================================================================================-->
+<!--   SystemManager                                                                        -->
+<!-- 使用Ant的版本 1.6.1                                                                                      -->
+<!--=======================================================================================-->
+
+<project name="com.hp.idc" basedir=".">
+	<property file="build.properties" />
+	<echo>USING build.properties</echo>
+	
+	<target name="copy-login">
+		<echo>step:copy login</echo>
+		<copy todir="${web.root}/portal/">
+			<fileset dir="${flex.bin}" id="idlogin">
+    			<include name="login*"/>
+    			<include name="playerProductInstall.swf"/>
+    			<include name="rpc_*"/>
+    			<include name="textLayout_*"/>
+    			<include name="framework_*"/>
+    			<include name="mx_*"/>
+    			<include name="spark_*"/>
+    			<include name="sparkskins_*"/>
+    			<include name="swfobject.js"/>
+    			<include name="history/*"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copy-resm">
+		<echo>step:copy resm</echo>
+		<copy todir="${web.root}/resm/flex">
+			<fileset dir="${flex.bin}" id="idresm">
+	    		<exclude name="login*"/>
+				<exclude name="Business*"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copy-business">
+		<echo>step:copy business</echo>
+		<copy todir="${web.root}/business">
+			<fileset dir="${flex.bin}" id="idbusiness">
+	    		<include name="Business*"/>
+	    		<include name="playerProductInstall.swf"/>
+	    		<include name="rpc_*"/>
+	    		<include name="textLayout_*"/>
+	    		<include name="framework_*"/>
+	    		<include name="mx_*"/>
+	    		<include name="spark_*"/>
+	    		<include name="sparkskins_*"/>
+	    		<include name="swfobject.js"/>
+	    		<include name="history/*"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="deploy">
+		<!--copy todir="${tomcat.home}/${web.context}/resm/flex">
+			<fileset dir="${web.root}/resm/flex">
+				<include name="*"/>
+			</fileset>
+		</copy -->
+		<copy todir="${tomcat.home}/${web.context}/business">
+			<fileset dir="${web.root}/business">
+				<include name="*/**"/>
+			</fileset>
+		</copy>
+	</target>
+	
+</project>

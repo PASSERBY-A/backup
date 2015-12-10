@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemEditor xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				  xmlns:s="library://ns.adobe.com/flex/spark" 
+				  xmlns:mx="library://ns.adobe.com/flex/mx"
+				  xmlns:gridEditorClasses="spark.components.gridEditorClasses.*">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.model.RelationDefine;
+			import com.hp.idc.util.json.JSON;
+			
+			import mx.collections.ArrayList;
+			import mx.collections.IList;
+			import mx.controls.Alert;
+			import mx.core.IVisualElement;
+			
+			import spark.events.DropDownEvent;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Overriden properties
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 *  @private
+			 * 
+			 *  returns the selected item in the comboBox.
+			 */ 
+			override public function get value():Object
+			{
+				return comboBox.selectedItem.id;
+			}						
+			
+			/**
+			 *  @private
+			 * 
+			 *  Set the selected item of the combo box with the data from the
+			 *  item. 
+			 */ 
+			override public function set value(newValue:Object):void
+			{
+				for(var i:int=0;i<comboBox.dataProvider.length;i++){
+					if(comboBox.dataProvider.getItemAt(i).id == newValue.toString()){
+						comboBox.selectedIndex = i;
+					}
+				}
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Properties
+			//
+			//--------------------------------------------------------------------------
+			
+			//----------------------------------
+			//  dataProvider
+			//----------------------------------
+			
+			private var _dataProvider:IList;
+			
+			[Bindable("comboBoxGridItemEditorDataProviderChanged")]
+			
+			/**
+			 *  The data provider for the combox box in the item editor.
+			 *
+			 *  @langversion 3.0
+			 *  @playerversion Flash 10
+			 *  @playerversion AIR 2.5
+			 *  @productversion Flex 4.5
+			 */ 
+			public function get dataProvider():IList
+			{
+				return _dataProvider;
+			}
+			
+			/**
+			 *  @private
+			 */ 
+			public function set dataProvider(value:IList):void
+			{
+				if (_dataProvider == value)
+					return;
+				
+				_dataProvider = value;
+				dispatchEvent(new Event("comboBoxGridItemEditorDataProviderChanged"));
+			}
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Overridden methods
+			//
+			//--------------------------------------------------------------------------
+			
+			/**
+			 *  @private
+			 */ 
+			override public function prepare():void
+			{
+				super.prepare();
+				
+				comboBox.addEventListener(DropDownEvent.OPEN, dropDown_openHandler);
+				comboBox.openDropDown();
+			}
+			
+			
+			/**
+			 *  @private
+			 */ 
+			override public function setFocus():void
+			{
+				// delegate focus to the combox box.
+				comboBox.setFocus();
+			}
+			
+			/**
+			 *  @private
+			 */ 
+			private function dropDown_openHandler(event:DropDownEvent):void
+			{
+				// Add a mouse down handler for the dropDown part. When 
+				// the user clicks in the drop down we want to end the editing 
+				// session. We listen to the dataGroup here instead of the dropDown
+				// part to avoid closing the editor when the dropDown's 
+				// scrollbar is clicked.
+				if (comboBox.dataGroup)
+					comboBox.dataGroup.addEventListener(MouseEvent.MOUSE_DOWN, dataGroup_mouseClickHandler, false, 0, true);
+			}
+			
+			/**
+			 *  @private
+			 */ 
+			private function dataGroup_mouseClickHandler(event:MouseEvent):void
+			{
+				// When the drop down list is clicked, end the editting session
+				// to allow the edit to be completed with just one click.
+				// Use callLater to let the click and change handlers finish 
+				// before we close the editor.
+				callLater(dataGrid.endItemEditorSession);
+			}
+			
+		]]>
+	</fx:Script>
+	<s:ComboBox id="comboBox" width="100%" dataProvider="{dataProvider}" labelField="name" />
+</s:GridItemEditor>

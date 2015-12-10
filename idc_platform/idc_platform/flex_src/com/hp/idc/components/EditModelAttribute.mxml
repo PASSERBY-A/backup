@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="480" height="320" title="模型关联关系"
+			   close="PopUpManager.removePopUp(this);"
+			   creationComplete="init(event)" >
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<mx:ArrayCollection id="inheritable_data">
+			<fx:String>否</fx:String>  
+			<fx:String>是</fx:String>  
+		</mx:ArrayCollection>
+		
+		<mx:ArrayCollection id="nullable_data">
+			<fx:String>否</fx:String>  
+			<fx:String>是</fx:String>  
+		</mx:ArrayCollection>
+		
+		<mx:RemoteObject  id="attributeService" destination="attributeService">
+			<!--mx:method  name="getAllAttributes" result="resultHandler(event)" fault="resultHandler2(event)"/-->
+			<mx:method  name="getAttributesForAdd" result="resultHandler(event)" fault="resultHandler2(event)"/>
+		</mx:RemoteObject>
+		
+		<mx:Validator id="attr_attrId_validator" source="{attr_attrId}" property="selectedItem" requiredFieldError=" "/>
+		<mx:Validator id="attr_name_validator" source="{attr_name}" property="text" requiredFieldError=" " />
+		
+	</fx:Declarations>
+	<s:VGroup width="100%" height="100%" paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10">
+		<s:HGroup width="100%">
+			<s:Form width="50%" height="100%">
+				<s:FormItem label="模型属性" height="22" required="true">
+					<s:ComboBox id="attr_attrId" labelField="name" change="changeAttrHandler(event)"/>
+				</s:FormItem>
+				<s:FormItem label="名称" height="22" required="true">
+					<s:TextInput id="attr_name" restrict="^\~\!\@\#\$\%\^\*\(\)\_\+\-\=\:\;\,\(\)\?\/\>\&#38;\&#60;\&#92;\`\|\&#91;\&#93;\&#123;\&#125;"/>
+				</s:FormItem>
+				<s:FormItem label="默认值" height="22">
+					<s:TextInput id="attr_defaultvalue"/>
+				</s:FormItem>
+				<s:FormItem height="22" label="值比较式">
+					<s:TextInput id="attr_condition" />
+				</s:FormItem>
+			</s:Form>
+			<s:Form width="50%" height="100%">
+				<s:FormItem height="22">
+					<s:CheckBox id="attr_inheritabe" label="可被继承" selected="true"/>
+				</s:FormItem>
+				<s:FormItem height="22">
+					<s:CheckBox id="attr_nullable" label="允许为空" selected="true"/>
+				</s:FormItem>				
+			</s:Form>
+		</s:HGroup>
+		<s:Form width="100%">
+			<s:FormItem label="备　　注" height="80">
+				<s:TextArea height="80" width="340" id="attr_remark"/>
+			</s:FormItem>
+		</s:Form>
+		<s:HGroup width="100%" horizontalAlign="right" paddingRight="10" paddingBottom="10">
+			<s:Button label="保存" click="addModelAttributeHandler(event)"/>
+			<s:Button label="取消" click="closeHandle(event)"/>
+		</s:HGroup>
+	</s:VGroup>
+	<fx:Script>
+		<![CDATA[
+			import com.hp.idc.resm.event.ModelAttributeEvent;
+			import com.hp.idc.resm.event.ModelRelationEvent;
+			import com.hp.idc.resm.model.AttributeDefine;
+			import com.hp.idc.resm.model.ModelAttribute;
+			import com.hp.idc.resm.model.ModelRelation;
+			import com.hp.idc.resm.model.RelationDefine;
+			
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var formLabelWidth : int = 55;
+			
+			public var isEdit:Boolean;
+			
+			public var modelAttribute:ModelAttribute;
+			
+			public var modelParentId:String;
+			
+			public function setValue():void{
+				var attrids:ArrayCollection = attr_attrId.dataProvider as ArrayCollection;
+				for(var i:int=0;attrids!=null&&i<attrids.length;i++){
+					var ad:AttributeDefine = attrids.getItemAt(i) as AttributeDefine;
+					if(ad.id==this.modelAttribute.attrId){
+						attr_attrId.selectedItem = ad;
+						break;
+					}
+				}
+				attr_defaultvalue.text = this.modelAttribute.defaultValue;
+				attr_name.text = this.modelAttribute.name;
+				attr_remark.text = this.modelAttribute.remark;
+				attr_inheritabe.selected = this.modelAttribute.inheritable;
+				attr_nullable.selected = this.modelAttribute.nullable;
+				attr_condition.text = this.modelAttribute.condition;
+			}
+			
+			protected function init(event:FlexEvent):void
+			{
+				//attributeService.getAllAttributes();
+				attributeService.getAttributesForAdd(modelParentId);
+			}
+			
+			private function addModelAttributeHandler(enent:MouseEvent):void{
+				//验证表单项
+				if(Validator.validateAll([attr_attrId_validator,attr_name_validator]).length!=0){
+					return;
+				}
+				
+				//this.modelAttribute.modelId = "newtempid";
+				this.modelAttribute.attrId = (attr_attrId.selectedItem as AttributeDefine).id;
+				this.modelAttribute.defaultValue = attr_defaultvalue.text;
+				this.modelAttribute.name = attr_name.text;
+				this.modelAttribute.remark = attr_remark.text;
+				this.modelAttribute.inheritable = attr_inheritabe.selected;
+				this.modelAttribute.nullable = attr_nullable.selected;
+				this.modelAttribute.condition = attr_condition.text;
+				
+				var e:ModelAttributeEvent ;
+				
+				if(isEdit){
+					e = new ModelAttributeEvent(ModelAttributeEvent.MODELATTRIBUTEUPDATE,modelAttribute,true);
+				}else{
+					e = new ModelAttributeEvent(ModelAttributeEvent.MODELATTRIBUTEADD,modelAttribute,true);
+				}
+				dispatchEvent(e);
+				
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function resultHandler(event:ResultEvent):void
+			{
+				var attris:ArrayCollection = event.result as ArrayCollection;
+				attr_attrId.dataProvider = attris;
+				
+				if(isEdit){
+					this.setValue();
+				}
+			}
+			
+			private function resultHandler2(event:FaultEvent):void
+			{
+				PetAlert.show(event.fault.getStackTrace(),"错误");
+			}
+			
+
+			protected function changeAttrHandler(event:IndexChangeEvent):void
+			{
+				if(attr_attrId.errorString != null){
+					attr_attrId.errorString = "";
+				}
+				attr_name.text = attr_attrId.selectedItem.name as String;
+			}
+			
+			private function closeHandle(event:MouseEvent):void{
+				this.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				PopUpManager.removePopUp(this);
+			}
+
+		]]>
+	</fx:Script>
+</s:TitleWindow>

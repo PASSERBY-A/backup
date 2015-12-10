@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="casConnectManager" class="com.hp.idc.cas.common.ConnectManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="auc_dbutil" class="com.hp.idc.cas.common.DBUtil">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="transactionTemplate" ref="transactionTemplate" />
+	</bean>
+	
+	<bean id="common_cas" class="com.hp.idc.cas.Common" init-method="init" depends-on="auc_dbutil">
+	</bean>
+ 	
+</beans>
