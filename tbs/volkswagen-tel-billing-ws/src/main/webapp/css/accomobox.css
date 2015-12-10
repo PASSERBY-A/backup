@@ -1,0 +1,39 @@
+  .ui-accombobox {
+      position: relative;
+      display: inline-block;
+  }
+  .ui-accombobox-toggle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      margin-left: -1px;
+      padding: 0;
+      background:white;
+      height:26px;
+      width:26px;
+  }
+  
+  .ui-autocomplete{
+  	min-width:100px;
+  }
+  .ui-accombobox-input {
+      border: 1px solid #B9B8BB;
+  	 background: white;
+  	 height:24px;
+  	 color:black;
+  	 font-family: "Microsoft YaHei", 微软雅黑;
+  	 font-weight:normal;
+  	 padding:1px 5px;
+  	 font-size:14px;
+  	 width:86px;
+  	
+  }
+  
+  .ui-tooltip {
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 300px;
+	-webkit-box-shadow: 0 0 5px #aaa;
+	box-shadow: 0 0 5px #aaa;
+}

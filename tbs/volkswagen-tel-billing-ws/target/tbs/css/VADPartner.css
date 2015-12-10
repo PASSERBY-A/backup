@@ -1,0 +1,42 @@
+a {text-decoration: none;}
+a:link{color:rgb(0, 150, 214);}
+a:visited{color:rgb(0, 150, 214);}
+a:HOVER{text-decoration: underline;}
+.main_div{font-family:"Microsoft YaHei",Î¢ÈíÑÅºÚ;font-size: 14px;}
+.channelBtn {
+	background-image: url(../images/RedMainScreenButton.png);
+	border: 0;
+	width: 171px;
+	height: 56px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.agentBtn {
+	background-image: url(../images/BlueMainScreenButton.png);
+	border: 0;
+	width: 171px;
+	height: 56px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.RegisteredProgramIcon{background-image: url(../images/RegisteredProgram.png); background-repeat: no-repeat; padding-left: 25px; padding-top: 0px;}
+.RegisteredProgramIcon a{padding-bottom: 4px;}
+.blueFont{color:rgb(0,150,214);}
+td.noUpBorder{BORDER-RIGHT: rgb(185,185,187) solid 1px; BORDER-LEFT: rgb(185,185,187) solid 1px; BORDER-BOTTOM: rgb(185,185,187) solid 1px;padding: 10px;border-collapse: collapse;}
+td.noUpLeftBorder{BORDER-RIGHT: rgb(185,185,187) solid 1px; BORDER-BOTTOM: rgb(185,185,187) solid 1px;padding: 10px;border-collapse: collapse;} 
+td.bottomBorder{BORDER-BOTTOM: rgb(185,185,187) solid 1px;border-collapse: collapse;}
+td.leftBottomBorder{BORDER-LEFT: rgb(185,185,187) solid 1px;BORDER-BOTTOM: rgb(185,185,187) solid 1px;border-collapse: collapse;}
+
+.partnerimg{
+	margin:-2px 3px 0 0;
+}
+.participateimg{
+	margin:-2px 0 0 4px;
+}
+.notparticipateimg{
+	margin:-3px 0 0 4px;
+}

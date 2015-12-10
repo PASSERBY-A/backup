@@ -1,0 +1,17 @@
+{
+	"sProcessing": " ",
+	"sLengthMenu": "Show _MENU_ per page",
+	"sZeroRecords": "Sorry, no matching data is found.",
+	"sInfo": "Record _START_ to _END_ / Total _TOTAL_ ",
+	"sInfoEmpty": "No matching record",
+	"sInfoFiltered": "(从 _MAX_ 条数据中搜索)",
+	"sInfoPostFix": "",
+	"sSearch": "搜索",
+	"sUrl": "",
+	"oPaginate": {
+		"sFirst":    " First ",
+		"sPrevious": " Previous ",
+		"sNext":     " Next ",
+		"sLast":     " Last "
+	}
+}

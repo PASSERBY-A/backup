@@ -1,0 +1,82 @@
+.quarterhistory
+{
+    /*background-color: #0096D6;*/
+    width: 150px;
+    display: inline;
+    float: left;
+    position: relative;
+    margin-left: 10px;
+    background-color: #fff;
+    color: #000;
+    border: solid 2px #0096D6;
+    z-index:1000;
+}
+    .quarterhistory a
+    {
+        text-align:left;
+    }
+
+    .quarterhistory a.current
+    {
+        display: block;
+        vertical-align: middle;
+        text-align: left;
+        padding: 2px 3px 2px;
+        color: #000;
+        text-decoration: none;
+        font-size: 14px;
+        background: #fff url(../images/quarter_arrow_down.png) no-repeat center right;
+    }
+
+    .quarterhistory a.hover
+    {
+        background-image: url(../images/quarter_arrow_up.png);
+    }
+
+    .quarterhistory a:hover
+    {
+        text-decoration: none;
+    }
+
+    .quarterhistory ul
+    {
+        position: absolute;
+        left: -2px; 
+        background-color: #fff; /*rgb(0, 150, 214);*/
+        border: solid 2px rgb(0, 150, 214);
+        border-top: 0;
+        width: 150px;
+        padding: 0;
+        padding-top: 3px;
+        margin: 0;
+        list-style: none;
+        display: none; 
+        z-index:1000;
+    }
+
+        .quarterhistory ul li
+        {
+            width: 100%;
+        }
+
+            .quarterhistory ul li a
+            {
+                text-decoration: none;
+                color: #000;
+                background-color: #fff;
+                display: block;
+                padding: 3px 4px;
+                font-size: 12px;
+            }
+
+                .quarterhistory ul li a:hover
+                {
+                    background-color: #d9eff9; color: rgb(0,150,214);
+                }
+
+                .quarterhistory ul li a.selected
+                {
+                    /*background-color: #0096D6;
+                    color: #fff;*/
+                    color: rgb(0,150,214);
+                }

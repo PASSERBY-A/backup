@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+
+body{
+	text-align:center;
+	font-family: "Microsoft YaHei", 微软雅黑, simsun, 宋体;
+	font-size:100%;
+}
+
+a {text-decoration: none;}
+
+a:link {
+
+	color: rgb(0, 0, 0);
+}
+
+a:visited {
+	color: rgb(0, 0, 0);
+}
+
+a:hover {
+	color: rgb(0, 0, 0);
+	text-decoration: underline;
+}
+
+.pheader{
+	width:850px;
+}
+
+.ptitle{
+	width:850px;
+	height:50px;
+	background-color:#ffffff;
+	border-bottom:1px solid #d5d5d5;
+	/*margin-left:122px;*/
+	position:relative;
+}
+
+.ptitle > .title-label{
+	bottom:0px;
+	left:0px;
+	position:absolute;
+	font-size:20px;
+	padding:8px 0px;
+	color:black;
+	border-bottom:2px solid #0197d6;
+}
+
+.ptitle .title-bar{
+	position:absolute;
+	bottom:0px;
+	right:0px;
+	padding:4px 2px;
+	font-size:12px;
+	text-align:
+}
+
+.title-bar > .btn-help{
+	display:inline;
+}
+
+.title-bar > .btn-logout{
+	display:inline;
+	margin:0px 8px;
+}
+
+.title-bar > .btn-username{
+	display:inline;
+} 	
+
+.btn-username > .icon{
+	position:relative;
+	left:0px;
+	top:3px;
+}
+
+.pbody{
+	width:850px;
+	clear:both;
+	text-align:left;
+}
+
+
+/*===begin high priority===*/
+.center{
+	margin-right: auto; 
+	margin-left: auto;
+}

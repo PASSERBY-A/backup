@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+.main_div {
+	font-family: "Microsoft YaHei", 微软雅黑;
+}
+#footer{
+	font-size: 12px;
+}
+
+.navigator{
+	margin: 15px 0 15px 8px;
+}
+
+.headerimg{
+	margin: 0 0 0 8px;
+}
+/* function panel*/
+#function_div{
+	margin: 20px 0 30px 8px;
+	clear: both;
+}
+#function_div div{
+	display: inline;
+}
+ .function_enable{
+	background-image: url(../images/BlueButton107.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 107px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
+ .function_disable{
+	background-image: url(../images/GrayButton107Disable.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 107px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
+ 

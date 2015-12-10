@@ -1,0 +1,53 @@
+﻿body  {font-family:'微软雅黑';font-size:14px;}
+body .header .banner{background-color:#0092f6;width:100%;}
+body .header .banner img{height:100px;width:1349px;}
+body .nav{float:left;padding:2px;}
+body .nav li{background-color:#0092f6;color:#fff;margin-bottom:1px;}
+body .nav li a{color:#fff;font-weight:bold;padding:4px 22px;display:inline-block;}
+body .nav li:hover, body .nav li.selected{background-color:#339900;}
+body #container{float:left;width:1245px;margin:3px 0 0;}
+
+/* override dataTable */
+/* border */
+body #container div.dataTables_wrapper .ui-widget-header {border-bottom:1px solid #797979;border-top: 0 none #fff;}
+body #container table.display tr {border-bottom:1px solid #797979;}
+body #container table.display td {border-left:1px solid #797979;border-right:1px solid #797979;color:#333;}
+.dataTables_filter input[type="text"], .ui-buttonset .ui-button,
+textarea, input[type="text"], input[type="password"]{border:1px solid #797979;color:#333;}
+.ui-buttonset, .dataTables_length, .dataTables_info, .dataTables_filter{color:#333;}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default,
+th.ui-state-default:first-child{border-left:1px solid #797979;border-right:1px solid #797979;}
+#theList_info{font-size:11px;}
+/* other */
+.clear{clear:both;}
+.clear-left{clear:left;}
+body #container table#theList thead tr{background-color:#0092f6;}
+body #container table.display thead th div.DataTables_sort_wrapper{font-weight:bold;font-size:14px;color:#FFF;}
+body #container table.display tr.odd.gradeA, tr.odd.gradeA td.sorting_1,
+body #container table.display tr.even.gradeA, tr.even.gradeA td.sorting_1,
+body #container div.dataTables_wrapper .ui-widget-header{background-color:transparent;border-top:0;}
+body #container #theList_wrapper div:last-child{border-bottom:0;}
+.ui-helper-clearfix:after{content:"";}
+.dataTables_paginate{width:1180px;}
+body #container table.display{table-layout:fixed;width:1195px;}
+body #container textarea{width:100%;}
+body #container table.display td input[type="text"],body #container table.display td input.input-text{max-width:150px;width:100%;}
+input.input-text-inline{max-width:150px;width:100%;}
+
+/* detail page */
+.red{color:#F00;}
+.blue{color:#00F;}
+.tools{float:left;min-width:200px;}
+.tools li.title{font-weight:bold;}
+.tools li dl{float:left;min-width:200px;}
+.tools li dl dd{margin-left:20px;}
+span.label {display:inline-block;width:180px;vertical-align: top;}
+span.label-inline {display:inline-block;width:180px;vertical-align: top;}
+body #container{margin: 30px 0 0 50px;width: 685px;}
+body #container .row{margin-bottom:10px;}
+body #container .row input[type="text"], body #container .row textarea{width: 500px;border:1px solid #797979;padding:5px;}
+body #container .row button{float:right;}
+body #container .account-panel{padding-left:185px;}
+body #container .account-panel span, body #container .account-panel label{margin-right:5px;display: inline-block;}
+body #container .row .account-info{border:1px solid #797979;text-align:center;width:100%;}
+body #container .row table td,body #container .row table th{border:1px solid #797979;}

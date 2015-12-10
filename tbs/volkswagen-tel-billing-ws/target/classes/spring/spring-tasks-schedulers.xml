@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task-3.1.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+       
+       
+        <aop:aspectj-autoproxy proxy-target-class="true" ></aop:aspectj-autoproxy>  
+
+       
+     <bean id="timService" class="com.volkswagen.tel.billing.ldap.TIMService"> 
+     	<property name="timLDAPHost" value="http://10.120.16.92:9080/ITIMWebServices"></property>
+     	<property name="timLookupUser" value="timwebservice"></property>
+     	<property name="timLookupPassword" value="!QAZ2wsx"></property>
+     	<property name="timLookupBaseDN" value="erglobalid=00000000000000000000,ou=vgc,o=vgc"></property>
+     </bean>  
+       
+	<bean id="syncTIMToDBTask" class="com.volkswagen.tel.billing.scheduler.SyncTIMToDBTask" />
+	
+	<bean id="chinaMobileParserTask" class="com.volkswagen.tel.billing.excel.parser.ChinaMobileParserTask" />
+	
+	<bean id="chinaUnicomParserTask" class="com.volkswagen.tel.billing.excel.parser.ChinaUnicomParserTask" />
+	
+	<bean id="sendMailTask" class="com.volkswagen.tel.billing.excel.parser.MailTask" />
+	
+	<bean id="costCenterReportTask" class="com.volkswagen.tel.billing.scheduler.CostCenterReportTask" />
+	
+	<task:scheduler id="syncTIMToDBScheduler"/>  
+		<task:scheduled-tasks scheduler="syncTIMToDBScheduler">
+	 			<task:scheduled ref="syncTIMToDBTask" method="synchronize" cron="0 0 3 * * ?"/>
+	</task:scheduled-tasks>
+	
+	<!-- <task:scheduler id="chinaMobileParserScheduler"/>  
+		<task:scheduled-tasks scheduler="chinaMobileParserScheduler">
+	 			<task:scheduled ref="chinaMobileParserTask" method="parsingMethod" cron="0 5 * * * ?" />
+	</task:scheduled-tasks>
+	
+	<task:scheduler id="chinaUnicomParserScheduler"/>  
+		<task:scheduled-tasks scheduler="chinaUnicomParserScheduler">
+	 			<task:scheduled ref="chinaUnicomParserTask" method="parsingMethod" cron="0 40 * * * ?" />
+	</task:scheduled-tasks>
+	
+	
+	 <task:scheduler id="sendMailScheduler"/>  
+		<task:scheduled-tasks scheduler="sendMailScheduler">
+	 			<task:scheduled ref="sendMailTask" method="check" cron="0 0/1 * * * ?"/>
+	</task:scheduled-tasks> 
+	
+	<task:scheduler id="costCenterReportScheduler"/>  
+		<task:scheduled-tasks scheduler="costCenterReportScheduler">
+	 	<task:scheduled ref="costCenterReportTask" method="exec" cron="0 0 0 L * ?"/>
+	</task:scheduled-tasks>
+	 -->
+	
+ 
+	
+	
+	</beans>

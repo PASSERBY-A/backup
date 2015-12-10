@@ -1,0 +1,138 @@
+body{
+	text-align:center;
+	font-family: "Microsoft YaHei", 微软雅黑, simsun, 宋体;
+	font-size:100%;
+}
+
+a:link {
+	color: rgb(0, 0, 0);
+}
+
+a:visited {
+	color: rgb(0, 0, 0);
+}
+
+a:hover {
+	color: rgb(0, 0, 0);
+	text-decoration: underline;
+}
+
+.pheader{
+	width:860px;
+}
+
+.ptitle{
+	width:860px;
+	height:100px;
+	background-color:#ffffff;
+	border-bottom:1px solid #d5d5d5;
+	/*margin-left:122px;*/
+	position:relative;
+}
+
+.ptitle > .title-label{
+	bottom:0px;
+	left:0px;
+	position:absolute;
+	font-size:27px;
+	padding:8px 0px;
+	color:black;
+	border-bottom:2px solid #0197d6;
+}
+
+.ptitle .title-bar{
+	position:absolute;
+	bottom:0px;
+	right:0px;
+	padding:4px 2px;
+	font-size:12px;
+	text-align:
+}
+
+.title-bar > .btn-help{
+	display:inline;
+}
+
+.title-bar > .btn-logout{
+	display:inline;
+	margin:0px 8px;
+}
+
+.title-bar > .btn-username{
+	display:inline;
+} 	
+
+.btn-username > .icon{
+	position:relative;
+	left:0px;
+	top:3px;
+}
+
+.pbody{
+	width:860px;
+}
+
+.slide-show{
+	width:860px;
+	background-color:#ffffff;
+	/*margin-left:122px;*/
+	padding:39px 0px;
+	border-bottom:1px solid #d5d5d5;
+}
+
+.column-div{
+	float:left;
+	width:33%;
+	margin-top:39px;
+}
+
+.column-div .content{
+	margin-top:25px;
+}
+
+.btn-style{
+	display:block;
+	cursor:default;
+	text-decoration: none;
+}
+
+.btn-style>.icon{
+	display:block;
+	width:32px;
+	height:32px;
+	margin:auto;
+}
+
+.icon-plan-manage{
+	background-image:url(images/partnerlogin/plan-mgr.png);
+	background-repeat:none;
+}
+
+.icon-project-request{
+	background-image:url(images/partnerlogin/pjt-req.png);
+	background-repeat:none;
+}
+
+.icon-performance-query{
+	background-image:url(images/partnerlogin/perf-qry.png);
+	background-repeat:none;
+}
+
+.btn-style>.label{
+	display:block;
+	font-weight:bold;
+	padding-top:15px;
+	font-size:14px;
+}
+
+.separter{
+	display:block;
+	border-bottom:1px solid #d5d5d5;
+	line-height:1px;
+}
+
+/*===begin high priority===*/
+.center{
+	margin-right: auto; 
+	margin-left: auto;
+}

@@ -1,0 +1,73 @@
+<html>
+	<head>
+	 <meta http-equiv=Content-Type content='text/html;charset=utf-8'>
+	 
+	 <style type="text/css">
+
+body
+
+{
+	font-family : Arial;
+	font-size : 14px;  
+	font-weight: normal;
+}
+
+</style>
+	 
+	 
+	</head>
+	
+	<body>
+		Dear ${name}, 
+		<br/>
+		<p>
+		The office and cell phone  bills for the month ${month} are new uploaded to the Telephone Billing System (TBS).  Please login to the  <a href='https://10.120.16.92/portal '>TBS System </a> to mark your private call. 
+		<br/>
+		#if (($mobiles.size()!=0) || ($telphone.size()!=0) )
+			<br/>Please also check the pending bills listed below:<br/>
+		#end
+		</p>
+		<br/>
+		<p>
+		<table>
+		#foreach($mobile in $mobiles.entrySet())
+		<TR><TD COLSPAN=3>Phone-No.: $mobile.key</TD></TR>
+		 	#foreach($m in $mobile.value)
+			<tr>
+				<td></td><td>$m</td><td></td>
+			</tr>
+			#end	
+		#end
+ 		<TR><TD COLSPAN=3><br/> </TD></TR>
+ 		<TR><TD COLSPAN=3><br/> </TD></TR>
+			#if ($!telphone && $telphone.size()!=0)
+				<TR><TD COLSPAN=3>Phone-No.: $tnumber</TD></TR>
+			#end
+			
+			#foreach($i in $telphone)
+			<tr>
+					<td></td><td>$i</td><td></td>
+			</tr> 
+			#end
+		#foreach($oldTelephone in $oldTelephones.entrySet())
+		<TR><TD COLSPAN=3>Phone-No.: $oldTelephone.key</TD></TR>
+		 	#foreach($o in $oldTelephone.value)
+			<tr>
+				<td></td><td>$o</td><td></td>
+			</tr>
+			#end	
+		#end			
+		</table>
+		</p>
+		<p>
+		Please don't reply to this system email address, you can contact VGC UHD +86 10 6531 3333 or  VGC.UHD@volkswagen.com.cn if you need support. 
+		<br>
+		<br>
+		Thank you. 
+		<br>
+		<br>
+		Your TBS Admin
+		</p>
+		 
+	</body>
+</html>

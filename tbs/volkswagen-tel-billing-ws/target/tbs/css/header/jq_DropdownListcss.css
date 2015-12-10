@@ -1,0 +1,13 @@
+@charset "utf-8";
+/* CSS Document */
+body #header #footer{ margin: 0px; padding: 0px; font-family: "微软雅黑", "宋体"; font-size: 12px; background-position: center top; background-color: #fff; -webkit-text-size-adjust: none; }
+/*下拉列表*/
+.jq_dropdownList { width: 318px; height: 34px; cursor: pointer; background-color: #0096d6; position: relative; z-index: 1000; margin-bottom: 10px; }
+.jq_dropdownList .ddlI { padding-left: 10px; font-size: 14px; color: #fff; padding-top: 7px; }
+.jq_nsDdListClick { width: 318px; height: 34px; }
+.jq_dropdownListBg { background-image: url(../../images/header/dBg.jpg); background-position: right top; background-repeat: no-repeat; }
+.jq_ddlList { z-index: 2000; cursor: default; width: 314px; background-color: #fff; border: 2px solid #959595; border-top: 0px; position: absolute; top: 34px; display: none; }
+.jq_ddlList a { display: block; color: #767676; padding-left: 10px; font-size: 14px; text-decoration: none; }
+.jq_ddlList a:hover { display: block; color: #262626; }
+.jq_ddllList { border-bottom: 1px solid #cecece; width: 314px; line-height: 30px; overflow: hidden; color: #767676; }
+/*下拉列表结束*/

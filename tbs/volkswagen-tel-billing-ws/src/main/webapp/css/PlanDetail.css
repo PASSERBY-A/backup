@@ -1,0 +1,182 @@
+body {
+	font-size: 12px;
+}
+a {
+	text-decoration: none;
+}
+a:link {
+	color: rgb(0, 150, 214);
+}
+a:visited {
+	color: rgb(0, 150, 214);
+}
+a:HOVER {
+	text-decoration: underline;
+}
+.main_div {
+	font-family: "Microsoft YaHei","微软雅黑";
+}
+.pagename {
+	margin-top: 25px;
+	margin-bottom: 35px;
+	font-size: 22px;
+}
+.addContact {
+	background-image: url(../images/BlueButton107.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 107px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+.disablesubmit {
+	background-image: url(../images/BlueButton115Disable.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 115px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
+.enablesubmit {
+	background-image: url(../images/BlueButton115.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 115px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+.disablesubmit_s {
+	background-image: url(../images/BlueButton86Disable.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 86px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
+.enablesubmit_s {
+	background-image: url(../images/BlueButton86.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 86px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+.rejectbtn {
+	background-image: url(../images/OrangeButton_small.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 86px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+.reopenbtn {
+	background-image: url(../images/OrangeButton_big.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 145px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+.cancelButton {
+	background-image: url(../images/GrayButton86.png);
+	background-repeat: no-repeat;
+	border: 0;
+	width: 86px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+.returnBtn {
+	background-image: url(../images/BlueButton86.png);
+	background-color: transparent;
+	border: 0;
+	width: 86px;
+	height: 29px;
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+}
+span.unit-mark {
+	color: red;
+}
+.placeholder {
+	color: #aaa;
+}
+input[type=text] {
+	height: 30px;
+	font-size: 14px;
+	line-height: 30px;
+	padding-left: 6px;
+	padding-right: 6px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(185,184,187);
+	font-family: "Microsoft YaHei","微软雅黑";
+}
+
+#popup_product{
+	border-collapse: collapse;
+}
+
+#popup_product th{
+	font-weight:bold;
+	text-align: center;
+	padding: 15px 20px;
+}
+
+#popup_product tr{
+	border: 1px solid gray;
+}
+
+#popup_product td{
+	text-align: center;
+	padding: 15px 20px;
+}
+
+#popup_product .saleNum{
+	font-size:18px;
+	margin-right: 2px;
+}
+
+#popup_product .unit{
+	color:red;
+}
+
+#popup_contactor td{
+	padding: 5px;
+}
+
+#popup_contactor .c_title{
+	color:#807f7f;
+}
+
+#popup_contactor .c_value{
+	font-weight:bold;
+}
+
+p.popup{
+	font-weight: bold;
+	font-size: 14px;
+}

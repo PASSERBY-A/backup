@@ -1,0 +1,45 @@
+/* filter */
+a {text-decoration: none;}
+a:link{color:rgb(0, 150, 214);}
+a:visited{color:rgb(0, 150, 214);}
+a:HOVER{text-decoration: underline;}
+#filter_div {
+	width: 801px;
+	height: 29px;
+	text-align: right;
+	float: left;
+	margin-bottom: 10px;
+}
+
+#filter_div select {
+	width: 100px;
+	height: 26px;
+	line-height: 26px;
+	margin-top: 3px;
+}
+
+#filter_div input[type=text] {
+	height: 21px;
+	width: 83px;
+	font-size: 14px;
+	line-height: 21px;
+	padding-left: 6px;
+	padding-right: 6px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(185, 184, 187);
+	font-family: "Microsoft YaHei", Î¢ÈíÑÅºÚ;
+}
+
+#filter_div img{
+	margin-bottom: 4px;
+	cursor: pointer;
+	vertical-align: middle;
+	width: 21px;
+	height: 22px;
+}
+
+#filter_div div {
+	display: inline-block;
+
+}

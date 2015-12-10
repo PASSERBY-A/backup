@@ -1,0 +1,23 @@
+#headerloginUser {
+	float: right;
+	margin: 5px 1px 0 0px;
+	width: 416px;
+	height: 20px;
+	font-size: 12px;
+}
+
+#headerloginUser a {
+	text-decoration: none;
+}
+
+#headerloginUser a:link {
+	color: rgb(0, 150, 214);
+}
+
+#headerloginUser a:visited {
+	color: rgb(0, 150, 214);
+}
+
+#headerloginUser a:HOVER {
+	text-decoration: underline;
+}
